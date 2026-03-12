@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@theme {
+:root {
   --color-claro-50: #fef3f2;
   --color-claro-100: #ffe3e1;
   --color-claro-200: #ffccc8;
@@ -62,53 +62,39 @@
   --text-9xl: 8rem;
 }
 
-@layer base {
-  :root {
-    --bg-primary-default: var(--color-claro-400);
-    --bg-primary-soft: var(--color-claro-950);
-    --bg-primary-strong: var(--color-claro-200);
-    --bg-primary-subtle: var(--color-claro-950);
+@theme {
+  --color-*: initial;
+  --color-bg-primary-default: var(--color-claro-400);
+  --color-bg-primary-soft: var(--color-claro-950);
+  --color-bg-primary-strong: var(--color-claro-200);
+  --color-bg-primary-subtle: var(--color-claro-950);
 
-    --text-primary-default: var(--color-claro-400);
-    --text-primary-logo: var(--color-claro-500);
-    --text-primary-soft: var(--color-claro-700);
-    --text-primary-strong: var(--color-claro-100);
-    --text-primary-subtle: var(--color-claro-900);
+  --color-text-primary-default: var(--color-claro-400);
+  --color-text-primary-logo: var(--color-claro-500);
+  --color-text-primary-soft: var(--color-claro-700);
+  --color-text-primary-strong: var(--color-claro-100);
+  --color-text-primary-subtle: var(--color-claro-900);
 
-    --text-neutral-contrast: var(--color-neutral-contrast);
+  --color-text-neutral-contrast: var(--color-neutral-contrast);
 
-    --font-regular: var(--font-normal);
-    --font-medium: var(--font-medium);
-    --font-bold: var(--font-bold);
+  --font-weight-regular: var(--font-normal);
+  --font-weight-medium: var(--font-medium);
+  --font-weight-bold: var(--font-bold);
 
-    --rounded-button-default: var(--radius-full);
-    --rounded-button-small: var(--radius-full);
+  --radius-*: initial;
+  --radius-button-default: var(--radius-full);
+  --radius-button-small: var(--radius-full);
 
-    --gap-1: var(--spacing-1);
-    --gap-2: var(--spacing-2);
-    --gap-3: var(--spacing-3);
-    --gap-4: var(--spacing-4);
-    --gap-5: var(--spacing-6);
-    --gap-6: var(--spacing-12);
+  --spacing-gap-2xs: var(--spacing-1);
+  --spacing-gap-xs: var(--spacing-2);
+  --spacing-gap-sm: var(--spacing-3);
+  --spacing-gap: var(--spacing-4);
+  --spacing-gap-md: var(--spacing-6);
+  --spacing-gap-lg: var(--spacing-12);
 
-    --p-1: var(--spacing-1);
-    --p-2: var(--spacing-2);
-    --p-3: var(--spacing-3);
-    --p-4: var(--spacing-4);
-    --p-6: var(--spacing-6);
-  }
-}
-
-@layer components {
-  .btn-primary {
-    background-color: var(--bg-primary-default);
-    border-radius: var(--rounded-button-default);
-    color: var(--text-neutral-contrast);
-    padding: var(--p-2);
-  }
-
-  .title-primary {
-    font-weight: var(--font-regular);
-    color: var(--text-primary-default);
-  }
+  --spacing-padding-2xs: var(--spacing-1);
+  --spacing-padding-xs: var(--spacing-2);
+  --spacing-padding-sm: var(--spacing-3);
+  --spacing-padding: var(--spacing-4);
+  --spacing-padding-md: var(--spacing-6);
 }
