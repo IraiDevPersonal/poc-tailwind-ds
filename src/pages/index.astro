@@ -11,7 +11,27 @@ import "../global.css";
     <meta name="generator" content={Astro.generator} />
     <title>Astro</title>
   </head>
-  <body>
-    <h1>Astro</h1>
+  <body class="p-10 gap-y-10 h-dvh grid place-content-center">
+    <h1 class="font-(--font-regular) text-(--text-primary-default)">
+      POC Tailwind DS (tokens semanticos)
+    </h1>
+
+    <h1 class="font-normal text-claro-400">
+      POC Tailwind DS (tokens primitivos)
+    </h1>
+
+    <h1 class="title-primary">POC Tailwind DS (componente)</h1>
+
+    <button
+      class="bg-(--bg-primary-default) rounded-(--rounded-button-default) p-(--p-2) text-(--text-neutral-contrast)"
+    >
+      Botón con tokens semanticos
+    </button>
+
+    <button class="bg-claro-400 text-neutral-contrast rounded-full p-2">
+      Botón con tokens primitivos
+    </button>
+
+    <button class="btn-primary"> Componente Botón </button>
   </body>
 </html>
