@@ -1,0 +1,19 @@
+---
+type Props = {
+  id: string;
+};
+
+const { id } = Astro.props;
+---
+
+<div class="w-full max-w-4xl mx-auto">
+  <!-- Carousel -->
+  <div class="embla overflow-hidden" id={id}>
+    <div class="embla__container flex gap-3">
+      <slot />
+    </div>
+  </div>
+
+  <!-- Dots -->
+  <div class="flex justify-center gap-2 mt-5" id={`${id}-dots`}></div>
+</div>

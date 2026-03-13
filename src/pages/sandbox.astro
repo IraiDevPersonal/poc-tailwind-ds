@@ -1,0 +1,61 @@
+---
+import "../global.css";
+import Slider from "../components/Slider.astro";
+import SliderItem from "../components/SliderItem.astro";
+import image from "../assets/slider-img.png";
+---
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>iPhone 17 Slider</title>
+  </head>
+  <body
+    class="bg-gray-100 min-h-screen flex flex-col gap-8 items-center justify-center p-8"
+  >
+    <Slider id="devices">
+      {
+        Array.from({ length: 6 }).map((_, index) => (
+          <SliderItem>
+            <p class="font-bold text-lg">
+              Apple <span class="text-red-500">{index + 1}</span>
+            </p>
+            <p class="font-semibold text-gray-800 mb-3">iPhone 17</p>
+            <img
+              src={image.src}
+              alt={`iPhone 17 - Apple ${index + 1}`}
+              class="w-full object-contain h-40"
+            />
+          </SliderItem>
+        ))
+      }
+    </Slider>
+    <Slider id="productos">
+      {
+        Array.from({ length: 2 }).map((_, index) => (
+          <SliderItem>
+            <p class="font-bold text-lg">
+              Apple <span class="text-red-500">{index + 1}</span>
+            </p>
+            <p class="font-semibold text-gray-800 mb-3">iPhone 17</p>
+            <img
+              src={image.src}
+              alt={`iPhone 17 - Apple ${index + 1}`}
+              class="w-full object-contain h-40"
+            />
+          </SliderItem>
+        ))
+      }
+    </Slider>
+  </body>
+</html>
+
+<script>
+  import { SliderProvider } from "../lib/slider-provider";
+
+  const devicesSlider = new SliderProvider("devices");
+  const productosSlider = new SliderProvider("productos");
+
+  devicesSlider.mount();
+  productosSlider.mount();
+</script>

@@ -14,6 +14,11 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.2.1",
     "astro": "^6.0.4",
+    "clsx": "^2.1.1",
+    "embla-carousel": "^8.6.0",
+    "glide": "link:@types/@glidejs/glide",
+    "swiper": "^12.1.2",
+    "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.1"
   }
 }
