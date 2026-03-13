@@ -25,6 +25,7 @@
   --radius-full: 624.9375rem;
 
   /* esto deberia ser tratadno como --spacing: 0.25rem */
+  --spacing: 0.25rem;
   --spacing-1: 0.25rem;
   --spacing-2: 0.5rem;
   --spacing-3: 0.75rem;
@@ -35,6 +36,13 @@
   --spacing-16: 4rem;
   --spacing-24: 6rem;
   --spacing-32: 8rem;
+  --spacing-custom: 3.234px;
+  /* --- Negative --- */
+  /* --spacing-negative-1: -0.25rem;
+  --spacing-negative-2: -0.5rem;
+  --spacing-negative-3: -0.75rem;
+  --spacing-negative-4: -1rem;
+  --spacing-negative-24: -1.5rem; */
 
   --font-normal: 400;
   --font-thin: 100;
@@ -62,6 +70,20 @@
   --text-9xl: 8rem;
 }
 
+.dark {
+  --color-claro-50: #fef3f2;
+  --color-claro-100: #ffe3e1;
+  --color-claro-200: #ffccc8;
+  --color-claro-300: #ffa8a2;
+  --color-claro-400: #fd766c;
+  --color-claro-500: #f54b3e;
+  --color-claro-600: #da291c;
+  --color-claro-700: #be2217;
+  --color-claro-800: #9d2017;
+  --color-claro-900: #82211a;
+  --color-claro-950: #470c08;
+}
+
 @theme {
   --color-*: initial;
   --color-bg-primary-default: var(--color-claro-400);
@@ -82,7 +104,7 @@
   --font-weight-bold: var(--font-bold);
 
   --radius-*: initial;
-  --radius-button-default: var(--radius-full);
+  --radius-button-default: var(--radius-none);
   --radius-button-small: var(--radius-full);
 
   --spacing-gap-2xs: var(--spacing-1);
