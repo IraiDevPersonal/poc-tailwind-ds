@@ -7,7 +7,7 @@ Estoy tratando de entender algunas cosas, los diseñadores me están proporciona
 Por ejemplo, me están proporcionando un token semántico con el siguiente nombre:
 
 ```css
---radius-button: var(--rounded-full)
+--radius-button: var(--rounded-full);
 ```
 
 Donde el token primitivo `--rounded-full` tiene un valor de `624.9375rem`.
@@ -32,8 +32,8 @@ Token semántico   →  el significado / uso
 ```
 
 ```css
---claro-400: #FD766C                           /* primitivo (¿qué es?) */
---bg-primary-default: var(--claro-400)         /* semántico (¿para qué sirve?) */
+--claro-400: #fd766c /* primitivo (¿qué es?) */
+  --bg-primary-default: var(--claro-400) /* semántico (¿para qué sirve?) */;
 ```
 
 El semántico **nunca tiene un valor directo**, siempre apunta a un primitivo. Esto permite que el tema cambie (dark mode, white label, etc.) sin tocar los componentes.
@@ -64,14 +64,14 @@ Semánticos  →  :root o @layer base (son referencias, no utilidades)
 ───────────────────────────────────────── */
 @theme {
   /* Colores primitivos */
-  --color-claro-400: #FD766C;
-  --color-claro-300: #FE9089;
-  --color-claro-500: #FC5A50;
+  --color-claro-400: #fd766c;
+  --color-claro-300: #fe9089;
+  --color-claro-500: #fc5a50;
 
   /* Radios primitivos */
   --radius-full: 624.9375rem;
-  --radius-sm:   0.25rem;
-  --radius-md:   0.5rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
 }
 
 /* ─────────────────────────────────────────
@@ -81,7 +81,7 @@ Semánticos  →  :root o @layer base (son referencias, no utilidades)
 @layer base {
   :root {
     --bg-primary-default: var(--color-claro-400);
-    --radius-button:      var(--radius-full);
+    --radius-button: var(--radius-full);
   }
 }
 ```
@@ -94,14 +94,12 @@ Los tokens semánticos los usas con **valores arbitrarios** de Tailwind:
 
 ```html
 <!-- Con token semántico (recomendado en componentes) -->
-<button class="bg-[var(--bg-primary-default)] rounded-[var(--radius-button)]">
+<button class="bg-(--bg-primary-default) rounded-(--radius-button)">
   Botón
 </button>
 
 <!-- Con token primitivo (también válido) -->
-<button class="bg-claro-400 rounded-full">
-  Botón
-</button>
+<button class="bg-claro-400 rounded-full">Botón</button>
 ```
 
 ---
@@ -136,26 +134,26 @@ Si quieres que los semánticos **también generen utilidades** con nombres útil
 
 /* CAPA 1 — Primitivos puros */
 @theme {
-  --color-claro-300:  #FE9089;
-  --color-claro-400:  #FD766C;
-  --color-claro-500:  #FC5A50;
-  --color-oscuro-900: #1A1A2E;
+  --color-claro-300: #fe9089;
+  --color-claro-400: #fd766c;
+  --color-claro-500: #fc5a50;
+  --color-oscuro-900: #1a1a2e;
 
   --radius-full: 624.9375rem;
-  --radius-md:   0.5rem;
+  --radius-md: 0.5rem;
 }
 
 /* CAPA 2 — Semánticos (alias, sin utilidades) */
 @layer base {
   :root {
     /* Color */
-    --bg-primary-default:  var(--color-claro-400);
-    --bg-primary-hover:    var(--color-claro-300);
-    --text-on-primary:     var(--color-oscuro-900);
+    --bg-primary-default: var(--color-claro-400);
+    --bg-primary-hover: var(--color-claro-300);
+    --text-on-primary: var(--color-oscuro-900);
 
     /* Radio */
-    --radius-button:       var(--radius-full);
-    --radius-card:         var(--radius-md);
+    --radius-button: var(--radius-full);
+    --radius-card: var(--radius-md);
   }
 }
 
@@ -163,8 +161,8 @@ Si quieres que los semánticos **también generen utilidades** con nombres útil
 @layer components {
   .btn-primary {
     background-color: var(--bg-primary-default);
-    border-radius:    var(--radius-button);
-    color:            var(--text-on-primary);
+    border-radius: var(--radius-button);
+    color: var(--text-on-primary);
   }
 }
 ```
@@ -180,7 +178,7 @@ Cuando el diseñador cambie el tema (por ejemplo dark mode o una marca diferente
 @layer base {
   [data-theme="dark"] {
     --bg-primary-default: var(--color-claro-300);
-    --text-on-primary:    var(--color-claro-400);
+    --text-on-primary: var(--color-claro-400);
   }
 }
 ```
@@ -191,8 +189,8 @@ Los componentes no se tocan. Los primitivos no se tocan. Solo cambias qué primi
 
 ### Resumen de capas
 
-| Capa | Directiva | Contenido | Genera utilidades |
-|------|-----------|-----------|-------------------|
-| 1 - Primitivos | `@theme` | Valores crudos (`#FD766C`, `624.9375rem`...) | Sí (`bg-claro-400`, `rounded-full`...) |
-| 2 - Semánticos | `@layer base :root` | Alias que apuntan a primitivos | No |
-| 3 - Componentes | `@layer components` | Clases que consumen semánticos | Sí (clases propias) |
+| Capa            | Directiva           | Contenido                                    | Genera utilidades                      |
+| --------------- | ------------------- | -------------------------------------------- | -------------------------------------- |
+| 1 - Primitivos  | `@theme`            | Valores crudos (`#FD766C`, `624.9375rem`...) | Sí (`bg-claro-400`, `rounded-full`...) |
+| 2 - Semánticos  | `@layer base :root` | Alias que apuntan a primitivos               | No                                     |
+| 3 - Componentes | `@layer components` | Clases que consumen semánticos               | Sí (clases propias)                    |
