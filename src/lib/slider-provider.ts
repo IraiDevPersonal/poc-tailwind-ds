@@ -4,15 +4,21 @@ import EmblaCarousel, {
 } from "embla-carousel";
 import { cn } from "./utils";
 
+type UniqueSnaps = {
+  uniqueSnaps: number[];
+  indexMapping: number[];
+  snapList: number[];
+};
+
 type ClassNames = {
   dot: string;
   dotActive: string;
 };
 
-export type SilderProviderOptions = Partial<{
+export type SilderProviderOptions = {
   classNames: Partial<ClassNames>;
   sliderOptions: Partial<EmblaOptionsType>;
-}>;
+};
 
 const DEFAULT_OPTIONS: SilderProviderOptions = {
   classNames: {
@@ -29,13 +35,13 @@ const DEFAULT_OPTIONS: SilderProviderOptions = {
 };
 
 export class SliderProvider {
-  private slider: EmblaCarouselType;
+  private sliderInstance: EmblaCarouselType;
   private dotsContainerEl: HTMLElement;
   private options: SilderProviderOptions;
 
   constructor(
     selector: string | HTMLElement,
-    options: SilderProviderOptions = DEFAULT_OPTIONS,
+    options: Partial<SilderProviderOptions> = {},
   ) {
     const containerEl =
       typeof selector === "string"
@@ -53,74 +59,159 @@ export class SliderProvider {
       throw new Error(`Dots container not found`);
     }
 
-    this.options = options;
+    this.options = this.mergeOptions(options);
     this.dotsContainerEl = dotsContainerEl;
-    this.slider = EmblaCarousel(containerEl, options.sliderOptions);
+    this.sliderInstance = EmblaCarousel(
+      containerEl,
+      this.options.sliderOptions,
+    );
   }
 
-  private buildClasses = (
-    isActive: boolean,
-    selector: keyof ClassNames,
-    activeSelector?: keyof ClassNames,
-  ) => {
+  /**
+   * Realiza una combinación profunda (deep merge) de las opciones proporcionadas con las opciones por defecto.
+   * Asegura que las configuraciones personalizadas sobrescriban solo los valores predeterminados específicos.
+   * @param options - Las opciones parciales proporcionadas por el usuario.
+   * @returns El objeto de opciones completamente combinado.
+   */
+  private mergeOptions = (
+    options: Partial<SilderProviderOptions>,
+  ): SilderProviderOptions => {
+    return {
+      classNames: {
+        ...DEFAULT_OPTIONS.classNames,
+        ...options.classNames,
+      },
+      sliderOptions: {
+        ...DEFAULT_OPTIONS.sliderOptions,
+        ...options.sliderOptions,
+      },
+    };
+  };
+
+  /**
+   * Construye la cadena de clases CSS para un elemento punto (dot) basada en su estado activo.
+   * @param isActive - Indica si el punto actual representa el snap seleccionado.
+   * @returns string de las clases CSS combinadas.
+   */
+  private buildDotClasses = (isActive: boolean): string => {
     return cn(
-      this.options?.classNames?.[selector],
-      activeSelector && isActive && this.options?.classNames?.[activeSelector],
+      this.options.classNames.dot,
+      isActive && this.options.classNames.dotActive,
     );
   };
 
-  // FIXME: fixear el problema de dots extras en desktop
+  /**
+   * Filtra las posiciones de desplazamiento (snap) duplicadas.
+   * Con `containScroll: "keepSnaps"`, los últimos snaps pueden apuntar a la misma posición visual exacta.
+   * Este método asegura que solo generemos puntos para posiciones visuales únicas.
+   * @returns Un objeto que contiene los snaps únicos, sus índices originales y la lista completa de snaps.
+   */
+  private getUniqueSnaps = (): UniqueSnaps => {
+    const snapList = this.sliderInstance.scrollSnapList();
+    const uniqueSnaps: number[] = [];
+    const indexMapping: number[] = [];
+
+    snapList.forEach((snap, index) => {
+      const existingIndex = uniqueSnaps.findIndex(
+        (s) => Math.abs(s - snap) < 0.1,
+      );
+
+      if (existingIndex === -1) {
+        uniqueSnaps.push(snap);
+        indexMapping.push(index);
+      }
+    });
+
+    return { uniqueSnaps, indexMapping, snapList };
+  };
+
+  /**
+   * Obtiene el índice del snap seleccionado en la lista de snaps únicos.
+   * @param uniqueSnaps - Lista de snaps únicos.
+   * @param snapList - Lista completa de snaps.
+   * @returns El índice del snap seleccionado en la lista de snaps únicos.
+   */
+  private getUniqueSelectedIndex = ({
+    uniqueSnaps,
+    snapList,
+  }: Omit<UniqueSnaps, "indexMapping">): number => {
+    const selectedIndex = this.sliderInstance.selectedScrollSnap();
+    const currentSnap = snapList[selectedIndex];
+    return uniqueSnaps.findIndex((s) => Math.abs(s - currentSnap) < 0.1);
+  };
+
+  /**
+   * Inicializa y renderiza los puntos de paginación dentro del contenedor de puntos.
+   * Los elementos se crean dinámicamente basándose en las posiciones de desplazamiento únicas.
+   * Oculta el contenedor de puntos por completo si hay 1 o menos snaps únicos disponibles.
+   */
   private buildDots = () => {
     this.dotsContainerEl.innerHTML = "";
-    const snapList = this.slider.scrollSnapList();
+    const { uniqueSnaps, indexMapping, snapList } = this.getUniqueSnaps();
 
-    // Ocultar container si hay 1 o menos snaps
-    if (snapList.length <= 1) {
+    // Oculta container si hay 1 o menos snaps
+    if (uniqueSnaps.length <= 1) {
       this.dotsContainerEl.style.display = "none";
       return;
     }
 
     this.dotsContainerEl.style.display = ""; // Restaurar display original
 
-    const selectedIndex = this.slider.selectedScrollSnap();
+    const uniqueSelectedIndex = this.getUniqueSelectedIndex({
+      uniqueSnaps,
+      snapList,
+    });
 
-    snapList.forEach((_, index) => {
+    uniqueSnaps.forEach((_, index) => {
       const dot = document.createElement("button");
-      const isActive = index === selectedIndex;
+      const isActive = index === uniqueSelectedIndex;
 
-      dot.className = this.buildClasses(isActive, "dot", "dotActive");
-      dot.addEventListener("click", () => this.slider.scrollTo(index));
+      dot.className = this.buildDotClasses(isActive);
+      const targetIndex = indexMapping[index];
+      dot.addEventListener("click", () =>
+        this.sliderInstance.scrollTo(targetIndex),
+      );
       this.dotsContainerEl.appendChild(dot);
     });
   };
 
+  /**
+   * Actualiza las clases CSS activas de los puntos de paginación cuando el slider cambia de posición.
+   */
   private updateDots = () => {
-    const selectedIndex = this.slider.selectedScrollSnap();
+    const { uniqueSnaps, snapList } = this.getUniqueSnaps();
+    const uniqueSelectedIndex = this.getUniqueSelectedIndex({
+      uniqueSnaps,
+      snapList,
+    });
 
     this.dotsContainerEl.querySelectorAll("button").forEach((dot, index) => {
-      const isActive = index === selectedIndex;
-
-      dot.className = this.buildClasses(isActive, "dot", "dotActive");
+      const isActive = index === uniqueSelectedIndex;
+      dot.className = this.buildDotClasses(isActive);
     });
   };
 
+  /**
+   * Se suscribe a los eventos de Embla Carousel y adjunta escuchadores de eventos externos.
+   * Configura la sincronización de los puntos de paginación y habilita el desplazamiento personalizado con la rueda del ratón.
+   */
   public mount = () => {
-    this.slider.on("init", this.buildDots);
-    this.slider.on("reInit", this.buildDots);
-    this.slider.on("select", this.updateDots);
+    this.sliderInstance.on("init", this.buildDots);
+    this.sliderInstance.on("reInit", this.buildDots);
+    this.sliderInstance.on("select", this.updateDots);
 
     // Mouse wheel scroll
     let wheelTimeout: ReturnType<typeof setTimeout>;
-    this.slider.containerNode().addEventListener(
+    this.sliderInstance.containerNode().addEventListener(
       "wheel",
       (e) => {
         e.preventDefault();
         clearTimeout(wheelTimeout);
         wheelTimeout = setTimeout(() => {
           if (e.deltaX > 0 || e.deltaY > 0) {
-            this.slider.scrollNext();
+            this.sliderInstance.scrollNext();
           } else {
-            this.slider.scrollPrev();
+            this.sliderInstance.scrollPrev();
           }
         }, 50);
       },
