@@ -1,42 +1,30 @@
 ---
-import "../global.css";
 import Slider from "../components/slider/Slider.astro";
 import image from "../assets/slider-img.png";
+import RootLayout from "../layouts/RootLayout.astro";
 ---
 
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="google" content="notranslate" />
-    <meta content="width=device-width" name="viewport" />
-    <link href="/favicon.ico" rel="icon" />
-    <meta content={Astro.generator} name="generator" />
-    <title>iPhone 17 Slider</title>
-  </head>
-  <body
-    class="bg-gray-100 min-h-screen flex flex-col gap-8 items-center justify-center p-8"
-  >
-    <div class="w-full max-w-4xl mx-auto space-y-4">
-      <Slider id="devices" showPagination={true}>
-        {
-          Array.from({ length: 10 }).map((_, index) => (
-            <div class="flex-none w-50 h-50 bg-white rounded-2xl shadow p-4 flex flex-col selection:bg-transparent">
-              <p class="font-bold text-lg">
-                Apple <span class="text-red-500">{index + 1}</span>
-              </p>
-              <p class="font-semibold text-gray-800 mb-3">iPhone 17</p>
-              <img
-                src={image.src}
-                alt={`iPhone 17 - Apple ${index + 1}`}
-                class="w-full object-contain h-40"
-              />
-            </div>
-          ))
-        }
-      </Slider>
-    </div>
-  </body>
-</html>
+<RootLayout>
+  <div class="w-full max-w-5xl mx-auto space-y-4">
+    <Slider id="devices" showPagination={true}>
+      {
+        Array.from({ length: 10 }).map((_, index) => (
+          <div class="flex-none w-50 h-50 bg-white rounded-2xl shadow p-4 flex flex-col selection:bg-transparent">
+            <p class="font-bold text-lg">
+              Apple <span class="text-red-500">{index + 1}</span>
+            </p>
+            <p class="font-semibold text-gray-800 mb-3">iPhone 17</p>
+            <img
+              src={image.src}
+              alt={`iPhone 17 - Apple ${index + 1}`}
+              class="w-full object-contain h-40"
+            />
+          </div>
+        ))
+      }
+    </Slider>
+  </div>
+</RootLayout>
 
 <script>
   import { SliderProvider } from "../components/slider/slider-provider";

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@variant dark (&:where(.dark, .dark *));
 
 :root {
   --color-claro-50: #fef3f2;
@@ -14,7 +15,8 @@
   --color-claro-950: #470c08;
 
   --color-neutral-contrast: #ffff;
-  --color-background: #fff;
+  --color-background: var(--color-neutral-100);
+  --color-dark: var(--color-blue-500);
 
   --radius-none: 0rem;
   --radius-default: 0.25rem;
@@ -78,12 +80,13 @@
   --color-claro-900: #ffe3e1;
   --color-claro-950: #fef3f2;
 
+  --color-dark: var(--color-red-500);
+
   --color-neutral-contrast: #000;
-  --color-background: #000;
+  --color-background: var(--color-neutral-950);
 }
 
-@theme {
-  --color-*: initial;
+@theme inline {
   --color-bg-primary-default: var(--color-claro-400);
   --color-bg-primary-soft: var(--color-claro-950);
   --color-bg-primary-strong: var(--color-claro-200);
@@ -97,12 +100,12 @@
 
   --color-text-neutral-contrast: var(--color-neutral-contrast);
   --color-background: var(--color-background);
+  --color-dark: var(--color-dark);
 
   --font-weight-regular: var(--font-normal);
   --font-weight-medium: var(--font-medium);
   --font-weight-bold: var(--font-bold);
 
-  --radius-*: initial;
   --radius-button-default: var(--radius-none);
   --radius-button-small: var(--radius-full);
 

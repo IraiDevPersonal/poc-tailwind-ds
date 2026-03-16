@@ -1,35 +1,22 @@
 ---
-import "../global.css";
+import RootLayout from "../layouts/RootLayout.astro";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
-  </head>
-  <body
-    class="p-10 gap-y-10 h-dvh grid place-content-center bg-background transition-colors duration-700"
-  >
-    <h1 class="text-text-primary-default font-regular">POC Tailwind</h1>
-
-    <button
-      id="theme-toggler"
-      class="bg-bg-primary-default text-text-neutral-contrast p-padding-xs rounded-button-default transition-colors duration-700"
-    >
-      Componente Botón
-    </button>
-  </body>
-</html>
-
-<script>
-  const btn = document.getElementById("theme-toggler");
-  const html = document.documentElement;
-
-  btn?.addEventListener("click", () => {
-    html.classList.toggle("dark");
-  });
-</script>
+<RootLayout>
+  <ul class="flex flex-col gap-y-4">
+    <li>
+      <a
+        href="/ds"
+        class="hover:text-blue-400 text-neutral-900 dark:text-neutral-50 transition-colors duration-700 underline"
+        >Design System</a
+      >
+    </li>
+    <li>
+      <a
+        href="/sandbox"
+        class="hover:text-blue-400 text-neutral-900 dark:text-neutral-50 transition-colors duration-700 underline"
+        >Sandbox</a
+      >
+    </li>
+  </ul>
+</RootLayout>

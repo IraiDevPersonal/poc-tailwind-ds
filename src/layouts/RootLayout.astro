@@ -1,0 +1,61 @@
+---
+import "../styles/global.css";
+
+type Props = {
+  tabTitle?: string;
+};
+
+const { tabTitle = "Sandbox Astro Tailwind" } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{tabTitle}</title>
+  </head>
+  <body
+    class="bg-background transition-colors duration-700 flex flex-col h-dvh"
+  >
+    <header
+      class="bg-neutral-950 dark:bg-neutral-100 transition-colors duration-700"
+    >
+      <div class="max-w-5xl mx-auto flex justify-between items-center h-16">
+        <div class="flex gap-2 items-center">
+          <button
+            onclick="window.history.back()"
+            class="h-10 w-10 min-w-10 dark:text-neutral-900 text-neutral-50 hover:text-blue-400 transition-colors cursor-pointer"
+          >
+            {"<"}
+          </button>
+          <h1
+            class="text-2xl font-extrabold italic text-neutral-50 dark:text-neutral-900 transition-colors duration-700"
+          >
+            Sandbox Astro Tailwind
+          </h1>
+        </div>
+        <button
+          id="theme-toggler"
+          class="bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-50 rounded-full transition-colors duration-700 h-10 w-10 cursor-pointer"
+        >
+          A
+        </button>
+      </div>
+    </header>
+    <main class="p-10 gap-y-10 h-dvh grid place-content-center">
+      <slot />
+    </main>
+  </body>
+</html>
+
+<script>
+  const btn = document.getElementById("theme-toggler");
+  const html = document.documentElement;
+
+  btn?.addEventListener("click", () => {
+    html.classList.toggle("dark");
+  });
+</script>
