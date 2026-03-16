@@ -11,13 +11,25 @@ import "../global.css";
     <meta name="generator" content={Astro.generator} />
     <title>Astro</title>
   </head>
-  <body class="p-10 gap-y-10 h-dvh grid place-content-center">
+  <body
+    class="p-10 gap-y-10 h-dvh grid place-content-center bg-background transition-colors duration-700"
+  >
     <h1 class="text-text-primary-default font-regular">POC Tailwind</h1>
 
     <button
-      class="bg-bg-primary-default text-text-neutral-contrast p-padding-xs rounded-button-default"
+      id="theme-toggler"
+      class="bg-bg-primary-default text-text-neutral-contrast p-padding-xs rounded-button-default transition-colors duration-700"
     >
       Componente Botón
     </button>
   </body>
 </html>
+
+<script>
+  const btn = document.getElementById("theme-toggler");
+  const html = document.documentElement;
+
+  btn?.addEventListener("click", () => {
+    html.classList.toggle("dark");
+  });
+</script>

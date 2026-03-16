@@ -14,6 +14,7 @@
   --color-claro-950: #470c08;
 
   --color-neutral-contrast: #ffff;
+  --color-background: #fff;
 
   --radius-none: 0rem;
   --radius-default: 0.25rem;
@@ -37,12 +38,6 @@
   --spacing-24: 6rem;
   --spacing-32: 8rem;
   --spacing-custom: 3.234px;
-  /* --- Negative --- */
-  /* --spacing-negative-1: -0.25rem;
-  --spacing-negative-2: -0.5rem;
-  --spacing-negative-3: -0.75rem;
-  --spacing-negative-4: -1rem;
-  --spacing-negative-24: -1.5rem; */
 
   --font-normal: 400;
   --font-thin: 100;
@@ -71,17 +66,20 @@
 }
 
 .dark {
-  --color-claro-50: #fef3f2;
-  --color-claro-100: #ffe3e1;
-  --color-claro-200: #ffccc8;
-  --color-claro-300: #ffa8a2;
-  --color-claro-400: #fd766c;
+  --color-claro-50: #470c08;
+  --color-claro-100: #82211a;
+  --color-claro-200: #9d2017;
+  --color-claro-300: #be2217;
+  --color-claro-400: #da291c;
   --color-claro-500: #f54b3e;
-  --color-claro-600: #da291c;
-  --color-claro-700: #be2217;
-  --color-claro-800: #9d2017;
-  --color-claro-900: #82211a;
-  --color-claro-950: #470c08;
+  --color-claro-600: #fd766c;
+  --color-claro-700: #ffa8a2;
+  --color-claro-800: #ffccc8;
+  --color-claro-900: #ffe3e1;
+  --color-claro-950: #fef3f2;
+
+  --color-neutral-contrast: #000;
+  --color-background: #000;
 }
 
 @theme {
@@ -98,6 +96,7 @@
   --color-text-primary-subtle: var(--color-claro-900);
 
   --color-text-neutral-contrast: var(--color-neutral-contrast);
+  --color-background: var(--color-background);
 
   --font-weight-regular: var(--font-normal);
   --font-weight-medium: var(--font-medium);
