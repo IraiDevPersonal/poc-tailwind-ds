@@ -1,18 +1,34 @@
 ---
+import { cn } from "../../lib/utils";
+
 type Props = {
   id: string;
   showPagination?: boolean;
+  classNames?: Partial<{
+    root: string;
+    container: string;
+    dotsContainer: string;
+  }>;
 };
 
-const { id, showPagination = true } = Astro.props;
+const { id, showPagination = true, classNames } = Astro.props;
 ---
 
-<!-- Carousel -->
-<div class="overflow-hidden" id={id}>
-  <div class="flex gap-3">
-    <slot />
+<div class={cn("flex flex-col gap-3", classNames?.root)}>
+  <!-- Carousel -->
+  <div class="overflow-hidden" id={id}>
+    <div class={cn("flex gap-3", classNames?.container)}>
+      <slot />
+    </div>
   </div>
-</div>
 
-<!-- Dots -->
-{showPagination && <div class="flex justify-center gap-2" id={`${id}-dots`} />}
+  <!-- Dots -->
+  {
+    showPagination && (
+      <div
+        class={cn("flex justify-center gap-2", classNames?.dotsContainer)}
+        id={`${id}-dots`}
+      />
+    )
+  }
+</div>
