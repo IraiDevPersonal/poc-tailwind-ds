@@ -1,37 +1,22 @@
 ---
-import "../global.css";
+import RootLayout from "../layouts/RootLayout.astro";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
-  </head>
-  <body class="p-10 gap-y-10 h-dvh grid place-content-center">
-    <h1 class="font-(--font-regular) text-(--text-primary-default)">
-      POC Tailwind DS (tokens semanticos)
-    </h1>
-
-    <h1 class="font-normal text-claro-400">
-      POC Tailwind DS (tokens primitivos)
-    </h1>
-
-    <h1 class="title-primary">POC Tailwind DS (componente)</h1>
-
-    <button
-      class="bg-(--bg-primary-default) rounded-(--rounded-button-default) p-(--p-2) text-(--text-neutral-contrast)"
-    >
-      Botón con tokens semanticos
-    </button>
-
-    <button class="bg-claro-400 text-neutral-contrast rounded-full p-2">
-      Botón con tokens primitivos
-    </button>
-
-    <button class="btn-primary"> Componente Botón </button>
-  </body>
-</html>
+<RootLayout>
+  <ul class="flex flex-col gap-y-4">
+    <li>
+      <a
+        href="/ds"
+        class="hover:text-blue-400 text-neutral-900 dark:text-neutral-50 transition-colors duration-700 underline"
+        >Design System</a
+      >
+    </li>
+    <li>
+      <a
+        href="/sandbox"
+        class="hover:text-blue-400 text-neutral-900 dark:text-neutral-50 transition-colors duration-700 underline"
+        >Sandbox</a
+      >
+    </li>
+  </ul>
+</RootLayout>

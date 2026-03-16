@@ -1,0 +1,18 @@
+---
+type Props = {
+  id: string;
+  showPagination?: boolean;
+};
+
+const { id, showPagination = true } = Astro.props;
+---
+
+<!-- Carousel -->
+<div class="overflow-hidden" id={id}>
+  <div class="flex gap-3">
+    <slot />
+  </div>
+</div>
+
+<!-- Dots -->
+{showPagination && <div class="flex justify-center gap-2" id={`${id}-dots`} />}
