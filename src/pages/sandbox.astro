@@ -1,7 +1,6 @@
 ---
 import "../global.css";
 import Slider from "../components/Slider.astro";
-import SliderItem from "../components/SliderItem.astro";
 import image from "../assets/slider-img.png";
 ---
 
@@ -13,30 +12,34 @@ import image from "../assets/slider-img.png";
   <body
     class="bg-gray-100 min-h-screen flex flex-col gap-8 items-center justify-center p-8"
   >
-    <Slider id="devices">
-      {
-        Array.from({ length: 10 }).map((_, index) => (
-          <SliderItem>
-            <p class="font-bold text-lg">
-              Apple <span class="text-red-500">{index + 1}</span>
-            </p>
-            <p class="font-semibold text-gray-800 mb-3">iPhone 17</p>
-            <img
-              src={image.src}
-              alt={`iPhone 17 - Apple ${index + 1}`}
-              class="w-full object-contain h-40"
-            />
-          </SliderItem>
-        ))
-      }
-    </Slider>
+    <div class="w-full max-w-4xl mx-auto space-y-4">
+      <Slider id="devices" showPagination={true}>
+        {
+          Array.from({ length: 10 }).map((_, index) => (
+            <div class="flex-none w-50 h-50 bg-white rounded-2xl shadow p-4 flex flex-col selection:bg-transparent">
+              <p class="font-bold text-lg">
+                Apple <span class="text-red-500">{index + 1}</span>
+              </p>
+              <p class="font-semibold text-gray-800 mb-3">iPhone 17</p>
+              <img
+                src={image.src}
+                alt={`iPhone 17 - Apple ${index + 1}`}
+                class="w-full object-contain h-40"
+              />
+            </div>
+          ))
+        }
+      </Slider>
+    </div>
   </body>
 </html>
 
 <script>
   import { SliderProvider } from "../lib/slider-provider";
 
-  const devicesSlider = new SliderProvider("#devices");
+  const devicesSlider = new SliderProvider("#devices", {
+    sliderOptions: { showPagination: true },
+  });
 
   devicesSlider.mount();
 </script>

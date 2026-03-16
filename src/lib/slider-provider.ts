@@ -17,7 +17,7 @@ type ClassNames = {
 
 export type SilderProviderOptions = {
   classNames: Partial<ClassNames>;
-  sliderOptions: Partial<EmblaOptionsType>;
+  sliderOptions: Partial<{ showPagination?: boolean } & EmblaOptionsType>;
 };
 
 const DEFAULT_OPTIONS: SilderProviderOptions = {
@@ -26,7 +26,8 @@ const DEFAULT_OPTIONS: SilderProviderOptions = {
     dotActive: "w-5 bg-red-400",
   },
   sliderOptions: {
-    containScroll: "keepSnaps",
+    containScroll: "trimSnaps",
+    showPagination: true,
     slidesToScroll: 1,
     align: "start",
     startIndex: 0,
@@ -36,13 +37,15 @@ const DEFAULT_OPTIONS: SilderProviderOptions = {
 
 export class SliderProvider {
   private sliderInstance: EmblaCarouselType;
-  private dotsContainerEl: HTMLElement;
+  private dotsContainerEl: HTMLElement | null;
   private options: SilderProviderOptions;
 
   constructor(
     selector: string | HTMLElement,
     options: Partial<SilderProviderOptions> = {},
   ) {
+    this.options = this.mergeOptions(options);
+
     const containerEl =
       typeof selector === "string"
         ? document.querySelector<HTMLElement>(selector)
@@ -55,17 +58,20 @@ export class SliderProvider {
       throw new Error(`Container not found`);
     }
 
-    if (!dotsContainerEl) {
+    if (!dotsContainerEl && this.showPagination()) {
       throw new Error(`Dots container not found`);
     }
 
-    this.options = this.mergeOptions(options);
     this.dotsContainerEl = dotsContainerEl;
     this.sliderInstance = EmblaCarousel(
       containerEl,
       this.options.sliderOptions,
     );
   }
+
+  private showPagination = (): boolean => {
+    return !!this.options.sliderOptions.showPagination;
+  };
 
   /**
    * Realiza una combinación profunda (deep merge) de las opciones proporcionadas con las opciones por defecto.
@@ -146,6 +152,9 @@ export class SliderProvider {
    * Oculta el contenedor de puntos por completo si hay 1 o menos snaps únicos disponibles.
    */
   private buildDots = () => {
+    if (!this.showPagination()) return;
+    if (!this.dotsContainerEl) return;
+
     this.dotsContainerEl.innerHTML = "";
     const { uniqueSnaps, indexMapping, snapList } = this.getUniqueSnaps();
 
@@ -171,7 +180,7 @@ export class SliderProvider {
       dot.addEventListener("click", () =>
         this.sliderInstance.scrollTo(targetIndex),
       );
-      this.dotsContainerEl.appendChild(dot);
+      this.dotsContainerEl!.appendChild(dot);
     });
   };
 
@@ -179,6 +188,9 @@ export class SliderProvider {
    * Actualiza las clases CSS activas de los puntos de paginación cuando el slider cambia de posición.
    */
   private updateDots = () => {
+    if (!this.showPagination()) return;
+    if (!this.dotsContainerEl) return;
+
     const { uniqueSnaps, snapList } = this.getUniqueSnaps();
     const uniqueSelectedIndex = this.getUniqueSelectedIndex({
       uniqueSnaps,
