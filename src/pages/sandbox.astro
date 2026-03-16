@@ -30,32 +30,13 @@ import image from "../assets/slider-img.png";
         ))
       }
     </Slider>
-    <Slider id="productos">
-      {
-        Array.from({ length: 2 }).map((_, index) => (
-          <SliderItem>
-            <p class="font-bold text-lg">
-              Apple <span class="text-red-500">{index + 1}</span>
-            </p>
-            <p class="font-semibold text-gray-800 mb-3">iPhone 17</p>
-            <img
-              src={image.src}
-              alt={`iPhone 17 - Apple ${index + 1}`}
-              class="w-full object-contain h-40"
-            />
-          </SliderItem>
-        ))
-      }
-    </Slider>
   </body>
 </html>
 
 <script>
   import { SliderProvider } from "../lib/slider-provider";
 
-  const devicesSlider = new SliderProvider("devices");
-  const productosSlider = new SliderProvider("productos");
+  const devicesSlider = new SliderProvider("#devices");
 
   devicesSlider.mount();
-  productosSlider.mount();
 </script>

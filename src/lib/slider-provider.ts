@@ -39,9 +39,11 @@ export class SliderProvider {
   ) {
     const containerEl =
       typeof selector === "string"
-        ? document.getElementById(selector)
+        ? document.querySelector<HTMLElement>(selector)
         : selector;
-    const dotsContainerEl = document.getElementById(`${selector}-dots`);
+    const dotsContainerEl = document.querySelector<HTMLElement>(
+      `${selector}-dots`,
+    );
 
     if (!containerEl) {
       throw new Error(`Container not found`);
@@ -67,16 +69,17 @@ export class SliderProvider {
     );
   };
 
+  // FIXME: fixear el problema de dots extras en desktop
   private buildDots = () => {
     this.dotsContainerEl.innerHTML = "";
     const snapList = this.slider.scrollSnapList();
-    
+
     // Ocultar container si hay 1 o menos snaps
     if (snapList.length <= 1) {
       this.dotsContainerEl.style.display = "none";
       return;
     }
-    
+
     this.dotsContainerEl.style.display = ""; // Restaurar display original
 
     const selectedIndex = this.slider.selectedScrollSnap();
