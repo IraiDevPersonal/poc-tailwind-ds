@@ -1,40 +1,20 @@
-import EmblaCarousel, {
-  type EmblaCarouselType,
-  type EmblaOptionsType,
-} from "embla-carousel";
-import { cn } from "./utils";
+import EmblaCarousel, { type EmblaCarouselType } from "embla-carousel";
+import { cn } from "../../lib/utils";
+import { SLIDER_DEFAULT_OPTIONS } from "./constants";
+import type { SilderProviderOptions, SliderUniqueSnaps } from "./types";
 
-type UniqueSnaps = {
-  uniqueSnaps: number[];
-  indexMapping: number[];
-  snapList: number[];
-};
-
-type ClassNames = {
-  dot: string;
-  dotActive: string;
-};
-
-export type SilderProviderOptions = {
-  classNames: Partial<ClassNames>;
-  sliderOptions: Partial<{ showPagination?: boolean } & EmblaOptionsType>;
-};
-
-const DEFAULT_OPTIONS: SilderProviderOptions = {
-  classNames: {
-    dot: "w-2 h-2 block rounded-full bg-neutral-200 transition-all ease-in-out duration-300 outline-none focus:outline-none",
-    dotActive: "w-5 bg-red-400",
-  },
-  sliderOptions: {
-    containScroll: "trimSnaps",
-    showPagination: true,
-    slidesToScroll: 1,
-    align: "start",
-    startIndex: 0,
-    loop: false,
-  },
-};
-
+/**
+ * Proveedor de funcionalidad para el carrusel (basado en Embla Carousel).
+ * Gestiona la inicialización, la lógica de paginación (puntos únicos)
+ * y el soporte para scroll con la rueda del ratón.
+ *
+ * Opciones por defecto:
+ * - `mountOnInit`: true (se monta automáticamente al instanciar).
+ * - `sliderOptions.showPagination`: true (muestra puntos de navegación).
+ * - `sliderOptions.containScroll`: 'trimSnaps' (limita el scroll a zonas con contenido).
+ * - `sliderOptions.skipSnaps`: true (permite desplazamientos rápidos sin rebote).
+ * - `sliderOptions.dragFree`: true (arrastre fluido).
+ */
 export class SliderProvider {
   private sliderInstance: EmblaCarouselType;
   private dotsContainerEl: HTMLElement | null;
@@ -67,6 +47,10 @@ export class SliderProvider {
       containerEl,
       this.options.sliderOptions,
     );
+
+    if (this.options.mountOnInit) {
+      this.mount();
+    }
   }
 
   private showPagination = (): boolean => {
@@ -84,13 +68,14 @@ export class SliderProvider {
   ): SilderProviderOptions => {
     return {
       classNames: {
-        ...DEFAULT_OPTIONS.classNames,
+        ...SLIDER_DEFAULT_OPTIONS.classNames,
         ...options.classNames,
       },
       sliderOptions: {
-        ...DEFAULT_OPTIONS.sliderOptions,
+        ...SLIDER_DEFAULT_OPTIONS.sliderOptions,
         ...options.sliderOptions,
       },
+      mountOnInit: options.mountOnInit ?? SLIDER_DEFAULT_OPTIONS.mountOnInit,
     };
   };
 
@@ -112,7 +97,7 @@ export class SliderProvider {
    * Este método asegura que solo generemos puntos para posiciones visuales únicas.
    * @returns Un objeto que contiene los snaps únicos, sus índices originales y la lista completa de snaps.
    */
-  private getUniqueSnaps = (): UniqueSnaps => {
+  private getUniqueSnaps = (): SliderUniqueSnaps => {
     const snapList = this.sliderInstance.scrollSnapList();
     const uniqueSnaps: number[] = [];
     const indexMapping: number[] = [];
@@ -140,7 +125,7 @@ export class SliderProvider {
   private getUniqueSelectedIndex = ({
     uniqueSnaps,
     snapList,
-  }: Omit<UniqueSnaps, "indexMapping">): number => {
+  }: Omit<SliderUniqueSnaps, "indexMapping">): number => {
     const selectedIndex = this.sliderInstance.selectedScrollSnap();
     const currentSnap = snapList[selectedIndex];
     return uniqueSnaps.findIndex((s) => Math.abs(s - currentSnap) < 0.1);

@@ -1,12 +1,16 @@
 ---
 import "../global.css";
-import Slider from "../components/Slider.astro";
+import Slider from "../components/slider/Slider.astro";
 import image from "../assets/slider-img.png";
 ---
 
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
+    <meta name="google" content="notranslate" />
+    <meta content="width=device-width" name="viewport" />
+    <link href="/favicon.ico" rel="icon" />
+    <meta content={Astro.generator} name="generator" />
     <title>iPhone 17 Slider</title>
   </head>
   <body
@@ -35,11 +39,12 @@ import image from "../assets/slider-img.png";
 </html>
 
 <script>
-  import { SliderProvider } from "../lib/slider-provider";
+  import { SliderProvider } from "../components/slider/slider-provider";
 
-  const devicesSlider = new SliderProvider("#devices", {
+  new SliderProvider("#devices", {
     sliderOptions: { showPagination: true },
+    mountOnInit: true,
   });
 
-  devicesSlider.mount();
+  // devicesSlider.mount();
 </script>
