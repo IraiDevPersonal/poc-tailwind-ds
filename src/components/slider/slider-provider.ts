@@ -4,9 +4,11 @@ import { SLIDER_DEFAULT_OPTIONS } from "./constants";
 import type { SilderProviderOptions, SliderUniqueSnaps } from "./types";
 
 /**
- * Proveedor de funcionalidad para el carrusel (basado en Embla Carousel).
- * Gestiona la inicialización, la lógica de paginación (puntos únicos)
- * y el soporte para scroll con la rueda del ratón.
+ * Proveedor de funcionalidad para Slider.
+ *
+ * @param selector - El selector (string) del contenedor del carrusel (ej: #devices, .devices).
+ * El sistema intentará encontrar automáticamente un contenedor de paginación añadiendo el sufijo `-dots` al selector.
+ * @param options - Configuraciones parciales para sobrescribir los valores por defecto (clases, opciones de Embla, auto-montaje).
  *
  * Opciones por defecto:
  * - `mountOnInit`: true (se monta automáticamente al instanciar).
@@ -20,16 +22,10 @@ export class SliderProvider {
   private dotsContainerEl: HTMLElement | null;
   private options: SilderProviderOptions;
 
-  constructor(
-    selector: string | HTMLElement,
-    options: Partial<SilderProviderOptions> = {},
-  ) {
+  constructor(selector: string, options: Partial<SilderProviderOptions> = {}) {
     this.options = this.mergeOptions(options);
 
-    const containerEl =
-      typeof selector === "string"
-        ? document.querySelector<HTMLElement>(selector)
-        : selector;
+    const containerEl = document.querySelector<HTMLElement>(selector);
     const dotsContainerEl = document.querySelector<HTMLElement>(
       `${selector}-dots`,
     );
