@@ -6,7 +6,7 @@ type Props = {
   showPagination?: boolean;
   classNames?: Partial<{
     root: string;
-    container: string;
+    slidesContainer: string;
     dotsContainer: string;
   }>;
 };
@@ -14,10 +14,10 @@ type Props = {
 const { id, showPagination = true, classNames } = Astro.props;
 ---
 
-<div class={cn("flex flex-col gap-3", classNames?.root)}>
+<div class={cn("flex flex-col gap-3 w-full min-w-0", classNames?.root)}>
   <!-- Carousel -->
-  <div class="overflow-hidden" id={id}>
-    <div class={cn("flex gap-3", classNames?.container)}>
+  <div class="overflow-hidden w-full min-w-0" id={id}>
+    <div class={cn("flex gap-3", classNames?.slidesContainer)}>
       <slot />
     </div>
   </div>

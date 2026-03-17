@@ -5,11 +5,7 @@ import RootLayout from "../layouts/RootLayout.astro";
 ---
 
 <RootLayout>
-  <Slider
-    id="devices"
-    showPagination={true}
-    classNames={{ root: "max-w-5xl mx-auto" }}
-  >
+  <Slider id="devices" showPagination={true} classNames={{ root: "max-w-5xl" }}>
     {
       Array.from({ length: 10 }).map((_, index) => (
         <div class="flex-none w-50 h-50 bg-white rounded-2xl shadow p-4 flex flex-col selection:bg-transparent">
