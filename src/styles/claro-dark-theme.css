@@ -1,0 +1,24 @@
+.dark {
+  /* Generalmente en dark mode solo se modificaran los valores para los token de colores, lo iportante esque conserven exactamente el mismo nombre las paletas de colores definidades en :root
+   */
+  --color-claro-50: #470c08;
+  --color-claro-100: #82211a;
+  --color-claro-200: #9d2017;
+  --color-claro-300: #be2217;
+  --color-claro-400: #da291c;
+  --color-claro-500: #f54b3e;
+  --color-claro-600: #fd766c;
+  --color-claro-700: #ffa8a2;
+  --color-claro-800: #ffccc8;
+  --color-claro-900: #ffe3e1;
+  --color-claro-950: #fef3f2;
+
+  --color-neutral-contrast: #fff;
+  --color-background: #282727;
+  --color-foreground: #ffffff;
+  /*
+  aqui se modifican los valores de los tokens de colores para dark mode referentes al background y foreground
+  --background: #282727e5;
+  --foreground: #ffffffe5;
+  */
+}

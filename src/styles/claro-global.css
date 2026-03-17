@@ -1,0 +1,136 @@
+@import "tailwindcss";
+@import "./claro-root-theme.css";
+@import "./claro-dark-theme.css";
+@variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  /*
+    IMPORTANTE: Los nombres de los archivos debe ser tal cual los que se ven en la zona de @imports de lo contrario no funcionara, estos pueden cambiar pero siempre debe hacer match el nombre del archivo con el que aparece en la importacion.
+
+    IMPORTANTE: Se debe conservar directiva: lo que se define con el "@" para el correcto funcionamiento, esta debe ser la estructua de los archivos
+
+    ___
+
+    aqui un poco de la documentacion importante de tailwind con respecto a la customizacion de temas
+    https://tailwindcss.com/docs/theme#:~:text=variable%20namespaces%20documentation.-,Theme%20variable%20namespaces,-Theme%20variables%20are
+
+    https://tailwindcss.com/docs/theme#default-theme-variable-reference:~:text=xl%22)%3B-,Default%20theme%20variable%20reference,-For%20reference%2C%20here%27s
+
+    copiar todo el link para que ir a la zona referenciada de la pagina
+  */
+
+  /* colors (background, text, border, etc...) */
+  /* IMPORTANTE: el prefijo para colores es --color */
+  --color-primary-bg-default: var(--color-claro-400);
+  --color-primary-bg-soft: var(--color-claro-200);
+  --color-primary-bg-strong: var(--color-claro-950);
+  --color-primary-bg-subtle: var(--color-claro-700);
+
+  --color-primary-text-default: var(--color-claro-400);
+  --color-primary-text-logo: var(--color-claro-500);
+  --color-primary-text-soft: var(--color-claro-700);
+  --color-primary-text-strong: var(--color-claro-100);
+  --color-primary-text-subtle: var(--color-claro-900);
+
+  --color-primary-border-default: var(--color-claro-400);
+  --color-primary-border-soft: var(--color-claro-700);
+  --color-primary-border-strong: var(--color-claro-100);
+  --color-primary-border-subtle: var(--color-claro-900);
+
+  --color-primary-bg-action-hover: var(--color-claro-300);
+  --color-primary-bg-action-pressed: var(--color-claro-200);
+
+  --color-neutral-text-contrast: var(--color-neutral-contrast);
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+
+  /* breakpoints */
+  --breakpoint-desktop: var(--breakpoint-desktop);
+
+  /* shadows */
+  /* IMPORTANTE: prefijo (namespace) para definir shadow es --shadow */
+  --shadow-none: var(--shadow-none);
+  --shadow-overlay-s: var(--shadow-overlay-small);
+  --shadow-overlay-m: var(--shadow-overlay-medium);
+  --shadow-overlay-l: var(--shadow-overlay-large);
+
+  /* inset shadows */
+  /* IMPORTANTE: prefijo (namespace) para definir shadow internas  es --inset-shadow */
+  --shadow-inset-s: var(--shadow-inset-small);
+  --shadow-inset-m: var(--shadow-inset-medium);
+  --shadow-inset-l: var(--shadow-inset-large);
+
+  /* drop shadows */
+  /* IMPORTANTE: prefijo (namespace) para definir drop shadows es --drop-shadow */
+  --drop-shadow-s: var(--shadow-drop-small);
+  --drop-shadow-m: var(--shadow-drop-medium);
+  --drop-shadow-l: var(--shadow-drop-large);
+
+  /* text shadows */
+  /* IMPORTANTE: prefijo (namespace) para definir text shadows es --text-shadow */
+  --text-shadow-s: var(--shadow-text-small);
+  --text-shadow-m: var(--shadow-text-medium);
+  --text-shadow-l: var(--shadow-text-large);
+
+  /* aspect ratio */
+  /* IMPORTANTE: prefijo (namespace) para definir aspect ratio es --aspect */
+  --aspect-4/3: var(--aspect-ratio-4-3);
+
+  /* blur */
+  /* IMPORTANTE: prefijo (namespace) para definir blur filter es --blur */
+  --blur-dense: var(--blur-filter-3xl);
+  --blur-light: var(--blur-filter);
+  --blur-medium: var(--blur-filter-xl);
+  --blur-thick: var(--blur-filter-2xl);
+  --blur-thin: var(--blur-filter-md);
+
+  /* font-weight */
+  /* IMPORTANTE: prefijo (namespace) para definir el font weight es --font-weight */
+  --font-weight-regular: var(--font-weight-regular);
+  --font-weight-medium: var(--font-weight-medium);
+  --font-weight-bold: var(--font-weight-bold);
+
+  /* font-family */
+  /* IMPORTANTE: prefijo (namespace) para definir el font family es --font */
+  --font-amx: var(--font-family);
+
+  /* font-size y line height */
+  /* IMPORTANTE: prefijo (namespace) para definir el font size es --text y si se agrega el --line-height ademas se le asignara el alto de linea especificamente al font-size apuntado, como se muestra acontinuacion
+  */
+  --text-*: initial; /* esto es para que tailwind no genere las utilidades de font-size por defecto (solo crearia estas que se estan declarando mas abajo) */
+  --text-12: var(--font-size-12);
+  --text-12--line-height: var(--line-height-14);
+  --text-14: var(--font-size-14);
+  --text-14--line-height: var(--line-height-16);
+  --text-24: var(--font-size-24);
+  --text-24--line-height: var(--line-height-28);
+
+  /* letter spacing */
+  /* IMPORTANTE: prefijo (namespace) para definir letter spacing es --tracking */
+  --tracking-none: var(--letter-spacing-none);
+
+  /* radius */
+  /* IMPORTANTE: prefijo (namespace) para definir border radius es --radius */
+  --radius-*: initial; /* esto es para que tailwind no genere las utilidades de border-radius por defecto (solo crearia estas que se estan declarando mas abajo) */
+  --radius-button-default: var(--border-radius-full);
+  --radius-button-small: var(--border-radius-full);
+  --radius-small: var(--border-radius-8);
+  --radius-medium: var(--border-radius-12);
+  --radius-large: var(--border-radius-16);
+
+  /* spacing base */
+  /* IMPORTANTE: prefijo (namespace segun tailwind) para definir cualquier spacing es --spacing, esto lo dejara disponible para, height,   width, padding, margin, gap, etc...
+  por eso disnticion semantica para agrupar cuales spacing se usaran para gap, paading y segun lo que sea necesario
+  */
+  --spacing: var(--spacing-base);
+
+  /* gap */
+  --spacing-gap-tile: var(--spacing-12);
+  --spacing-gap-grid: var(--spacing-16);
+  --spacing-gap-block: var(--spacing-24);
+
+  /* padding */
+  --spacing-padding-compact: var(--spacing-8);
+  --spacing-padding-base: var(--spacing-12);
+  --spacing-padding-box: var(--spacing-16);
+}

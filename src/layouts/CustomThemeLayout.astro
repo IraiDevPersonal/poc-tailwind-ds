@@ -1,0 +1,53 @@
+---
+import "../styles/claro-global.css";
+
+type Props = {
+  tabTitle?: string;
+};
+
+const { tabTitle = "Sandbox Astro Tailwind" } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{tabTitle}</title>
+  </head>
+  <body
+    class="bg-background text-foreground transition-colors duration-300 flex flex-col h-dvh"
+  >
+    <header class="border-b-2">
+      <div class="max-w-5xl mx-auto flex justify-between items-center h-16">
+        <div class="flex gap-2 items-center">
+          <h1 class="text-24 font-bold">Custom Theme Claro DS</h1>
+        </div>
+        <button
+          id="theme-toggler"
+          class="cursor-pointer text-neutral-text-contrast bg-primary-bg-default hover:bg-primary-bg-action-hover transition-colors rounded-button-default p-padding-compact w-32 duration-300"
+        >
+          Light Theme
+        </button>
+      </div>
+    </header>
+    <main class="p-10 gap-y-10 h-dvh grid place-content-center">
+      <slot />
+    </main>
+  </body>
+</html>
+
+<script>
+  const btn = document.getElementById("theme-toggler");
+  const html = document.documentElement;
+
+  btn?.addEventListener("click", () => {
+    btn.innerText = "";
+    btn.innerText = html.classList.contains("dark")
+      ? "Light Theme"
+      : "Dark Theme";
+    html.classList.toggle("dark");
+  });
+</script>

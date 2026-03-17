@@ -1,0 +1,139 @@
+:root {
+  /* COLORES */
+  /* (seguir formato de 50 hasta 950) */
+  --color-claro-50: #fef3f2;
+  --color-claro-100: #ffe3e1;
+  --color-claro-200: #ffccc8;
+  --color-claro-300: #ffa8a2;
+  --color-claro-400: #fd766c;
+  --color-claro-500: #f54b3e;
+  --color-claro-600: #da291c;
+  --color-claro-700: #be2217;
+  --color-claro-800: #9d2017;
+  --color-claro-900: #82211a;
+  --color-claro-950: #470c08;
+
+  --color-neutral-contrast: #000;
+  --color-white: #fff;
+  --color-back: #000;
+  --color-background: #ffffff;
+  --color-foreground: #565656;
+  /* con respecto a los colores, seria bueno definir un color para el background de toda la app, como tambien un color para el texto
+    como referencia esto se usa mucho de esta forma
+    --background: #ffffffe5;
+    --foreground: #282727e5 --> color para texto
+    y de esta forma poder modificarlos directamente en el tema dark, como se mostrara mas abajo
+  */
+
+  /* REDONDEADOS */
+  /* pueden ser tratados como px, se pueden crear tantos como sean necesarios */
+  --border-radius-none: 0px;
+  --border-radius-8: 8px;
+  --border-radius-12: 12px;
+  --border-radius-16: 16px;
+  --border-radius-full: 9999px;
+
+  /* SPACING
+    Proporcionar un spacing base, esto para que se generen las utilizades de tailwind referentes a spacing con respecto a la base
+    proporcionada
+    IMPORTANTE: spacing "base" debe ser tratado en rem
+   */
+  --spacing-base: 0.25rem; /* --> se define el spacing base*/
+  /* ¿Que hace esto?
+    Define la unidad mas pequeña disponible para las utilidades de spacing en TAILWIND (padding, margin, gap, height, width)
+    Otra variable importante es el font-size del browser, este valor no se debe manipular y por defecto es de 16px (es un estandar)
+    ej: p-1 (padding 1) --> internamente se hace un calculo con la siguiente formula: (N * --spacing-base * --font-size), donde N es el valor que se recibe desde la utilidad de tailwind (p-N) para este caso N = 1 (p-1)
+    quedando de la siguiente forma: (1 * 0.25rem * 16px) = 4px, para p-2 seria (2 * 0.25rem * 16px) = 8px y asi sucesivamente
+    Los valores de p-N (token de tailwind para padding), m-N (token de tailwind para margin) se utilizan para hacer el calculo antes mencionado, donde N es cualquier valor que se desee, tailwind se encarga de hacer el calculo y proporcionar el resultado, por eso la importancia de definir una base
+   */
+
+  /* SPACING ESPECIFICOS Y CUSTOM */
+  /* se pueden crear tantos spacing especificos o custom como se desee
+    estos pueden ser definidos en px para una mayor comodidad, y los nombres pueden hacer referencia a los valores en px, por ejemplo
+    --spacing-16: 16px; o algo mas descriptivo como --spacing-large: 42px; etc...
+    y se puede ser tan especifico en valor como sea necesario, solo tener en cuanta que estos son valores especificos y no seran parte de las utilidades que genera tailwind, seran utilizados como referencias para los token semanticos
+    ej: token primitivo: --spacing-16: 16px;
+        token semantico: --spacing-gap-large: var(--spacing-16);
+        utilidad de tailwind generada: gap-large
+  */
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-custom: 3.234px;
+  /* IMPORTANTE: los valores negativos son generados automaticamente por tailwind, solo definiendo su valor positivo
+    ej: el token semantico --spacing-custom: var(--spacing-16) que usa el token primitivo del ejemplo, generará el valor 16px y -16px de forma automatica, quedando disponible para el uso
+  */
+
+  /* PESO DE LA FUENTE */
+  /* definicion de peso de la fuente, sus valores se definen sin px o rem, solo el valor numerico y nombres descriptivos */
+  --font-weight-regular: 400;
+  --font-weight-light: 300;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* TAMAÑO DE LA FUENTE */
+  /* definicion de tamaños de fuente, con nombres descriptivos o con respecto a su unidad en px */
+  --font-size-12: 12px;
+  --font-size-14: 14px;
+  --font-size-24: 24px;
+
+  /* ALTO DE LA LINEA */
+  /* definicion de alto de linea, con nombres descriptivos o con respecto a su unidad en px */
+  --line-height-14: 14px;
+  --line-height-16: 16px;
+  --line-height-28: 28px;
+
+  /* SEPARACION ENTRE LETRAS */
+  /* definicion de separacion de caracteres con nombres descriptivos */
+  --letter-spacing-none: 0em;
+
+  /* SOMBRAS */
+  /* defincion de estilos de sombras, con nombres descriptivos
+    IMPORTANTE: siempre tratar de crear las sombras con un color por defecto
+    se agregan ejemplos de las distintas formas de aplicar shadows, por si se llegan a utilizar, se pueden omitir las que no van al caso
+  */
+  --shadow-none: none;
+  --shadow-overlay-small: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-overlay-medium:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-overlay-large:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  /* sombras internas */
+  --shadow-inset-small: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+  --shadow-inset-medium: inset 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-inset-large:
+    inset 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  /* sombras para contornos (utilises para svg, para que la sombra sigan su forma) */
+  --shadow-drop-small: drop-shadow(0 1px 2px 0 rgba(0, 0, 0, 0.05));
+  --shadow-drop-medium: drop-shadow(
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05)
+  );
+  --shadow-drop-large: drop-shadow(
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04)
+  );
+  /* sombras para textos */
+  --shadow-text-small: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-text-medium:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-text-large:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* FILTROS BLUR */
+  /* Definicion de efectos de blur, con nombres descriptivos o con respecto a su unidad en px */
+  --blur-filter: 8px;
+  --blur-filter-md: 12px;
+  --blur-filter-xl: 24px;
+  --blur-filter-2xl: 40px;
+  --blur-filter-3xl: 64px;
+
+  /* ASPECT RATIO */
+  /* defincion de aspect ratio, con nombres descriptivos */
+  --aspect-ratio-4-3: 4 / 3;
+
+  /* BREAKPOINTS */
+  --breakpoint-desktop: 64rem; /* --> equivale a 1024px*/
+}
