@@ -22,7 +22,7 @@
     como referencia esto se usa mucho de esta forma
     --background: #ffffffe5;
     --foreground: #282727e5 --> color para texto
-    y de esta forma poder modificarlos directamente en el tema dark, como se mostrara mas abajo
+    y de esta forma poder modificarlos directamente en el tema dark, ver en tema dark
   */
 
   /* REDONDEADOS */
@@ -136,4 +136,8 @@
 
   /* BREAKPOINTS */
   --breakpoint-desktop: 64rem; /* --> equivale a 1024px*/
+
+  /* OBS GENERALES:
+    lo ideal seria tratar de evitar el uso de px y usar rem en cuanto a font-size y spacing (a no ser de que sea muy custom)
+  */
 }

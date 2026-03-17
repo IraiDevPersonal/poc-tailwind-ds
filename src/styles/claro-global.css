@@ -21,6 +21,14 @@
 
   /* colors (background, text, border, etc...) */
   /* IMPORTANTE: el prefijo para colores es --color */
+  /* SUGERENCIA: se plantea una modificacion en como se define el nombre del token semantico con respecto a colores
+    originalmente era asi: --color-bg-primary-default
+    y ahora es: --color-primary-bg-default
+    con esto viene a resolver algo que nos pasaba al momento de usar esto en desarrollo
+    ej: antes se tenia bg-bg-primary-default es bg-bg es redundante y tiene a confundir, mientras que usando la sugerencia planteada quedaria asi: bg-primary-bg-default
+    donde el primer "bg" le dice a tailwind donde quiero aplicar el color (bg --> background), el "primary" hace referencia a la paleta del color, el siguiente "bg" es la parte semantica, que indica de donde proviene el color y por ultimo el "default" seria su nivel de intensidad (default, soft, strong, subtle)
+    aplicando la sugerencia nos ayudaria a nosotros y a futuros equipos de trabajo a enteder mejor la aplicacion de colores
+  */
   --color-primary-bg-default: var(--color-claro-400);
   --color-primary-bg-soft: var(--color-claro-200);
   --color-primary-bg-strong: var(--color-claro-950);
@@ -92,11 +100,12 @@
 
   /* font-family */
   /* IMPORTANTE: prefijo (namespace) para definir el font family es --font */
-  --font-amx: var(--font-family);
+  --font-family: var(--font-family);
 
   /* font-size y line height */
   /* IMPORTANTE: prefijo (namespace) para definir el font size es --text y si se agrega el --line-height ademas se le asignara el alto de linea especificamente al font-size apuntado, como se muestra acontinuacion
   */
+  /* SUGERENCIA: aqui se puede apreciar como el token semantico esta siendo practicamente identica al token primitivo, porque se esta usando --text-12 que hace referencia a 12px que se recibe del primitivo, lo ideal es evitar esto y que el token semantico sea algo como --text-xs, porque a futuro ese --text-xs puede tener el valor 14px y no romperia la semantica, en cuanto a text-12 con un valor de 14px ya no seria semantico e incluso contraproducente, esto viene observado del uso de tamaño de fuentes en el figma  */
   --text-*: initial; /* esto es para que tailwind no genere las utilidades de font-size por defecto (solo crearia estas que se estan declarando mas abajo) */
   --text-12: var(--font-size-12);
   --text-12--line-height: var(--line-height-14);
@@ -133,4 +142,10 @@
   --spacing-padding-compact: var(--spacing-8);
   --spacing-padding-base: var(--spacing-12);
   --spacing-padding-box: var(--spacing-16);
+
+  /* OBS GENERALES:
+    dentro de lo posible usar la misma nomenclarura en el nombre de los semanticos
+    ej: los shadow estan de la siguiente manera, shadow-overlay-s, -m, -l y los radius (algunos) son radius-small, -medium, -large
+    lo ideal es que sean de una forma todos, para mantener todo lo mas homogeneo posible
+  */
 }
