@@ -7,7 +7,7 @@ export const SLIDER_DEFAULT_OPTIONS: SilderProviderOptions = {
   },
   sliderOptions: {
     containScroll: "trimSnaps",
-    showPagination: true,
+    showDots: true,
     slidesToScroll: 1,
     align: "start",
     startIndex: 0,

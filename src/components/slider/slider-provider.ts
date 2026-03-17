@@ -34,7 +34,7 @@ export class SliderProvider {
       throw new Error(`Container not found`);
     }
 
-    if (!dotsContainerEl && this.showPagination()) {
+    if (!dotsContainerEl && this.showDots()) {
       throw new Error(`Dots container not found`);
     }
 
@@ -49,8 +49,8 @@ export class SliderProvider {
     }
   }
 
-  private showPagination = (): boolean => {
-    return !!this.options.sliderOptions.showPagination;
+  private showDots = (): boolean => {
+    return !!this.options.sliderOptions.showDots;
   };
 
   /**
@@ -133,7 +133,7 @@ export class SliderProvider {
    * Oculta el contenedor de puntos por completo si hay 1 o menos snaps únicos disponibles.
    */
   private buildDots = () => {
-    if (!this.showPagination()) return;
+    if (!this.showDots()) return;
     if (!this.dotsContainerEl) return;
 
     this.dotsContainerEl.innerHTML = "";
@@ -169,7 +169,7 @@ export class SliderProvider {
    * Actualiza las clases CSS activas de los puntos de paginación cuando el slider cambia de posición.
    */
   private updateDots = () => {
-    if (!this.showPagination()) return;
+    if (!this.showDots()) return;
     if (!this.dotsContainerEl) return;
 
     const { uniqueSnaps, snapList } = this.getUniqueSnaps();

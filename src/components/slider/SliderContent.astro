@@ -8,6 +8,6 @@ type Props = {
 const { className } = Astro.props;
 ---
 
-<div class={cn("flex gap-3 w-full min-w-0", className)}>
+<div class={cn("flex flex-col gap-4", className)}>
   <slot />
 </div>

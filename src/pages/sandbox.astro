@@ -1,26 +1,24 @@
 ---
+import DeviceCard from "../components/DeviceCard.astro";
 import Slider from "../components/slider/Slider.astro";
-import image from "../assets/slider-img.png";
+import SliderContent from "../components/slider/SliderContent.astro";
+import SliderDots from "../components/slider/SliderDots.astro";
+import Slides from "../components/slider/Slides.astro";
 import RootLayout from "../layouts/RootLayout.astro";
 ---
 
 <RootLayout>
-  <Slider id="devices" showPagination={true} classNames={{ root: "max-w-5xl" }}>
-    {
-      Array.from({ length: 10 }).map((_, index) => (
-        <div class="flex-none w-50 h-50 bg-white rounded-2xl shadow p-4 flex flex-col selection:bg-transparent">
-          <p class="font-bold text-lg">
-            Apple <span class="text-red-500">{index + 1}</span>
-          </p>
-          <p class="font-semibold text-gray-800 mb-3">iPhone 17</p>
-          <img
-            src={image.src}
-            alt={`iPhone 17 - Apple ${index + 1}`}
-            class="w-full object-contain h-40"
-          />
-        </div>
-      ))
-    }
+  <Slider>
+    <SliderContent>
+      <Slides id="devices" className="max-w-5xl">
+        {
+          Array.from({ length: 10 }).map((_, index) => (
+            <DeviceCard index={index} />
+          ))
+        }
+      </Slides>
+      <SliderDots id="devices" />
+    </SliderContent>
   </Slider>
 </RootLayout>
 
@@ -28,9 +26,7 @@ import RootLayout from "../layouts/RootLayout.astro";
   import { SliderProvider } from "../components/slider/slider-provider";
 
   new SliderProvider("#devices", {
-    sliderOptions: { showPagination: true },
+    sliderOptions: { showDots: true },
     mountOnInit: true,
   });
-
-  // devicesSlider.mount();
 </script>
