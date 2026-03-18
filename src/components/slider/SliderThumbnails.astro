@@ -1,5 +1,18 @@
 ---
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+import { cn } from "../../lib/utils";
+import RenderArray from "../RenderArray.astro";
 
+type Props<T = null> = {
+  render?: AstroComponentFactory;
+  className?: string;
+  items?: T[];
+  id: string;
+};
+
+const { id, className, items, render } = Astro.props;
 ---
 
-<div>thumbnail</div>
+<ul id={`${id}-thumbnails`} class={cn("flex flex-col gap-2", className)}>
+  <RenderArray items={items} render={render} />
+</ul>

@@ -22,13 +22,11 @@ export class SliderProvider {
   private dotsContainerEl: HTMLElement | null;
   private options: SilderProviderOptions;
 
-  constructor(selector: string, options: Partial<SilderProviderOptions> = {}) {
+  constructor(id: string, options: Partial<SilderProviderOptions> = {}) {
     this.options = this.mergeOptions(options);
 
-    const containerEl = document.querySelector<HTMLElement>(selector);
-    const dotsContainerEl = document.querySelector<HTMLElement>(
-      `${selector}-dots`,
-    );
+    const containerEl = document.getElementById(id);
+    const dotsContainerEl = document.getElementById(`${id}-dots`);
 
     if (!containerEl) {
       throw new Error(`Container not found`);

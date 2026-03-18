@@ -1,0 +1,10 @@
+---
+type Props = {
+  index: number;
+  name: string;
+};
+
+const { index, name } = Astro.props;
+---
+
+<li class="h-16 w-16 bg-white shadow-lg rounded-lg p-2 text-xs">{name}</li>
