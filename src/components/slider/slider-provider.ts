@@ -1,21 +1,43 @@
 import EmblaCarousel, { type EmblaCarouselType } from "embla-carousel";
-import { cn } from "../../lib/utils";
+import { cn } from "@lib/utils";
 import { SLIDER_DEFAULT_OPTIONS } from "./constants";
 import type { SilderProviderOptions, SliderUniqueSnaps } from "./types";
 
 /**
- * Proveedor de funcionalidad para Slider.
+ * Proveedor de lógica y funcionalidad para componentes de tipo Slider.
+ * Facilita la integración con Embla Carousel, gestionando automáticamente la sincronización
+ * de puntos de navegación (dots) y miniaturas (thumbnails).
  *
- * @param selector - El selector (string) del contenedor del carrusel (ej: #devices, .devices).
- * El sistema intentará encontrar automáticamente un contenedor de paginación añadiendo el sufijo `-dots` al selector.
- * @param options - Configuraciones parciales para sobrescribir los valores por defecto (clases, opciones de Embla, auto-montaje).
+ * @example
+ * const options = {
+ *   sliderOptions: {
+ *     showThumbnails: true,
+ *     showDots: true,
+ *   },
+ *   mountOnInit: true,
+ * };
  *
- * Opciones por defecto:
- * - `mountOnInit`: true (se monta automáticamente al instanciar).
- * - `sliderOptions.showPagination`: true (muestra puntos de navegación).
- * - `sliderOptions.containScroll`: 'trimSnaps' (limita el scroll a zonas con contenido).
- * - `sliderOptions.skipSnaps`: true (permite desplazamientos rápidos sin rebote).
- * - `sliderOptions.dragFree`: true (arrastre fluido).
+ * new SliderProvider('mi-slider-id', options);
+ *
+ * @note
+ * El funcionamiento de las miniaturas (thumbnails) está optimizado para sliders que muestran
+ * una única diapositiva a la vez. Aunque se permite su uso con múltiples tarjetas visibles,
+ * la sincronización del estado activo en los thumbnails podría no ser exacta.
+ *
+ * @param id - Identificador único del contenedor raíz del slider.
+ * El sistema localizará automáticamente los elementos relacionados mediante sufijos:
+ * - Puntos de paginación: `${id}-dots`
+ * - Miniaturas: `${id}-thumbnails`
+ *
+ * @param options - Configuraciones opcionales para personalizar clases, opciones de Embla y auto-montaje.
+ *
+ * Configuraciones por defecto:
+ * - `mountOnInit`: true (montaje automático al instanciar).
+ * - `sliderOptions.showDots`: true (gestión de puntos habilitada).
+ * - `sliderOptions.showThumbnails`: false (miniaturas deshabilitadas por defecto).
+ * - `sliderOptions.containScroll`: 'trimSnaps' (evita espacios vacíos al inicio/final).
+ * - `sliderOptions.skipSnaps`: true (permite desplazamientos fluidos entre tarjetas).
+ * - `sliderOptions.dragFree`: true (habilita arrastre libre).
  */
 export class SliderProvider {
   private sliderInstance: EmblaCarouselType;
@@ -204,7 +226,28 @@ export class SliderProvider {
   /**
    * Establece click listener y estado activo para los thumbnails dentro del su contenedor.
    */
-  private initThumbnails = () => {
+  private setupThumbnails = () => {
+    if (!this.showThumbnails()) return;
+    if (!this.thumbnailsContainerEl) return;
+
+    const thumbnails = this.thumbnailsContainerEl.querySelectorAll("button");
+
+    thumbnails.forEach((thumbnail, index) => {
+      if (thumbnail.dataset.thumbnailInitialized === "true") return;
+
+      thumbnail.addEventListener("click", () => {
+        this.sliderInstance.scrollTo(index);
+      });
+      thumbnail.dataset.thumbnailInitialized = "true";
+    });
+
+    this.updateThumbnails();
+  };
+
+  /**
+   * Actualiza las clases CSS activas de los thumbnails cuando el slider cambia de posición.
+   */
+  private updateThumbnails = () => {
     if (!this.showThumbnails()) return;
     if (!this.thumbnailsContainerEl) return;
 
@@ -213,9 +256,6 @@ export class SliderProvider {
 
     thumbnails.forEach((thumbnail, index) => {
       const isActive = index === selectedIndex;
-      thumbnail.addEventListener("click", () => {
-        this.sliderInstance.scrollTo(index);
-      });
       thumbnail.dataset.active = isActive.toString();
     });
   };
@@ -227,12 +267,15 @@ export class SliderProvider {
   public mount = () => {
     this.sliderInstance.on("init", () => {
       this.buildDots();
-      this.initThumbnails();
+      this.setupThumbnails();
     });
-    this.sliderInstance.on("reInit", this.buildDots);
+    this.sliderInstance.on("reInit", () => {
+      this.buildDots();
+      this.setupThumbnails();
+    });
     this.sliderInstance.on("select", () => {
       this.updateDots();
-      this.initThumbnails();
+      this.updateThumbnails();
     });
 
     // Mouse wheel scroll

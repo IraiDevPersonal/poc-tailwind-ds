@@ -1,13 +1,13 @@
 ---
-import DeviceCard from "../components/DeviceCard.astro";
-import DeviceThumbnail from "../components/DeviceThumbnail.astro";
-import Slider from "../components/slider/Slider.astro";
-import SliderContent from "../components/slider/SliderContent.astro";
-import SliderDots from "../components/slider/SliderDots.astro";
-import SliderThumbnails from "../components/slider/SliderThumbnails.astro";
-import Slides from "../components/slider/Slides.astro";
-import RootLayout from "../layouts/RootLayout.astro";
-import { DEVICE_SLIDER_ID } from "../lib/constants";
+import DeviceCard from "@components/DeviceCard.astro";
+import DeviceThumbnail from "@components/DeviceThumbnail.astro";
+import Slider from "@components/slider/Slider.astro";
+import SliderContent from "@components/slider/SliderContent.astro";
+import SliderDots from "@components/slider/SliderDots.astro";
+import SliderThumbnails from "@components/slider/SliderThumbnails.astro";
+import Slides from "@components/slider/Slides.astro";
+import RootLayout from "@layouts/RootLayout.astro";
+import { DEVICE_SLIDER_ID } from "@lib/constants";
 
 const products = Array.from({ length: 7 }).map((_, index) => ({
   id: index + 1,
@@ -35,8 +35,8 @@ const products = Array.from({ length: 7 }).map((_, index) => ({
 </RootLayout>
 
 <script>
-  import { SliderProvider } from "../components/slider/slider-provider";
-  import { DEVICE_SLIDER_ID } from "../lib/constants";
+  import { SliderProvider } from "@components/slider/slider-provider";
+  import { DEVICE_SLIDER_ID } from "@lib/constants";
 
   new SliderProvider(DEVICE_SLIDER_ID, {
     sliderOptions: { showThumbnails: true, showDots: true },
