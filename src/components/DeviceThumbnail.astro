@@ -7,4 +7,10 @@ type Props = {
 const { index, name } = Astro.props;
 ---
 
-<li class="h-16 w-16 bg-white shadow-lg rounded-lg p-2 text-xs">{name}</li>
+<li>
+  <button
+    class="h-16 w-16 bg-white shadow-lg rounded-lg p-2 text-xs ring-2 ring-transparent transition-all ease-in-out data-[active=true]:ring-red-500"
+  >
+    {name}
+  </button>
+</li>

@@ -7,13 +7,14 @@ export const SLIDER_DEFAULT_OPTIONS: SilderProviderOptions = {
   },
   sliderOptions: {
     containScroll: "trimSnaps",
-    showDots: true,
+    showThumbnails: false,
     slidesToScroll: 1,
+    skipSnaps: true,
+    dragFree: true,
+    showDots: true,
     align: "start",
     startIndex: 0,
     loop: false,
-    skipSnaps: true,
-    dragFree: true,
   },
   mountOnInit: true,
 };

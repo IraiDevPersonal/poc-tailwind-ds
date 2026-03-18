@@ -51,6 +51,8 @@ export type SliderClassNames = {
  */
 export type SilderProviderOptions = {
   classNames: Partial<SliderClassNames>;
-  sliderOptions: Partial<{ showDots: boolean } & EmblaOptionsType>;
+  sliderOptions: Partial<
+    { showDots: boolean; showThumbnails: boolean } & EmblaOptionsType
+  >;
   mountOnInit?: boolean;
 };

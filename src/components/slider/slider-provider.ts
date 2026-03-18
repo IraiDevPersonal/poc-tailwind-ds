@@ -20,6 +20,7 @@ import type { SilderProviderOptions, SliderUniqueSnaps } from "./types";
 export class SliderProvider {
   private sliderInstance: EmblaCarouselType;
   private dotsContainerEl: HTMLElement | null;
+  private thumbnailsContainerEl: HTMLElement | null;
   private options: SilderProviderOptions;
 
   constructor(id: string, options: Partial<SilderProviderOptions> = {}) {
@@ -27,6 +28,7 @@ export class SliderProvider {
 
     const containerEl = document.getElementById(id);
     const dotsContainerEl = document.getElementById(`${id}-dots`);
+    const thumbnailsContainerEl = document.getElementById(`${id}-thumbnails`);
 
     if (!containerEl) {
       throw new Error(`Container not found`);
@@ -36,7 +38,20 @@ export class SliderProvider {
       throw new Error(`Dots container not found`);
     }
 
+    if (!thumbnailsContainerEl && this.showThumbnails()) {
+      throw new Error(`Thumbnails container not found`);
+    }
+
+    if (!this.showDots()) {
+      dotsContainerEl!.hidden = true;
+    }
+
+    if (!this.showThumbnails()) {
+      thumbnailsContainerEl!.hidden = true;
+    }
+
     this.dotsContainerEl = dotsContainerEl;
+    this.thumbnailsContainerEl = thumbnailsContainerEl;
     this.sliderInstance = EmblaCarousel(
       containerEl,
       this.options.sliderOptions,
@@ -49,6 +64,10 @@ export class SliderProvider {
 
   private showDots = (): boolean => {
     return !!this.options.sliderOptions.showDots;
+  };
+
+  private showThumbnails = (): boolean => {
+    return !!this.options.sliderOptions.showThumbnails;
   };
 
   /**
@@ -183,13 +202,38 @@ export class SliderProvider {
   };
 
   /**
+   * Establece click listener y estado activo para los thumbnails dentro del su contenedor.
+   */
+  private initThumbnails = () => {
+    if (!this.showThumbnails()) return;
+    if (!this.thumbnailsContainerEl) return;
+
+    const selectedIndex = this.sliderInstance.selectedScrollSnap();
+    const thumbnails = this.thumbnailsContainerEl.querySelectorAll("button");
+
+    thumbnails.forEach((thumbnail, index) => {
+      const isActive = index === selectedIndex;
+      thumbnail.addEventListener("click", () => {
+        this.sliderInstance.scrollTo(index);
+      });
+      thumbnail.dataset.active = isActive.toString();
+    });
+  };
+
+  /**
    * Se suscribe a los eventos de Embla Carousel y adjunta escuchadores de eventos externos.
    * Configura la sincronización de los puntos de paginación y habilita el desplazamiento personalizado con la rueda del ratón.
    */
   public mount = () => {
-    this.sliderInstance.on("init", this.buildDots);
+    this.sliderInstance.on("init", () => {
+      this.buildDots();
+      this.initThumbnails();
+    });
     this.sliderInstance.on("reInit", this.buildDots);
-    this.sliderInstance.on("select", this.updateDots);
+    this.sliderInstance.on("select", () => {
+      this.updateDots();
+      this.initThumbnails();
+    });
 
     // Mouse wheel scroll
     let wheelTimeout: ReturnType<typeof setTimeout>;
