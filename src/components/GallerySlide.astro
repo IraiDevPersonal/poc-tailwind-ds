@@ -1,0 +1,15 @@
+---
+import image from "@assets/slider-img.png";
+
+type Props = {
+  name: string;
+};
+
+const { name } = Astro.props;
+---
+
+<div
+  class="flex-none w-96 h-96 bg-white rounded-2xl shadow p-4 flex flex-col place-content-center selection:bg-transparent"
+>
+  <img class="w-full object-contain h-40" src={image.src} alt={name} />
+</div>

@@ -64,12 +64,12 @@ export class SliderProvider {
       throw new Error(`Thumbnails container not found`);
     }
 
-    if (!this.showDots()) {
-      dotsContainerEl!.hidden = true;
+    if (dotsContainerEl && !this.showDots()) {
+      dotsContainerEl.hidden = true;
     }
 
-    if (!this.showThumbnails()) {
-      thumbnailsContainerEl!.hidden = true;
+    if (thumbnailsContainerEl && !this.showThumbnails()) {
+      thumbnailsContainerEl.hidden = true;
     }
 
     this.dotsContainerEl = dotsContainerEl;
