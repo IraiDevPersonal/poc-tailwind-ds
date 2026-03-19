@@ -14,7 +14,7 @@ const { id, className, items, render } = Astro.props;
 ---
 
 <div class="overflow-hidden w-full min-w-0" id={id}>
-  <div class={cn("flex gap-3", className)}>
+  <div class={cn("flex gap-3 w-full h-full", className)}>
     <Render items={items} render={render}>
       <slot />
     </Render>

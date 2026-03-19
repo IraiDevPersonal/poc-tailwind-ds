@@ -16,7 +16,10 @@ const { id, className, items, render } = Astro.props;
 
 <ul
   id={getSliderIdFor(id, "thumbnails")}
-  class={cn("flex flex-col gap-2", className)}
+  class={cn(
+    "flex flex-col gap-2 order-last lg:order-first overflow-y-scroll [-ms-overflow-style:none] [scrollbar-width:none]",
+    className,
+  )}
 >
   <Render items={items} render={render}>
     <slot />

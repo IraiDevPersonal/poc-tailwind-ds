@@ -1,8 +1,8 @@
 export type SliderElementIds = "dots" | "thumbnails" | "nav-buttons";
 
 export function getSliderIdFor(
-  continerId: string,
+  containerId: string,
   elementId: SliderElementIds,
 ) {
-  return `${continerId}-${elementId}`;
+  return `${containerId}-${elementId}`;
 }

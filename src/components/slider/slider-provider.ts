@@ -36,6 +36,7 @@ import { getSliderIdFor } from "./utils";
  * - `mountOnInit`: true (montaje automático al instanciar).
  * - `sliderOptions.showDots`: true (gestión de puntos habilitada).
  * - `sliderOptions.showThumbnails`: false (miniaturas deshabilitadas por defecto).
+ * - `sliderOptions.showNavButtons`: false (botones de navegación deshabilitados por defecto).
  * - `sliderOptions.containScroll`: 'trimSnaps' (evita espacios vacíos al inicio/final).
  * - `sliderOptions.skipSnaps`: true (permite desplazamientos fluidos entre tarjetas).
  * - `sliderOptions.dragFree`: true (habilita arrastre libre).
@@ -255,6 +256,7 @@ export class SliderProvider {
     thumbnails.forEach((thumbnail, index) => {
       if (thumbnail.dataset.thumbnailInitialized === "true") return;
 
+      (thumbnail as HTMLElement).style.scrollMargin = "8px";
       thumbnail.addEventListener("click", () => {
         this.sliderInstance.scrollTo(index);
       });
@@ -277,6 +279,14 @@ export class SliderProvider {
     thumbnails.forEach((thumbnail, index) => {
       const isActive = index === selectedIndex;
       thumbnail.dataset.active = isActive.toString();
+
+      if (isActive) {
+        thumbnail.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "nearest",
+        });
+      }
     });
   };
 
@@ -299,7 +309,28 @@ export class SliderProvider {
           this.sliderInstance.scrollNext();
         }
       });
+
       button.dataset.navButtonInitialized = "true";
+    });
+
+    this.updateNavButtons();
+  };
+
+  /**
+   * Actualiza el estado de los botones de navegación cuando el slider cambia de posición.
+   */
+  private updateNavButtons = () => {
+    if (!this.showNavButtons()) return;
+    if (!this.navButtonsContainerEl) return;
+
+    const buttons = this.navButtonsContainerEl.querySelectorAll("button");
+
+    buttons.forEach((button, index) => {
+      if (index === 0) {
+        button.disabled = !this.sliderInstance.canScrollPrev();
+      } else {
+        button.disabled = !this.sliderInstance.canScrollNext();
+      }
     });
   };
 
@@ -321,6 +352,7 @@ export class SliderProvider {
     this.sliderInstance.on("select", () => {
       this.updateDots();
       this.updateThumbnails();
+      this.updateNavButtons();
     });
 
     // Mouse wheel scroll

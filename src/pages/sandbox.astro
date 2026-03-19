@@ -10,7 +10,7 @@ import SliderThumbnails from "@components/slider/SliderThumbnails.astro";
 import Slides from "@components/slider/Slides.astro";
 import RootLayout from "@layouts/RootLayout.astro";
 import { DEVICE_SLIDER_ID, GALLERY_SLIDER_ID } from "@lib/constants";
-import SliderButtons from "@components/slider/SliderButtons.astro";
+import SliderNavButtons from "@components/slider/SliderNavButtons.astro";
 
 const products = Array.from({ length: 7 }).map((_, index) => ({
   id: index + 1,
@@ -19,7 +19,31 @@ const products = Array.from({ length: 7 }).map((_, index) => ({
 ---
 
 <RootLayout>
-  <Slider>
+  <Slider className="h-[320px] mx-auto w-max">
+    <SliderThumbnails
+      className="h-full p-0.5"
+      render={DeviceThumbnail}
+      id={GALLERY_SLIDER_ID}
+      items={products}
+    >
+      <SlideFallback as="li" className="size-12 rounded-lg" textContent="" />
+    </SliderThumbnails>
+    <SliderWrapper className="w-[310px] min-h-full">
+      <SliderNavButtons id={GALLERY_SLIDER_ID} />
+      <Slides id={GALLERY_SLIDER_ID} render={GallerySlide} items={products}>
+        <SlideFallback
+          className="rounded-[16px] h-[320px]"
+          textContent="Sin imagenes para mostrar"
+        />
+      </Slides>
+      <SliderDots
+        id={GALLERY_SLIDER_ID}
+        className="absolute bottom-5 left-1/2 -translate-x-1/2"
+      />
+    </SliderWrapper>
+  </Slider>
+
+  <Slider className="max-w-5xl mx-auto">
     <SliderWrapper>
       <Slides
         id={DEVICE_SLIDER_ID}
@@ -28,34 +52,6 @@ const products = Array.from({ length: 7 }).map((_, index) => ({
         items={products}
       />
       <SliderDots id={DEVICE_SLIDER_ID} />
-    </SliderWrapper>
-  </Slider>
-
-  <Slider>
-    <SliderThumbnails
-      render={DeviceThumbnail}
-      id={GALLERY_SLIDER_ID}
-      items={products}
-    >
-      <SlideFallback className="h-16 w-16 rounded-lg" textContent="" />
-    </SliderThumbnails>
-    <SliderWrapper>
-      <SliderButtons id={GALLERY_SLIDER_ID} />
-      <Slides
-        id={GALLERY_SLIDER_ID}
-        className="max-w-[310px]"
-        render={GallerySlide}
-        items={products}
-      >
-        <SlideFallback
-          className="w-96 h-96 rounded-2xl"
-          textContent="Sin imagenes para mostrar..."
-        />
-      </Slides>
-      <SliderDots
-        id={GALLERY_SLIDER_ID}
-        className="absolute bottom-4 left-1/2 -translate-x-1/2"
-      />
     </SliderWrapper>
   </Slider>
 </RootLayout>

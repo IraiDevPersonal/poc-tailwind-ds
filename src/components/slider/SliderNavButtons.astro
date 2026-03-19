@@ -4,22 +4,27 @@ import { getSliderIdFor } from "./utils";
 
 type Props = {
   id: string;
-  className?: string;
+  classNames?: Partial<{
+    wrapper: string;
+    buttons: string;
+  }>;
 };
 
-const { id, className } = Astro.props satisfies Props;
-const classNames =
-  "grid place-content-center z-10 h-8 w-8 min-w-8 bg-[#E5E5E5] text-[#404040] rounded-[8px]";
+const { id, classNames } = Astro.props satisfies Props;
+const className = cn(
+  "grid place-content-center z-10 h-8 w-8 min-w-8 bg-[#E5E5E5] text-[#404040] rounded-[8px] disabled:opacity-50 transition-opacity disabled:cursor-not-allowed",
+  classNames?.buttons,
+);
 ---
 
 <div
   id={getSliderIdFor(id, "nav-buttons")}
   class={cn(
     "absolute top-1/2 -translate-y-1/2 px-3 w-full justify-between flex text-black z-10",
-    className,
+    classNames?.wrapper,
   )}
 >
-  <button class={classNames}>
+  <button class={className}>
     <svg
       width="16"
       height="16"
@@ -32,7 +37,7 @@ const classNames =
         fill="#404040"></path>
     </svg>
   </button>
-  <button class={classNames}>
+  <button class={className}>
     <svg
       width="16"
       height="16"
