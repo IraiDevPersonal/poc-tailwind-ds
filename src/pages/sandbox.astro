@@ -2,8 +2,9 @@
 import DeviceSlide from "@components/DeviceSlide.astro";
 import DeviceThumbnail from "@components/DeviceThumbnail.astro";
 import GallerySlide from "@components/GallerySlide.astro";
+import SlideFallback from "@components/slider/SlideFallback.astro";
 import Slider from "@components/slider/Slider.astro";
-import SliderContent from "@components/slider/SliderContent.astro";
+import SliderWrapper from "@components/slider/SliderWrapper.astro";
 import SliderDots from "@components/slider/SliderDots.astro";
 import SliderThumbnails from "@components/slider/SliderThumbnails.astro";
 import Slides from "@components/slider/Slides.astro";
@@ -18,7 +19,7 @@ const products = Array.from({ length: 7 }).map((_, index) => ({
 
 <RootLayout>
   <Slider>
-    <SliderContent>
+    <SliderWrapper>
       <Slides
         id={DEVICE_SLIDER_ID}
         className="max-w-5xl"
@@ -26,7 +27,7 @@ const products = Array.from({ length: 7 }).map((_, index) => ({
         items={products}
       />
       <SliderDots id={DEVICE_SLIDER_ID} />
-    </SliderContent>
+    </SliderWrapper>
   </Slider>
 
   <Slider>
@@ -34,16 +35,26 @@ const products = Array.from({ length: 7 }).map((_, index) => ({
       render={DeviceThumbnail}
       id={GALLERY_SLIDER_ID}
       items={products}
-    />
-    <SliderContent>
+    >
+      <SlideFallback className="h-16 w-16 rounded-lg" textContent="" />
+    </SliderThumbnails>
+    <SliderWrapper>
       <Slides
         id={GALLERY_SLIDER_ID}
         className="max-w-96"
         render={GallerySlide}
         items={products}
+      >
+        <SlideFallback
+          className="w-96 h-96 rounded-2xl"
+          textContent="Sin imagenes para mostrar..."
+        />
+      </Slides>
+      <SliderDots
+        id={GALLERY_SLIDER_ID}
+        className="absolute bottom-4 left-1/2 -translate-x-1/2"
       />
-      <SliderDots id={GALLERY_SLIDER_ID} />
-    </SliderContent>
+    </SliderWrapper>
   </Slider>
 </RootLayout>
 

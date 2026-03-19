@@ -1,0 +1,23 @@
+---
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+
+type Props<T = unknown> = {
+  render: AstroComponentFactory;
+  items?: T[];
+};
+
+const { items, render: Item } = Astro.props satisfies Props;
+const show = items && items.length > 0 && Item;
+
+function spread<T = unknown>(item: T) {
+  return typeof item === "object" ? item : {};
+}
+---
+
+{
+  show ? (
+    items.map((item, index) => <Item {...spread(item)} index={index} />)
+  ) : (
+    <slot />
+  )
+}
