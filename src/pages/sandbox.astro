@@ -10,6 +10,7 @@ import SliderThumbnails from "@components/slider/SliderThumbnails.astro";
 import Slides from "@components/slider/Slides.astro";
 import RootLayout from "@layouts/RootLayout.astro";
 import { DEVICE_SLIDER_ID, GALLERY_SLIDER_ID } from "@lib/constants";
+import SliderButtons from "@components/slider/SliderButtons.astro";
 
 const products = Array.from({ length: 7 }).map((_, index) => ({
   id: index + 1,
@@ -39,9 +40,10 @@ const products = Array.from({ length: 7 }).map((_, index) => ({
       <SlideFallback className="h-16 w-16 rounded-lg" textContent="" />
     </SliderThumbnails>
     <SliderWrapper>
+      <SliderButtons id={GALLERY_SLIDER_ID} />
       <Slides
         id={GALLERY_SLIDER_ID}
-        className="max-w-96"
+        className="max-w-[310px]"
         render={GallerySlide}
         items={products}
       >
@@ -66,10 +68,12 @@ const products = Array.from({ length: 7 }).map((_, index) => ({
 
   new SliderProvider(GALLERY_SLIDER_ID, {
     sliderOptions: {
+      showNavButtons: true,
       showThumbnails: true,
       showDots: true,
       skipSnaps: false,
       dragFree: false,
+      loop: true,
     },
   });
 </script>

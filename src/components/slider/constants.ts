@@ -8,6 +8,7 @@ export const SLIDER_DEFAULT_OPTIONS: SilderProviderOptions = {
   sliderOptions: {
     containScroll: "trimSnaps",
     showThumbnails: false,
+    showNavButtons: false,
     slidesToScroll: 1,
     skipSnaps: true,
     dragFree: true,

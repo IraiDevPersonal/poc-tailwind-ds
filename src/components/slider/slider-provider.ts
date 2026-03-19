@@ -2,6 +2,7 @@ import EmblaCarousel, { type EmblaCarouselType } from "embla-carousel";
 import { cn } from "@lib/utils";
 import { SLIDER_DEFAULT_OPTIONS } from "./constants";
 import type { SilderProviderOptions, SliderUniqueSnaps } from "./types";
+import { getSliderIdFor } from "./utils";
 
 /**
  * Proveedor de lógica y funcionalidad para componentes de tipo Slider.
@@ -43,14 +44,20 @@ export class SliderProvider {
   private sliderInstance: EmblaCarouselType;
   private dotsContainerEl: HTMLElement | null;
   private thumbnailsContainerEl: HTMLElement | null;
+  private navButtonsContainerEl: HTMLElement | null;
   private options: SilderProviderOptions;
 
   constructor(id: string, options: Partial<SilderProviderOptions> = {}) {
     this.options = this.mergeOptions(options);
 
     const containerEl = document.getElementById(id);
-    const dotsContainerEl = document.getElementById(`${id}-dots`);
-    const thumbnailsContainerEl = document.getElementById(`${id}-thumbnails`);
+    const dotsContainerEl = document.getElementById(getSliderIdFor(id, "dots"));
+    const thumbnailsContainerEl = document.getElementById(
+      getSliderIdFor(id, "thumbnails"),
+    );
+    const navButtonsContainerEl = document.getElementById(
+      getSliderIdFor(id, "nav-buttons"),
+    );
 
     if (!containerEl) {
       throw new Error(`Container not found`);
@@ -64,6 +71,10 @@ export class SliderProvider {
       throw new Error(`Thumbnails container not found`);
     }
 
+    if (!navButtonsContainerEl && this.showNavButtons()) {
+      throw new Error(`Nav Buttons container not found`);
+    }
+
     if (dotsContainerEl && !this.showDots()) {
       dotsContainerEl.hidden = true;
     }
@@ -72,8 +83,13 @@ export class SliderProvider {
       thumbnailsContainerEl.hidden = true;
     }
 
+    if (navButtonsContainerEl && !this.showNavButtons()) {
+      navButtonsContainerEl.hidden = true;
+    }
+
     this.dotsContainerEl = dotsContainerEl;
     this.thumbnailsContainerEl = thumbnailsContainerEl;
+    this.navButtonsContainerEl = navButtonsContainerEl;
     this.sliderInstance = EmblaCarousel(
       containerEl,
       this.options.sliderOptions,
@@ -90,6 +106,10 @@ export class SliderProvider {
 
   private showThumbnails = (): boolean => {
     return !!this.options.sliderOptions.showThumbnails;
+  };
+
+  private showNavButtons = (): boolean => {
+    return !!this.options.sliderOptions.showNavButtons;
   };
 
   /**
@@ -261,6 +281,29 @@ export class SliderProvider {
   };
 
   /**
+   * Establece click listener para los botones de navegación dentro del su contenedor.
+   */
+  private setupNavButtons = () => {
+    if (!this.showNavButtons()) return;
+    if (!this.navButtonsContainerEl) return;
+
+    const buttons = this.navButtonsContainerEl.querySelectorAll("button");
+
+    buttons.forEach((button, index) => {
+      if (button.dataset.navButtonInitialized === "true") return;
+
+      button.addEventListener("click", () => {
+        if (index === 0) {
+          this.sliderInstance.scrollPrev();
+        } else {
+          this.sliderInstance.scrollNext();
+        }
+      });
+      button.dataset.navButtonInitialized = "true";
+    });
+  };
+
+  /**
    * Se suscribe a los eventos de Embla Carousel y adjunta escuchadores de eventos externos.
    * Configura la sincronización de los puntos de paginación y habilita el desplazamiento personalizado con la rueda del ratón.
    */
@@ -268,10 +311,12 @@ export class SliderProvider {
     this.sliderInstance.on("init", () => {
       this.buildDots();
       this.setupThumbnails();
+      this.setupNavButtons();
     });
     this.sliderInstance.on("reInit", () => {
       this.buildDots();
       this.setupThumbnails();
+      this.setupNavButtons();
     });
     this.sliderInstance.on("select", () => {
       this.updateDots();

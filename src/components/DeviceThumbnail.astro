@@ -1,4 +1,6 @@
 ---
+import image from "@assets/slider-img.png";
+
 type Props = {
   name: string;
 };
@@ -8,8 +10,13 @@ const { name } = Astro.props;
 
 <li>
   <button
-    class="h-16 w-16 bg-white shadow-lg rounded-lg p-2 text-xs ring-2 ring-transparent transition-all ease-in-out data-[active=true]:ring-red-500"
+    class="h-[48px] w-[49px] bg-white shadow-lg rounded-lg p-2 text-xs ring-2 ring-transparent transition-all ease-in-out data-[active=true]:ring-red-500 truncate"
+    title={name}
   >
-    {name}
+    <img
+      class="w-full h-full object-contain object-center"
+      src={image.src}
+      alt={name}
+    />
   </button>
 </li>
