@@ -1,5 +1,5 @@
-import EmblaCarousel, { type EmblaCarouselType } from "embla-carousel";
 import { cn } from "@lib/utils";
+import EmblaCarousel, { type EmblaCarouselType } from "embla-carousel";
 import { SLIDER_DEFAULT_OPTIONS } from "./constants";
 import type { SilderProviderOptions, SliderUniqueSnaps } from "./types";
 import { getSliderIdFor } from "./utils";
@@ -34,12 +34,13 @@ import { getSliderIdFor } from "./utils";
  *
  * Configuraciones por defecto:
  * - `mountOnInit`: true (montaje automático al instanciar).
- * - `sliderOptions.showDots`: true (gestión de puntos habilitada).
+ * - `sliderOptions.showDots`: false (gestión de puntos habilitada).
  * - `sliderOptions.showThumbnails`: false (miniaturas deshabilitadas por defecto).
  * - `sliderOptions.showNavButtons`: false (botones de navegación deshabilitados por defecto).
  * - `sliderOptions.containScroll`: 'trimSnaps' (evita espacios vacíos al inicio/final).
  * - `sliderOptions.skipSnaps`: true (permite desplazamientos fluidos entre tarjetas).
  * - `sliderOptions.dragFree`: true (habilita arrastre libre).
+ * - `sliderOptions.disableNativeHorizontalScroll`: false (deshabilita scroll horizontal nativo).
  */
 export class SliderProvider {
   private sliderInstance: EmblaCarouselType;
@@ -111,6 +112,10 @@ export class SliderProvider {
 
   private showNavButtons = (): boolean => {
     return !!this.options.sliderOptions.showNavButtons;
+  };
+
+  private useShiftToHorizontalScroll = (): boolean => {
+    return !!this.options.sliderOptions.useShiftToHorizontalScroll;
   };
 
   /**
@@ -355,20 +360,27 @@ export class SliderProvider {
       this.updateNavButtons();
     });
 
-    // Mouse wheel scroll
-    let wheelTimeout: ReturnType<typeof setTimeout>;
+    let isThrottled = false;
     this.sliderInstance.containerNode().addEventListener(
       "wheel",
       (e) => {
+        if (this.useShiftToHorizontalScroll() && !e.shiftKey) return;
+
         e.preventDefault();
-        clearTimeout(wheelTimeout);
-        wheelTimeout = setTimeout(() => {
-          if (e.deltaX > 0 || e.deltaY > 0) {
-            this.sliderInstance.scrollNext();
-          } else {
-            this.sliderInstance.scrollPrev();
-          }
-        }, 50);
+
+        if (isThrottled) return;
+
+        isThrottled = true;
+
+        if (e.deltaX > 0 || e.deltaY > 0) {
+          this.sliderInstance.scrollNext();
+        } else {
+          this.sliderInstance.scrollPrev();
+        }
+
+        setTimeout(() => {
+          isThrottled = false;
+        }, 150);
       },
       { passive: false },
     );

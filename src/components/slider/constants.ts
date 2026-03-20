@@ -6,6 +6,7 @@ export const SLIDER_DEFAULT_OPTIONS: SilderProviderOptions = {
     dotActive: "w-5 bg-red-400",
   },
   sliderOptions: {
+    useShiftToHorizontalScroll: true,
     containScroll: "trimSnaps",
     showThumbnails: false,
     showNavButtons: false,

@@ -20,7 +20,9 @@ const { id, classNames, items, render } = Astro.props;
   class={cn("overflow-hidden w-fit max-w-full min-w-0", classNames?.root)}
   id={id}
 >
-  <div class={cn("flex gap-3 w-full h-full", classNames?.slides)}>
+  <div
+    class={cn("flex gap-(--slides-gap,12px) w-full h-full", classNames?.slides)}
+  >
     <Render items={items} render={render}>
       <slot />
     </Render>
