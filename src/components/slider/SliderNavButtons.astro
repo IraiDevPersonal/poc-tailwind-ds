@@ -12,7 +12,9 @@ type Props = {
 
 const { id, classNames } = Astro.props satisfies Props;
 const className = cn(
-  "grid place-content-center z-10 h-8 w-8 min-w-8 bg-[#E5E5E5] text-[#404040] rounded-[8px] disabled:opacity-50 transition-opacity disabled:cursor-not-allowed",
+  "grid place-content-center z-10 h-(--nav-button-size,2rem) w-(--nav-button-size,2rem) min-w-(--nav-button-size,2rem)",
+  "bg-(--nav-button-bg,#E5E5E5) text-(--nav-button-color,#404040) rounded-(--nav-button-radius,8px)",
+  "disabled:opacity-50 transition-opacity disabled:cursor-not-allowed",
   classNames?.buttons,
 );
 ---

@@ -61,19 +61,19 @@ export class SliderProvider {
     );
 
     if (!containerEl) {
-      throw new Error(`Container not found`);
+      throw new Error(`Container not found id: ${id}`);
     }
 
     if (!dotsContainerEl && this.showDots()) {
-      throw new Error(`Dots container not found`);
+      throw new Error(`Dots container not found id: ${id}`);
     }
 
     if (!thumbnailsContainerEl && this.showThumbnails()) {
-      throw new Error(`Thumbnails container not found`);
+      throw new Error(`Thumbnails container not found id: ${id}`);
     }
 
     if (!navButtonsContainerEl && this.showNavButtons()) {
-      throw new Error(`Nav Buttons container not found`);
+      throw new Error(`Nav Buttons container not found id: ${id}`);
     }
 
     if (dotsContainerEl && !this.showDots()) {

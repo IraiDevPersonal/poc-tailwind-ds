@@ -9,7 +9,7 @@ const { name } = Astro.props;
 ---
 
 <div
-  class="flex-none w-full h-[320px] bg-white rounded-[16px] flex flex-col place-content-center selection:bg-transparent"
+  class="flex-none w-full h-(--slider-height,320px) bg-white rounded-[16px] flex flex-col place-content-center selection:bg-transparent"
 >
   <img class="w-full object-contain h-40" src={image.src} alt={name} />
 </div>

@@ -19,20 +19,26 @@ const products = Array.from({ length: 7 }).map((_, index) => ({
 ---
 
 <RootLayout>
-  <Slider className="h-[320px] mx-auto w-max">
+  <Slider
+    className="mx-auto w-max"
+    theme={{
+      "--slider-height": "320px",
+      "--thumbnail-width": "60px",
+      "--slider-main-width": "320px",
+    }}
+  >
     <SliderThumbnails
-      className="h-full p-0.5"
       render={DeviceThumbnail}
       id={GALLERY_SLIDER_ID}
       items={products}
     >
       <SlideFallback as="li" className="size-12 rounded-lg" textContent="" />
     </SliderThumbnails>
-    <SliderWrapper className="w-[310px] min-h-full">
+    <SliderWrapper>
       <SliderNavButtons id={GALLERY_SLIDER_ID} />
       <Slides id={GALLERY_SLIDER_ID} render={GallerySlide} items={products}>
         <SlideFallback
-          className="rounded-[16px] h-[320px]"
+          className="rounded-[16px] h-full"
           textContent="Sin imagenes para mostrar"
         />
       </Slides>
@@ -43,7 +49,7 @@ const products = Array.from({ length: 7 }).map((_, index) => ({
     </SliderWrapper>
   </Slider>
 
-  <Slider className="max-w-5xl mx-auto">
+  <Slider className="max-w-5xl mx-auto" theme={{ "--slider-gap": "20px" }}>
     <SliderWrapper>
       <Slides
         id={DEVICE_SLIDER_ID}
@@ -60,7 +66,7 @@ const products = Array.from({ length: 7 }).map((_, index) => ({
   import { SliderProvider } from "@components/slider/slider-provider";
   import { DEVICE_SLIDER_ID, GALLERY_SLIDER_ID } from "@lib/constants";
 
-  new SliderProvider(DEVICE_SLIDER_ID);
+  new SliderProvider(DEVICE_SLIDER_ID, { sliderOptions: { showDots: true } });
 
   new SliderProvider(GALLERY_SLIDER_ID, {
     sliderOptions: {

@@ -14,7 +14,9 @@ const hasChildren = Astro.slots.has("default");
 
 <Tag
   class={cn(
-    "flex flex-col items-center justify-center w-full h-full bg-neutral-200 truncate",
+    "flex flex-col items-center justify-center w-full h-(--slider-height,100%)",
+    "bg-(--fallback-bg,var(--color-neutral-200)) text-(--fallback-color,var(--color-neutral-500)) rounded-(--fallback-radius,0px)",
+    "truncate",
     className,
   )}
 >

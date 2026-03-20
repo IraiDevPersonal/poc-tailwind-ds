@@ -17,7 +17,8 @@ const { id, className, items, render } = Astro.props;
 <ul
   id={getSliderIdFor(id, "thumbnails")}
   class={cn(
-    "flex flex-col gap-2 order-last lg:order-first overflow-y-scroll [-ms-overflow-style:none] [scrollbar-width:none]",
+    "flex flex-col gap-2 order-last lg:order-first overflow-y-auto lg:overflow-y-scroll [-ms-overflow-style:none] [scrollbar-width:none]",
+    "w-(--thumbnail-width,max-content) min-w-(--thumbnail-width,max-content) h-full p-0.5",
     className,
   )}
 >

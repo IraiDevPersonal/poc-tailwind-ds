@@ -9,7 +9,10 @@ const { className } = Astro.props;
 ---
 
 <div
-  class={cn("relative flex flex-col gap-4 w-full h-full min-w-0", className)}
+  class={cn(
+    "relative flex flex-col gap-4 w-(--slider-main-width,100%) h-full min-w-0",
+    className,
+  )}
 >
   <slot />
 </div>
