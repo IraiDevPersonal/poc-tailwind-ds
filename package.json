@@ -17,6 +17,7 @@
     "astro": "^6.0.4",
     "clsx": "^2.1.1",
     "embla-carousel": "^8.6.0",
+    "embla-carousel-wheel-gestures": "^8.1.0",
     "glide": "link:@types/@glidejs/glide",
     "swiper": "^12.1.2",
     "tailwind-merge": "^3.5.0",

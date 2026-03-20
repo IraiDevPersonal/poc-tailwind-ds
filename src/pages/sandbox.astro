@@ -65,7 +65,9 @@ const products = Array.from({ length: 7 }).map((_, index) => ({
   import { SliderProvider } from "@components/slider/slider-provider";
   import { DEVICE_SLIDER_ID, GALLERY_SLIDER_ID } from "@lib/constants";
 
-  new SliderProvider(DEVICE_SLIDER_ID, { sliderOptions: { showDots: true } });
+  new SliderProvider(DEVICE_SLIDER_ID, {
+    sliderOptions: { showDots: true },
+  });
 
   new SliderProvider(GALLERY_SLIDER_ID, {
     sliderOptions: {

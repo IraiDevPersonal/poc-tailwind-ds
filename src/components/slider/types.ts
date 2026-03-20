@@ -56,6 +56,7 @@ export type SilderProviderOptions = {
       showDots: boolean;
       showThumbnails: boolean;
       showNavButtons: boolean;
+      useShiftToHorizontalScroll: boolean;
     } & EmblaOptionsType
   >;
   mountOnInit?: boolean;

@@ -1,0 +1,8 @@
+[  443182ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_RESET @ http://localhost:4321/src/styles/global.css:0
+[  443182ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_RESET @ http://localhost:4321/src/layouts/RootLayout.astro?astro&type=script&index=0&lang.ts:0
+[  443182ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_RESET @ http://localhost:4321/@fs/Users/iraidev/Documents/dev/job/poc-tailwind/src/assets/slider-img.png?origWidth=2162&origHeight=2600&origFormat=png:0
+[  443184ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_RESET @ http://localhost:4321/src/pages/sandbox.astro?astro&type=script&index=0&lang.ts:0
+[  443184ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/node_modules/.pnpm/vite@7.3.1_jiti@2.6.1_lightningcss@1.31.1_yaml@2.8.2/node_modules/vite/dist/client/env.mjs:0
+[  443184ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/@id/__x00__astro:toolbar:internal:0
+[  443186ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/favicon.ico:0
+[  443187ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:4321/favicon.svg:0
