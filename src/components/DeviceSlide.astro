@@ -1,5 +1,6 @@
 ---
 import image from "@assets/slider-img.png";
+import Slide from "./slider/Slide.astro";
 
 type Props = {
   index: number;
@@ -10,9 +11,7 @@ type Props = {
 const { index, name, id } = Astro.props;
 ---
 
-<div
-  class="flex-none w-50 h-50 bg-white rounded-2xl shadow p-4 flex flex-col selection:bg-transparent"
->
+<Slide className="h-60 w-60">
   <p class="font-bold text-lg">
     Apple <span class="text-red-500">{id}</span>
   </p>
@@ -22,4 +21,4 @@ const { index, name, id } = Astro.props;
     alt={`iPhone 17 - Apple ${index + 1}`}
     class="w-full object-contain h-40"
   />
-</div>
+</Slide>

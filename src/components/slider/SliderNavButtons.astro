@@ -12,8 +12,8 @@ type Props = {
 
 const { id, classNames } = Astro.props satisfies Props;
 const className = cn(
-  "grid place-content-center z-10 h-(--nav-button-size,2rem) w-(--nav-button-size,2rem) min-w-(--nav-button-size,2rem)",
-  "bg-(--nav-button-bg,#E5E5E5) text-(--nav-button-color,#404040) rounded-(--nav-button-radius,8px)",
+  "grid place-content-center z-10 size-8",
+  "bg-[#E5E5E5] text-[#404040] rounded-[8px]",
   "disabled:opacity-50 transition-opacity disabled:cursor-not-allowed",
   classNames?.buttons,
 );
@@ -36,7 +36,7 @@ const className = cn(
     >
       <path
         d="M9.52876 3.52876C9.78911 3.26841 10.2111 3.26841 10.4715 3.52876C10.7318 3.78911 10.7318 4.21112 10.4715 4.47147L6.94282 8.00011L10.4715 11.5288L10.517 11.5795C10.7306 11.8414 10.7155 12.2274 10.4715 12.4715C10.2274 12.7155 9.84139 12.7306 9.57954 12.517L9.52876 12.4715L5.52876 8.47147C5.26841 8.21112 5.26841 7.78911 5.52876 7.52876L9.52876 3.52876Z"
-        fill="#404040"></path>
+        fill="currentColor"></path>
     </svg>
   </button>
   <button class={className}>
@@ -49,7 +49,7 @@ const className = cn(
     >
       <path
         d="M5.52876 3.52876C5.78911 3.26841 6.21112 3.26841 6.47147 3.52876L10.4715 7.52876C10.7318 7.78911 10.7318 8.21112 10.4715 8.47147L6.47147 12.4715C6.21112 12.7318 5.78911 12.7318 5.52876 12.4715C5.26841 12.2111 5.26841 11.7891 5.52876 11.5288L9.0574 8.00011L5.52876 4.47147C5.26841 4.21112 5.26841 3.78911 5.52876 3.52876Z"
-        fill="#404040"></path>
+        fill="currentColor"></path>
     </svg>
   </button>
 </div>

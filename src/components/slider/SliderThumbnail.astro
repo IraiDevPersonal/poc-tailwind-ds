@@ -1,0 +1,20 @@
+---
+import { cn } from "@lib/utils";
+
+type Props = {
+  className?: string;
+};
+
+const { className } = Astro.props;
+---
+
+<li>
+  <button
+    class={cn(
+      "h-(--thumbnail-height,48px) w-(--thumbnail-width,48px) min-w-(--thumbnail-width,48px) bg-white rounded-lg p-2 text-xs ring-2 ring-transparent transition-all ease-in-out data-[active=true]:ring-red-500 truncate",
+      className,
+    )}
+  >
+    <slot />
+  </button>
+</li>

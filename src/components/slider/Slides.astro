@@ -5,16 +5,22 @@ import Render from "@components/slider/Render.astro";
 
 interface Props<T> {
   render: AstroComponentFactory;
-  className?: string;
+  classNames?: Partial<{
+    slides: string;
+    root: string;
+  }>;
   items?: T[];
   id: string;
 }
 
-const { id, className, items, render } = Astro.props;
+const { id, classNames, items, render } = Astro.props;
 ---
 
-<div class="overflow-hidden w-full min-w-0" id={id}>
-  <div class={cn("flex gap-3 w-full h-full", className)}>
+<div
+  class={cn("overflow-hidden w-fit max-w-full min-w-0", classNames?.root)}
+  id={id}
+>
+  <div class={cn("flex gap-3 w-full h-full", classNames?.slides)}>
     <Render items={items} render={render}>
       <slot />
     </Render>

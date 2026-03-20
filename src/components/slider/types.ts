@@ -67,18 +67,10 @@ export type SilderProviderOptions = {
  */
 export type SliderTheme = {
   "--slider-height"?: string;
+  "--thumbnails-wrapper-width"?: string;
+  "--thumbnails-wrapper-height"?: string;
   "--thumbnail-width"?: string;
-  "--slider-main-width"?: string;
-  "--slider-gap"?: string;
-  "--nav-button-size"?: string;
-  "--nav-button-bg"?: string;
-  "--nav-button-color"?: string;
-  "--nav-button-radius"?: string;
-  "--dot-size"?: string;
-  "--dot-bg"?: string;
-  "--dot-active-width"?: string;
-  "--dot-active-bg"?: string;
-  "--fallback-bg"?: string;
-  "--fallback-color"?: string;
-  "--fallback-radius"?: string;
+  "--thumbnail-height"?: string;
+  "--slider-wrapper-width"?: string;
+  "--slides-gap"?: string;
 };

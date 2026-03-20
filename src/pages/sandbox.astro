@@ -6,7 +6,7 @@ import SlideFallback from "@components/slider/SlideFallback.astro";
 import Slider from "@components/slider/Slider.astro";
 import SliderWrapper from "@components/slider/SliderWrapper.astro";
 import SliderDots from "@components/slider/SliderDots.astro";
-import SliderThumbnails from "@components/slider/SliderThumbnails.astro";
+import SliderThumbnailsWrapper from "@components/slider/SliderThumbnailsWrapper.astro";
 import Slides from "@components/slider/Slides.astro";
 import RootLayout from "@layouts/RootLayout.astro";
 import { DEVICE_SLIDER_ID, GALLERY_SLIDER_ID } from "@lib/constants";
@@ -23,22 +23,21 @@ const products = Array.from({ length: 7 }).map((_, index) => ({
     className="mx-auto w-max"
     theme={{
       "--slider-height": "320px",
-      "--thumbnail-width": "60px",
-      "--slider-main-width": "320px",
+      "--slider-wrapper-width": "320px",
     }}
   >
-    <SliderThumbnails
+    <SliderThumbnailsWrapper
       render={DeviceThumbnail}
       id={GALLERY_SLIDER_ID}
       items={products}
     >
       <SlideFallback as="li" className="size-12 rounded-lg" textContent="" />
-    </SliderThumbnails>
+    </SliderThumbnailsWrapper>
     <SliderWrapper>
       <SliderNavButtons id={GALLERY_SLIDER_ID} />
       <Slides id={GALLERY_SLIDER_ID} render={GallerySlide} items={products}>
         <SlideFallback
-          className="rounded-[16px] h-full"
+          className="rounded-2xl h-full"
           textContent="Sin imagenes para mostrar"
         />
       </Slides>
@@ -49,11 +48,11 @@ const products = Array.from({ length: 7 }).map((_, index) => ({
     </SliderWrapper>
   </Slider>
 
-  <Slider className="max-w-5xl mx-auto" theme={{ "--slider-gap": "20px" }}>
+  <Slider className="max-w-5xl mx-auto" theme={{ "--slides-gap": "20px" }}>
     <SliderWrapper>
       <Slides
+        classNames={{ root: "shadow-2xl" }}
         id={DEVICE_SLIDER_ID}
-        className="max-w-5xl"
         render={DeviceSlide}
         items={products}
       />

@@ -1,5 +1,6 @@
 ---
 import image from "@assets/slider-img.png";
+import SliderThumbnail from "./slider/SliderThumbnail.astro";
 
 type Props = {
   name: string;
@@ -8,15 +9,10 @@ type Props = {
 const { name } = Astro.props;
 ---
 
-<li>
-  <button
-    class="size-12 bg-white rounded-lg p-2 text-xs ring-2 ring-transparent transition-all ease-in-out data-[active=true]:ring-red-500 truncate"
-    title={name}
-  >
-    <img
-      class="w-full h-full object-contain object-center"
-      src={image.src}
-      alt={name}
-    />
-  </button>
-</li>
+<SliderThumbnail>
+  <img
+    class="w-full h-full object-contain object-center"
+    src={image.src}
+    alt={name}
+  />
+</SliderThumbnail>
