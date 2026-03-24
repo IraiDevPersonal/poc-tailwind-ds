@@ -1,28 +1,24 @@
 ---
-import type { AstroComponentFactory } from "astro/runtime/server/index.js";
-import { cn } from "@lib/utils";
 import Render from "@components/slider/Render.astro";
+import { cn } from "@lib/utils";
+import type { RenderProps } from "./types";
 import { getSliderIdFor } from "./utils";
 
-type Props<T = null> = {
-  render: AstroComponentFactory;
+type Props<T> = {
   className?: string;
-  items?: T[];
   id: string;
-};
+} & RenderProps<T>;
 
-const { id, className, items, render } = Astro.props;
+const { id, className, ...props } = Astro.props;
 ---
 
 <ul
   id={getSliderIdFor(id, "thumbnails")}
   class={cn(
     "flex flex-col gap-2 order-last lg:order-first overflow-y-auto lg:overflow-y-scroll [-ms-overflow-style:none] [scrollbar-width:none]",
-    "w-(--thumbnails-wrapper-width,max-content) min-w-(--thumbnails-wrapper-width,max-content) h-(--thumbnails-wrapper-height,100%) p-0.5",
+    "w-max min-w-max h-full p-0.5",
     className,
   )}
 >
-  <Render items={items} render={render}>
-    <slot />
-  </Render>
+  <Render {...props} />
 </ul>

@@ -1,12 +1,10 @@
 ---
-import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+import SlideFallback from "./SlideFallback.astro";
+import type { RenderProps } from "./types";
 
-type Props<T = unknown> = {
-  render: AstroComponentFactory;
-  items?: T[];
-};
+type Props<T = unknown> = RenderProps<T>;
 
-const { items, render: Item } = Astro.props satisfies Props;
+const { items, fallback: Fallback, render: Item } = Astro.props satisfies Props;
 const show = items && items.length > 0 && Item;
 
 function spread<T = unknown>(item: T) {
@@ -18,6 +16,10 @@ function spread<T = unknown>(item: T) {
   show ? (
     items.map((item, index) => <Item {...spread(item)} index={index} />)
   ) : (
-    <slot />
+    <>
+      {typeof Fallback === "undefined" && <SlideFallback />}
+      {typeof Fallback === "string" && <SlideFallback textContent={Fallback} />}
+      {typeof Fallback === "function" && <Fallback />}
+    </>
   )
 }

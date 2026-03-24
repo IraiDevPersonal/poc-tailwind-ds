@@ -1,19 +1,17 @@
 ---
-import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import { cn } from "@lib/utils";
 import Render from "@components/slider/Render.astro";
+import type { RenderProps } from "./types";
 
-interface Props<T> {
-  render: AstroComponentFactory;
+type Props<T> = {
   classNames?: Partial<{
     slides: string;
     root: string;
   }>;
-  items?: T[];
   id: string;
-}
+} & RenderProps<T>;
 
-const { id, classNames, items, render } = Astro.props;
+const { id, classNames, ...props } = Astro.props;
 ---
 
 <div
@@ -23,8 +21,6 @@ const { id, classNames, items, render } = Astro.props;
   <div
     class={cn("flex gap-(--slides-gap,12px) w-full h-full", classNames?.slides)}
   >
-    <Render items={items} render={render}>
-      <slot />
-    </Render>
+    <Render fallback="Sin contenido para mostrar" {...props} />
   </div>
 </div>

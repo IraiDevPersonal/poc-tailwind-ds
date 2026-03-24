@@ -1,3 +1,4 @@
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import type { EmblaOptionsType } from "embla-carousel";
 
 /**
@@ -67,11 +68,13 @@ export type SilderProviderOptions = {
  * Permite tipar el objeto de estilos enviado al contenedor raíz.
  */
 export type SliderTheme = {
-  "--slider-height"?: string;
-  "--thumbnails-wrapper-width"?: string;
-  "--thumbnails-wrapper-height"?: string;
-  "--thumbnail-width"?: string;
-  "--thumbnail-height"?: string;
   "--slider-wrapper-width"?: string;
+  "--slider-height"?: string;
   "--slides-gap"?: string;
+};
+
+export type RenderProps<T = unknown> = {
+  fallback?: AstroComponentFactory | string;
+  render: AstroComponentFactory;
+  items?: T[];
 };
