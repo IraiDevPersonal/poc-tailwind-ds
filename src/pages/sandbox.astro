@@ -1,64 +1,291 @@
 ---
-import DeviceThumbnail from "@components/DeviceThumbnail.astro";
-import GalleryFallback from "@components/GalleryFallback.astro";
-import GallerySlide from "@components/GallerySlide.astro";
-import Slider from "@components/slider/Slider.astro";
-import SliderDots from "@components/slider/SliderDots.astro";
-import SliderNavButtons from "@components/slider/SliderNavButtons.astro";
-import SliderThumbnailsWrapper from "@components/slider/SliderThumbnailsWrapper.astro";
-import SliderWrapper from "@components/slider/SliderWrapper.astro";
-import Slides from "@components/slider/Slides.astro";
-import RootLayout from "@layouts/RootLayout.astro";
-import { GALLERY_SLIDER_ID } from "@lib/constants";
+import SandboxLayout from "@layouts/SandboxLayout.astro";
+import "../components/carousel-3d/carousel-3d.css";
+import CarouselItem from "@components/carousel-3d/CarouselItem.astro";
+import DestinationCarouselItem from "@components/DestinationCarouselItem.astro";
 
-const products = Array.from({ length: 7 }).map((_, index) => ({
-  id: index + 1,
-  name: `producto ${index + 1}`,
-}));
+const destinations = [
+  {
+    name: "Spain",
+    flag: "\u{1F1EA}\u{1F1F8}",
+    image: "/images/spain.jpg",
+    description:
+      "Sun-drenched beaches and vibrant culture along the Mediterranean coast.",
+  },
+  {
+    name: "Maldives",
+    flag: "\u{1F1F2}\u{1F1FB}",
+    image: "/images/maldives.jpg",
+    description: "Crystal-clear waters and overwater bungalows in paradise.",
+  },
+  {
+    name: "Malta",
+    flag: "\u{1F1F2}\u{1F1F9}",
+    image: "/images/malta.jpg",
+    description:
+      "Historic temples and stunning blue lagoons in the Mediterranean.",
+  },
+  {
+    name: "Indonesia",
+    flag: "\u{1F1EE}\u{1F1E9}",
+    image: "/images/indonesia.jpg",
+    description:
+      "Tropical islands with world-class surfing and ancient temples.",
+  },
+  {
+    name: "Turkey",
+    flag: "\u{1F1F9}\u{1F1F7}",
+    image: "/images/turkey.jpg",
+    description:
+      "Where East meets West with stunning coastlines and rich history.",
+  },
+  {
+    name: "Barbados",
+    flag: "\u{1F1E7}\u{1F1E7}",
+    image: "/images/barbados.jpg",
+    description: "Caribbean charm with pink sand beaches and rum distilleries.",
+  },
+  {
+    name: "Greece",
+    flag: "\u{1F1EC}\u{1F1F7}",
+    image: "/images/greece.jpg",
+    description:
+      "Whitewashed villages and turquoise coves around every corner.",
+  },
+  {
+    name: "Portugal",
+    flag: "\u{1F1F5}\u{1F1F9}",
+    image: "/images/portugal.jpg",
+    description: "Golden Algarve cliffs and charming coastal towns.",
+  },
+  {
+    name: "Thailand",
+    flag: "\u{1F1F9}\u{1F1ED}",
+    image: "/images/thailand.jpg",
+    description:
+      "Emerald waters, jungle-covered limestone karsts, and golden temples.",
+  },
+  {
+    name: "Mauritius",
+    flag: "\u{1F1F2}\u{1F1FA}",
+    image: "/images/mauritius.jpg",
+    description: "Volcanic island paradise with coral reefs and lush forests.",
+  },
+  {
+    name: "Cyprus",
+    flag: "\u{1F1E8}\u{1F1FE}",
+    image: "/images/cyprus.jpg",
+    description: "Mythical birthplace of Aphrodite with golden sandy beaches.",
+  },
+  {
+    name: "Italy",
+    flag: "\u{1F1EE}\u{1F1F9}",
+    image: "/images/italy.jpg",
+    description:
+      "Amalfi Coast dreams, Sardinian coves, and world-renowned cuisine.",
+  },
+  {
+    name: "Croatia",
+    flag: "\u{1F1ED}\u{1F1F7}",
+    image: "/images/croatia.jpg",
+    description:
+      "Adriatic jewel with medieval walled cities and island-hopping adventures.",
+  },
+];
 ---
 
-<RootLayout>
-  <!-- Ejemplo para Slider Gallery -->
-  <Slider
-    className="mx-auto w-max"
-    theme={{
-      "--slider-height": "320px",
-      "--slider-wrapper-width": "320px",
-    }}
-  >
-    <SliderThumbnailsWrapper
-      render={DeviceThumbnail}
-      id={GALLERY_SLIDER_ID}
-      items={products}
-    />
-    <SliderWrapper>
-      <SliderNavButtons id={GALLERY_SLIDER_ID} />
-      <Slides
-        fallback={GalleryFallback}
-        id={GALLERY_SLIDER_ID}
-        render={GallerySlide}
-        items={products}
-      />
-      <SliderDots
-        id={GALLERY_SLIDER_ID}
-        className="absolute bottom-5 left-1/2 -translate-x-1/2"
-      />
-    </SliderWrapper>
-  </Slider>
-</RootLayout>
+<SandboxLayout>
+  <!-- Placeholder (fake cards) -->
+  <div class="c3d-swap-container">
+    <div id="placeholder" class="c3d-placeholder">
+      <div class="c3d-placeholder-card c3d-placeholder-left">
+        <CarouselItem>
+          <DestinationCarouselItem {...destinations.at(-1)!} />
+        </CarouselItem>
+      </div>
+      <div class="c3d-placeholder-card c3d-placeholder-center">
+        <CarouselItem>
+          <DestinationCarouselItem {...destinations[0]} />
+        </CarouselItem>
+      </div>
+      <div class="c3d-placeholder-card c3d-placeholder-right">
+        <CarouselItem>
+          <DestinationCarouselItem {...destinations[1]} />
+        </CarouselItem>
+      </div>
+    </div>
+
+    <!-- Carousel real (oculto) -->
+    <div id="mi-carousel" class="c3d-real-hidden">
+      {
+        destinations.map((dest) => (
+          <CarouselItem data-carousel-card>
+            <DestinationCarouselItem {...dest} />
+          </CarouselItem>
+        ))
+      }
+    </div>
+  </div>
+</SandboxLayout>
 
 <script>
-  import { SliderProvider } from "@components/slider/slider-provider";
-  import { GALLERY_SLIDER_ID } from "@lib/constants";
+  import { Carousel3D } from "@components/carousel-3d";
 
-  new SliderProvider(GALLERY_SLIDER_ID, {
-    sliderOptions: {
-      showNavButtons: true,
-      showThumbnails: true,
-      showDots: true,
-      skipSnaps: false,
-      dragFree: false,
-      loop: true,
-    },
+  const carrouselEl = document.getElementById("mi-carousel");
+
+  new Carousel3D(carrouselEl!, {
+    visibleCards: 3,
+    infinite: true,
+    placeholderSelector: "#placeholder",
+    showArrows: false,
   });
 </script>
+
+<style>
+  /* ============================
+     Card content (compartido entre placeholder y carousel real)
+     ============================ */
+  .c3d-card-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 25px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .c3d-card-content > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .c3d-card-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.1) 50%,
+      transparent
+    );
+    pointer-events: none;
+  }
+
+  .c3d-card-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px;
+  }
+
+  .c3d-card-info h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .c3d-card-info p {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 2px;
+  }
+
+  /* ============================
+     Placeholder: cards fake estaticas
+     Posicionadas con CSS para simular el carousel antes de que JS cargue.
+     Valores de transform identicos a los que usa el JS.
+     ============================ */
+  .c3d-placeholder {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    perspective: 1050px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .c3d-placeholder-card {
+    position: absolute;
+    width: 260px;
+    height: 340px;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.15),
+      0 5px 15px rgba(0, 0, 0, 0.08);
+  }
+
+  .c3d-placeholder-center {
+    transform: translateX(0px) scale(1) rotateY(0deg);
+    z-index: 30;
+  }
+
+  .c3d-placeholder-left {
+    transform: translateX(-220px) scale(0.8) rotateY(21deg);
+    z-index: 20;
+  }
+
+  .c3d-placeholder-right {
+    transform: translateX(220px) scale(0.8) rotateY(-21deg);
+    z-index: 20;
+  }
+
+  /* Descripcion */
+  .c3d-description-area {
+    text-align: center;
+    margin-top: 24px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .c3d-description-area p {
+    color: #4b5563;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    max-width: 500px;
+  }
+
+  /* ============================
+     Responsive placeholder
+     ============================ */
+  @media (max-width: 1023px) and (min-width: 640px) {
+    .c3d-placeholder {
+      height: 360px;
+      perspective: 800px;
+    }
+    .c3d-placeholder-card {
+      width: 220px;
+      height: 290px;
+    }
+    .c3d-placeholder-left {
+      transform: translateX(-187px) scale(0.8) rotateY(21deg);
+    }
+    .c3d-placeholder-right {
+      transform: translateX(187px) scale(0.8) rotateY(-21deg);
+    }
+  }
+
+  @media (max-width: 639px) {
+    .c3d-placeholder {
+      height: 320px;
+      perspective: 600px;
+    }
+    .c3d-placeholder-card {
+      width: 200px;
+      height: 260px;
+    }
+    .c3d-placeholder-left {
+      transform: translateX(-154px) scale(0.8) rotateY(21deg);
+    }
+    .c3d-placeholder-right {
+      transform: translateX(154px) scale(0.8) rotateY(-21deg);
+    }
+  }
+</style>

@@ -1,0 +1,171 @@
+/* Placeholder swap container */
+.c3d-swap-container {
+  position: relative;
+}
+
+.c3d {
+  position: relative;
+  width: 100%;
+  user-select: none;
+  overflow: hidden;
+}
+
+/* Must come AFTER .c3d to override position: relative.
+   Higher specificity (2 classes) ensures absolute wins. */
+.c3d.c3d-real-hidden {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.c3d-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Perspective container */
+.c3d-perspective {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+/* Visual card layer */
+.c3d-visual-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+/* Individual card */
+.c3d-card {
+  position: absolute;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  transition: transform 0.05s linear, opacity 0.05s linear;
+  pointer-events: auto;
+  cursor: pointer;
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.15),
+    0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.c3d-card-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+.c3d-card-inner > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Invisible scroll layer — virtual scroll pattern:
+   A single canvas div sets the scrollable width.
+   No snap items in DOM — snapping is JS-based on scroll end. */
+.c3d-scroll {
+  position: absolute;
+  inset: 0;
+  z-index: 35;
+  display: flex;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.c3d-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.c3d-spacer {
+  flex-shrink: 0;
+}
+
+.c3d-canvas {
+  flex-shrink: 0;
+  height: 1px;
+}
+
+/* Nav buttons */
+.c3d-nav {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  cursor: pointer;
+  z-index: 40;
+  transition: background-color 200ms, box-shadow 200ms;
+  backdrop-filter: blur(4px);
+}
+
+.c3d-nav:hover {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.c3d-nav:active {
+  transform: scale(0.95);
+}
+
+/* Dot indicators (consumer-styled, these are just defaults) */
+.c3d-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 24px;
+}
+
+.c3d-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: #d1d5db;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: width 300ms ease, background-color 300ms ease;
+}
+
+.c3d-dot[data-active="true"] {
+  width: 16px;
+  background: #5b8def;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .c3d-nav {
+    width: 36px;
+    height: 36px;
+  }
+
+  .c3d-nav svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .c3d-nav-hide-mobile {
+    display: none;
+  }
+}
