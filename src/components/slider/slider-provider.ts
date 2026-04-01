@@ -165,7 +165,7 @@ export class SliderProvider {
 
     snapList.forEach((snap, index) => {
       const existingIndex = uniqueSnaps.findIndex(
-        (s) => Math.abs(s - snap) < 0.1,
+        (s) => Math.abs(s - snap) < 0.01,
       );
 
       if (existingIndex === -1) {
