@@ -3,78 +3,46 @@ import type {
   ResponsiveConfig,
   Carousel3DOptions,
 } from "./types";
+import { VIRTUAL_CYCLES, NAV_CLASS } from "./constants";
+import { interpolateKeyframes } from "./utils";
 
-// Virtual cycles: the canvas is sized to this many repetitions of all cards.
-// User would need to scroll ~650 cards in one direction to reach the edge.
-const VIRTUAL_CYCLES = 100;
-
-function lerp(a: number, b: number, t: number): number {
-  return a + (b - a) * t;
-}
-
-function interpolateKeyframes(
-  keyframes: TransformKeyframe[],
-  position: number,
-  transformScale: number,
-): {
-  translateX: number;
-  scale: number;
-  rotateY: number;
-  opacity: number;
-  zIndex: number;
-} {
-  const half = (keyframes.length - 1) / 2;
-  const normalized = position + half;
-
-  if (normalized <= 0)
-    return {
-      ...keyframes[0],
-      translateX: keyframes[0].translateX * transformScale,
-    };
-  if (normalized >= keyframes.length - 1) {
-    const last = keyframes[keyframes.length - 1];
-    return { ...last, translateX: last.translateX * transformScale };
-  }
-
-  const idx = Math.floor(normalized);
-  const t = normalized - idx;
-  const a = keyframes[idx];
-  const b = keyframes[Math.min(idx + 1, keyframes.length - 1)];
-
-  return {
-    translateX: lerp(a.translateX, b.translateX, t) * transformScale,
-    scale: lerp(a.scale, b.scale, t),
-    rotateY: lerp(a.rotateY, b.rotateY, t),
-    opacity: lerp(a.opacity, b.opacity, t),
-    zIndex: Math.round(lerp(a.zIndex, b.zIndex, t)),
-  };
-}
-
-const NAV_CLASS = [
-  "shrink-0",
-  "flex",
-  "items-center",
-  "justify-center",
-  "w-12",
-  "h-12",
-  "max-sm:w-9",
-  "max-sm:h-9",
-  "rounded-full",
-  "border-[1.5px]",
-  "border-black/15",
-  "bg-white/90",
-  "text-[#333]",
-  "cursor-pointer",
-  "z-40",
-  "transition-[background-color,box-shadow]",
-  "duration-200",
-  "backdrop-blur-[4px]",
-  "hover:bg-white",
-  "hover:shadow-[0_2px_8px_rgba(0,0,0,0.12)]",
-  "active:scale-95",
-].join(" ");
-
-export class Carousel3D {
+/**
+ * Carrusel 3D con efecto de profundidad y desplazamiento virtual infinito.
+ * Gestiona la animación de tarjetas con perspectiva, rotación y escala interpoladas
+ * mediante keyframes, sin depender de librerías de animación externas.
+ *
+ * @example
+ * const carousel = new Carousel3D(document.getElementById('mi-carousel')!, {
+ *   visibleCards: 3,
+ *   infinite: true,
+ *   showArrows: true,
+ *   translateX: 220,
+ *   rotateY: 21,
+ *   sideScale: 0.8,
+ *   onActiveChange: (index) => console.log('Activo:', index),
+ * });
+ *
+ * @note
+ * El carrusel utiliza un canvas virtual de `VIRTUAL_CYCLES * cardCount` posiciones
+ * para simular desplazamiento infinito sin reciclar nodos DOM. Al destruirlo,
+ * restaura el HTML original del contenedor.
+ *
+ * @param container - Elemento raíz del carrusel. Debe contener los elementos hijos
+ * que coincidan con `cardSelector` (por defecto `[data-carousel-card]`).
+ *
+ * @param options - Configuración opcional del carrusel.
+ *
+ * Configuraciones por defecto:
+ * - `visibleCards`: 3 (o `data-visible-cards` del contenedor).
+ * - `infinite`: true (desplazamiento infinito virtual).
+ * - `showArrows`: true (botones de navegación visibles).
+ * - `showArrowsOnMobile`: true (botones visibles en móvil).
+ * - `translateX`: 220 (desplazamiento horizontal de las tarjetas laterales en px).
+ * - `rotateY`: 21 (rotación en el eje Y de las tarjetas laterales en grados).
+ * - `sideScale`: 0.8 (escala de las tarjetas laterales).
+ * - `perspective`: 1050 (perspectiva CSS del contenedor en px).
+ */
+export class Carousel3DProvider {
   private container: HTMLElement;
   private visibleCards: 3 | 5;
   private infinite: boolean;
@@ -190,7 +158,12 @@ export class Carousel3D {
   // the look; these methods ensure the placeholder is always kept in sync.
   // ---------------------------------------------------------------------------
 
-  /** Build keyframes for the currently selected visibleCards mode. */
+  /**
+   * Construye los keyframes de transformación según el modo `visibleCards` seleccionado.
+   * Los valores de `translateX`, `rotateY` y `sideScale` de la instancia determinan
+   * la apariencia de las tarjetas laterales; las posiciones fantasma se derivan proporcionalmente.
+   * @returns Array de keyframes ordenados de izquierda a derecha.
+   */
   private buildKeyframes(): TransformKeyframe[] {
     const tx = this.translateX;
     const ry = this.rotateY;
@@ -246,7 +219,12 @@ export class Carousel3D {
     ];
   }
 
-  /** Build breakpoints from options. */
+  /**
+   * Construye la lista de breakpoints responsivos a partir de las opciones.
+   * Si el usuario no proporcionó breakpoints explícitos, se genera uno único
+   * con `minWidth: 0` que aplica a cualquier ancho de pantalla.
+   * @returns Array de breakpoints ordenados de mayor a menor `minWidth`.
+   */
   private buildBreakpoints(): { minWidth: number; config: ResponsiveConfig }[] {
     // Si el usuario pasó breakpoints explícitos, usarlos directamente.
     if (this.options.breakpoints?.length) {
@@ -276,11 +254,20 @@ export class Carousel3D {
 
   // ---------------------------------------------------------------------------
 
-  /** Scroll position adjusted for the left spacer — 0 = first virtual card centered */
+  /**
+   * Posición de scroll ajustada por el spacer izquierdo.
+   * Un valor de 0 equivale a la primera tarjeta virtual centrada en pantalla.
+   */
   private get scrollOffset(): number {
     return this.scrollLayer.scrollLeft - this.spacerWidth;
   }
 
+  /**
+   * Determina la configuración responsiva activa según el ancho actual del contenedor.
+   * Recorre los breakpoints de mayor a menor y devuelve el primero cuyo `minWidth`
+   * sea menor o igual al ancho del contenedor.
+   * @returns La configuración `ResponsiveConfig` correspondiente al breakpoint activo.
+   */
   private getResponsiveConfig(): ResponsiveConfig {
     const width = this.container.offsetWidth;
     for (const bp of this.breakpoints) {
@@ -289,6 +276,12 @@ export class Carousel3D {
     return this.breakpoints[this.breakpoints.length - 1].config;
   }
 
+  /**
+   * Construye y monta toda la estructura DOM del carrusel dentro del contenedor raíz.
+   * Crea la capa de perspectiva, las tarjetas visuales (clones de los hijos originales),
+   * el canvas de scroll virtual y los botones de navegación.
+   * Vacía el contenedor antes de insertar los nuevos elementos.
+   */
   private buildDOM(): void {
     const rc = this.currentResponsive;
 
@@ -379,6 +372,11 @@ export class Carousel3D {
     this.container.appendChild(wrapper);
   }
 
+  /**
+   * Desplaza el scroll layer hasta la posición del índice virtual indicado.
+   * @param index - Índice virtual de la tarjeta a centrar.
+   * @param behavior - Comportamiento del scroll (`"auto"` o `"smooth"`). Por defecto `"auto"`.
+   */
   private scrollToVirtual(
     index: number,
     behavior: ScrollBehavior = "auto",
@@ -389,6 +387,11 @@ export class Carousel3D {
     });
   }
 
+  /**
+   * Establece la posición inicial del scroll.
+   * En modo infinito, centra en la mitad del canvas virtual alineada con el índice 0.
+   * En modo finito, centra en la tarjeta del medio del conjunto real.
+   */
   private initialPosition(): void {
     if (this.infinite) {
       const middleVirtual = Math.floor(this.virtualCount / 2);
@@ -402,6 +405,10 @@ export class Carousel3D {
     }
   }
 
+  /**
+   * Suscribe todos los event listeners necesarios para el funcionamiento del carrusel:
+   * scroll, click en botones prev/next, click en tarjetas y ResizeObserver.
+   */
   private bindEvents(): void {
     this.scrollLayer.addEventListener("scroll", this.handleScroll, {
       passive: true,
@@ -429,6 +436,10 @@ export class Carousel3D {
     this.resizeObserver.observe(this.container);
   }
 
+  /**
+   * Manejador del evento `scroll`. Actualiza las transformaciones de las tarjetas
+   * y programa un temporizador para ejecutar la lógica de snap al terminar el scroll.
+   */
   private handleScroll = (): void => {
     this.updateTransforms();
 
@@ -438,6 +449,10 @@ export class Carousel3D {
     }, 100);
   };
 
+  /**
+   * Ejecuta el snap al terminar el scroll: ajusta la posición a la tarjeta más cercana
+   * y actualiza `activeIndex` si cambió, disparando el callback `onActiveChange`.
+   */
   private handleScrollEnd(): void {
     const rc = this.currentResponsive;
     const offset = this.scrollOffset;
@@ -460,6 +475,11 @@ export class Carousel3D {
     }
   }
 
+  /**
+   * Manejador de click sobre el scroll layer. Detecta la tarjeta visual clicada
+   * usando `elementFromPoint` (con `pointerEvents` temporalmente desactivados en el layer)
+   * y desplaza el carrusel hacia ella si no es la tarjeta central.
+   */
   private handleCardClick = (e: MouseEvent): void => {
     const rc = this.currentResponsive;
     const centerVirtual = Math.round(this.scrollOffset / rc.cardWidth);
@@ -497,6 +517,11 @@ export class Carousel3D {
     }
   };
 
+  /**
+   * Recalcula y aplica las transformaciones CSS (`translateX`, `scale`, `rotateY`, `opacity`, `zIndex`)
+   * a cada tarjeta visual según su distancia al centro actual del scroll.
+   * Las tarjetas fuera del rango visible se ocultan y desactivan su `pointerEvents`.
+   */
   private updateTransforms(): void {
     const rc = this.currentResponsive;
     const centerFloat = this.scrollOffset / rc.cardWidth;
@@ -554,6 +579,11 @@ export class Carousel3D {
     }
   }
 
+  /**
+   * Responde a cambios de tamaño del contenedor detectados por `ResizeObserver`.
+   * Actualiza la configuración responsiva activa, redimensiona tarjetas y canvas,
+   * recalcula el spacer y mantiene la posición de scroll proporcional al nuevo `cardWidth`.
+   */
   private handleResize(): void {
     const newConfig = this.getResponsiveConfig();
     const oldCardWidth = this.currentResponsive.cardWidth;
@@ -585,10 +615,19 @@ export class Carousel3D {
     this.updateTransforms();
   }
 
+  /**
+   * Retorna el índice real de la tarjeta actualmente centrada en el carrusel.
+   * @returns Índice entre `0` y `cardCount - 1`.
+   */
   getActiveIndex(): number {
     return this.activeIndex;
   }
 
+  /**
+   * Desplaza el carrusel hasta la tarjeta con el índice real indicado.
+   * En modo infinito calcula el camino más corto para evitar giros innecesarios.
+   * @param index - Índice real de la tarjeta destino. Se limita al rango `[0, cardCount - 1]`.
+   */
   goTo(index: number): void {
     const clamped = Math.max(0, Math.min(index, this.cardCount - 1));
     const rc = this.currentResponsive;
@@ -606,6 +645,11 @@ export class Carousel3D {
     }
   }
 
+  /**
+   * Desmonta el carrusel y restaura el contenido HTML original del contenedor.
+   * Elimina todos los event listeners, desconecta el `ResizeObserver` y limpia
+   * los timers pendientes. No tiene efecto si el carrusel no fue inicializado.
+   */
   destroy(): void {
     if (!this.initialized) return;
 

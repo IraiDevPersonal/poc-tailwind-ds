@@ -176,11 +176,11 @@ const placeholders = getPlaceholder();
 </RootLayout>
 
 <script>
-  import { Carousel3D } from "@components/carousel-3d";
+  import { Carousel3DProvider } from "@components/carousel-3d/carousel-3d-provider";
   import { SliderProvider } from "@components/slider/slider-provider";
   import { GALLERY_SLIDER_ID } from "@lib/constants";
 
-  new Carousel3D(document.getElementById("mi-carousel")!, {
+  new Carousel3DProvider(document.getElementById("mi-carousel")!, {
     placeholderSelector: "#placeholder",
     visibleCards: 3,
     infinite: true,
