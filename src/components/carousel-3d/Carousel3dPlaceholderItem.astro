@@ -12,16 +12,15 @@ const { position = "center" } = Astro.props;
 // via inline styles right after initialization, keeping both in sync automatically.
 const defaultTransforms = {
   center: "",
-  left: "[transform:translateX(-154px)_scale(0.8)_rotateY(21deg)]  sm:[transform:translateX(-187px)_scale(0.8)_rotateY(21deg)]  lg:[transform:translateX(-235px)_scale(0.8)_rotateY(55deg)]",
-  right:
-    "[transform:translateX(154px)_scale(0.8)_rotateY(-21deg)] sm:[transform:translateX(187px)_scale(0.8)_rotateY(-21deg)] lg:[transform:translateX(235px)_scale(0.8)_rotateY(-55deg)]",
+  left: "[transform:translateX(-235px)_scale(0.8)_rotateY(55deg)]",
+  right: "[transform:translateX(235px)_scale(0.8)_rotateY(-55deg)]",
 };
 ---
 
 <div
   data-c3d-position={position}
   class={cn(
-    "absolute w-[200px] h-[260px] sm:w-[220px] sm:h-[290px] lg:w-[275px] lg:h-[271px] rounded-[25px] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.15),0_5px_15px_rgba(0,0,0,0.08)]",
+    "absolute w-[275px] h-[271px] rounded-[25px] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.15),0_5px_15px_rgba(0,0,0,0.08)]",
     position === "center" && "z-30",
     position !== "center" && "z-20",
     defaultTransforms[position],

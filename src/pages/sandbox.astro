@@ -109,7 +109,7 @@ const destinations = [
     description:
       "Adriatic jewel with medieval walled cities and island-hopping adventures.",
   },
-];
+].slice(0, 3);
 
 function getPlaceholder() {
   return {
@@ -185,8 +185,14 @@ const placeholders = getPlaceholder();
     visibleCards: 3,
     infinite: true,
     showArrows: false,
-    rotateY: 55,
-    translateX: 235,
+    rotateY: 55.6,
+    translateX: 234,
+    sideScale: 0.7627,
+    layout: {
+      containerHeight: 271,
+      cardHeight: 271,
+      cardWidth: 275,
+    },
   });
 
   new SliderProvider(GALLERY_SLIDER_ID, {

@@ -8,9 +8,6 @@ import type {
 // User would need to scroll ~650 cards in one direction to reach the edge.
 const VIRTUAL_CYCLES = 100;
 
-// Scale ratios for sm and base breakpoints relative to lg (fixed layout proportions).
-const SCALE_SM = 800 / 1050;
-const SCALE_BASE = 600 / 1050;
 
 function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * t;
@@ -89,6 +86,7 @@ export class Carousel3D {
   private showArrowsOnMobile: boolean;
 
   // Layout options — single source of truth shared with the placeholder.
+  private options!: Carousel3DOptions;
   private translateX: number;
   private rotateY: number;
   private sideScale: number;
@@ -120,6 +118,7 @@ export class Carousel3D {
     this.visibleCards =
       options.visibleCards ??
       (parseInt(container.dataset.visibleCards || "3", 10) as 3 | 5);
+    this.options = options;
     this.infinite = options.infinite ?? true;
     this.onActiveChange = options.onActiveChange;
     this.showArrows = options.showArrows ?? true;
@@ -251,41 +250,30 @@ export class Carousel3D {
     ];
   }
 
-  /** Build breakpoints scaling perspective proportionally from the lg value. */
+  /** Build breakpoints from options. */
   private buildBreakpoints(): { minWidth: number; config: ResponsiveConfig }[] {
-    const p = this.lgPerspective;
-    return [
-      {
-        minWidth: 1024,
-        config: {
-          cardWidth: 275,
-          cardHeight: 271,
-          containerHeight: 420,
-          perspective: p,
-          transformScale: 1.0,
-        },
+    // Si el usuario pasó breakpoints explícitos, usarlos directamente.
+    if (this.options.breakpoints?.length) {
+      return this.options.breakpoints;
+    }
+
+    // Sin breakpoints: un único BP (minWidth: 0) que aplica a cualquier ancho.
+    const defaults: ResponsiveConfig = {
+      cardWidth:       275,
+      cardHeight:      271,
+      containerHeight: 420,
+      perspective:     this.lgPerspective,
+      transformScale:  1.0,
+    };
+
+    return [{
+      minWidth: 0,
+      config: {
+        ...defaults,
+        ...(this.options.layout ?? {}),
+        perspective: this.lgPerspective, // siempre respeta la opción top-level
       },
-      // {
-      //   minWidth: 640,
-      //   config: {
-      //     cardWidth: 220,
-      //     cardHeight: 290,
-      //     containerHeight: 360,
-      //     perspective: Math.round(p * SCALE_SM),
-      //     transformScale: 0.85,
-      //   },
-      // },
-      // {
-      //   minWidth: 0,
-      //   config: {
-      //     cardWidth: 200,
-      //     cardHeight: 260,
-      //     containerHeight: 320,
-      //     perspective: Math.round(p * SCALE_BASE),
-      //     transformScale: 0.7,
-      //   },
-      // },
-    ];
+    }];
   }
 
   /**
@@ -297,19 +285,22 @@ export class Carousel3D {
     const rc = this.currentResponsive;
     const adjustedTX = Math.round(this.translateX * rc.transformScale);
 
-    const leftEl = this.placeholder.querySelector<HTMLElement>(
-      '[data-c3d-position="left"]',
-    );
-    const rightEl = this.placeholder.querySelector<HTMLElement>(
-      '[data-c3d-position="right"]',
-    );
-
-    if (leftEl)
-      leftEl.style.transform = `translateX(-${adjustedTX}px) scale(${this.sideScale}) rotateY(${this.rotateY}deg)`;
-    if (rightEl)
-      rightEl.style.transform = `translateX(${adjustedTX}px) scale(${this.sideScale}) rotateY(-${this.rotateY}deg)`;
-
+    // Sincronizar altura y perspectiva del contenedor
+    this.placeholder.style.height = `${rc.containerHeight}px`;
     this.placeholder.style.perspective = `${rc.perspective}px`;
+
+    // Sincronizar tamaño de todas las cards placeholder
+    const items = this.placeholder.querySelectorAll<HTMLElement>('[data-c3d-position]');
+    for (const item of items) {
+      item.style.width  = `${rc.cardWidth}px`;
+      item.style.height = `${rc.cardHeight}px`;
+    }
+
+    // Sincronizar transforms de las cards laterales
+    const leftEl  = this.placeholder.querySelector<HTMLElement>('[data-c3d-position="left"]');
+    const rightEl = this.placeholder.querySelector<HTMLElement>('[data-c3d-position="right"]');
+    if (leftEl)  leftEl.style.transform  = `translateX(-${adjustedTX}px) scale(${this.sideScale}) rotateY(${this.rotateY}deg)`;
+    if (rightEl) rightEl.style.transform = `translateX(${adjustedTX}px) scale(${this.sideScale}) rotateY(-${this.rotateY}deg)`;
   }
 
   // ---------------------------------------------------------------------------
