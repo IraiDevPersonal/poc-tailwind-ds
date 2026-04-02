@@ -1,0 +1,38 @@
+---
+import { cn } from "@lib/utils";
+
+/**
+ * Slide individual del Carousel3D.
+ *
+ * Es un item `flex-none` dentro del container de Embla.
+ * El `Carousel3DProvider` aplica los transforms 3D directamente a este elemento
+ * vía `embla.slideNodes()`, por lo que el ancho controla qué tan visibles son
+ * los slides adyacentes (los que "asoman" en el coverflow).
+ *
+ * El ancho por defecto es `65%` del viewport del carousel, lo que deja ~17.5%
+ * visible de cada slide adyacente antes de aplicar los transforms 3D.
+ */
+
+type Props = {
+  className?: string;
+  slideClassName?: string;
+};
+
+const { className, slideClassName } = Astro.props;
+---
+
+<div
+  class={cn(
+    "flex-none w-[65%] cursor-grab active:cursor-grabbing select-none",
+    className,
+  )}
+>
+  <div
+    class={cn(
+      "w-full h-full rounded-2xl overflow-hidden",
+      slideClassName,
+    )}
+  >
+    <slot />
+  </div>
+</div>

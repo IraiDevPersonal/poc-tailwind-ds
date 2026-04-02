@@ -1,0 +1,630 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "Home" [ref=e6] [cursor=pointer]:
+          - /url: https://atobeach.com/
+          - img [ref=e7]
+        - generic [ref=e25]:
+          - button "GBP" [ref=e26] [cursor=pointer]:
+            - text: GBP
+            - img [ref=e27]
+          - link "My trips" [ref=e29] [cursor=pointer]:
+            - /url: https://atobeach.com/settings/trips
+            - img [ref=e30]
+          - button "Open menu" [ref=e32]:
+            - img [ref=e33]
+      - generic [ref=e38]:
+        - heading "Find Your Perfect Beach Holiday Package" [level=1] [ref=e39]
+        - paragraph [ref=e40]: Compare beach holiday packages with flights and hotels in one search. Explore top destinations and flexible travel options for your next getaway.
+        - button "Price-Drop Guarantee" [ref=e41] [cursor=pointer]:
+          - img [ref=e42]
+          - paragraph [ref=e47]: Price-Drop Guarantee
+      - img "Header background" [ref=e49]
+    - main [ref=e50]:
+      - generic [ref=e52]:
+        - heading "Where do you want to go?" [level=2] [ref=e53]
+        - generic [ref=e54]:
+          - button "Departing from Select airport" [ref=e55]:
+            - paragraph [ref=e56]: Departing from
+            - generic [ref=e57]:
+              - generic [ref=e58]:
+                - img [ref=e60]
+                - generic [ref=e63]: Select airport
+              - img [ref=e64]
+          - button "Arriving to Select airport" [ref=e66]:
+            - paragraph [ref=e67]: Arriving to
+            - generic [ref=e68]:
+              - generic [ref=e69]:
+                - img [ref=e71]
+                - generic [ref=e74]: Select airport
+              - img [ref=e75]
+          - button "Number of Guests 1 Adult" [ref=e77]:
+            - paragraph [ref=e78]: Number of Guests
+            - generic [ref=e79]:
+              - generic [ref=e80]:
+                - img [ref=e82]
+                - generic [ref=e89]: 1 Adult
+              - img [ref=e90]
+          - button "Travel date Select dates" [ref=e92]:
+            - paragraph [ref=e93]: Travel date
+            - generic [ref=e94]:
+              - generic [ref=e95]:
+                - img [ref=e97]
+                - generic [ref=e102]: Select dates
+              - img [ref=e103]
+        - generic [ref=e105]:
+          - generic [ref=e106]:
+            - switch "Toggle round trip flight" [checked] [ref=e107] [cursor=pointer]
+            - generic [ref=e109]: Round trip
+          - generic [ref=e110]:
+            - button "Options" [ref=e111]:
+              - img [ref=e112]
+              - generic [ref=e125]:
+                - generic [ref=e126]: Options
+                - img [ref=e127]
+            - button "Search" [disabled] [ref=e131]:
+              - img [ref=e132]
+              - generic [ref=e145]:
+                - text: Search
+                - img [ref=e146]
+      - generic [ref=e150]:
+        - generic [ref=e152]:
+          - generic [ref=e153]:
+            - heading "Popular Beach Holiday Destinations for 2026/2027" [level=2] [ref=e154]
+            - paragraph [ref=e155]: Browse our most popular beach destinations for travellers from Chile
+          - generic [ref=e157]:
+            - link [ref=e201] [cursor=pointer]:
+              - /url: https://atobeach.com/spain-travel-guide
+              - generic [ref=e202]:
+                - img [ref=e203]
+                - generic [ref=e205]:
+                  - heading [level=3] [ref=e206]:
+                    - img [ref=e208]
+                    - text: Spain
+                  - paragraph [ref=e209]: Click to learn more
+            - link [ref=e211] [cursor=pointer]:
+              - /url: https://atobeach.com/maldives-travel-guide
+              - generic [ref=e212]:
+                - img [ref=e213]
+                - generic [ref=e215]:
+                  - heading [level=3] [ref=e216]:
+                    - img [ref=e218]
+                    - text: Maldives
+                  - paragraph [ref=e219]: Click to learn more
+            - link [ref=e221] [cursor=pointer]:
+              - /url: https://atobeach.com/malta-travel-guide
+              - generic [ref=e222]:
+                - img [ref=e223]
+                - generic [ref=e225]:
+                  - heading [level=3] [ref=e226]:
+                    - img [ref=e228]
+                    - text: Malta
+                  - paragraph [ref=e229]: Click to learn more
+            - link [ref=e231] [cursor=pointer]:
+              - /url: https://atobeach.com/indonesia-travel-guide
+              - generic [ref=e232]:
+                - img [ref=e233]
+                - generic [ref=e235]:
+                  - heading [level=3] [ref=e236]:
+                    - img [ref=e238]
+                    - text: Indonesia
+                  - paragraph [ref=e239]: Click to learn more
+            - link [ref=e241] [cursor=pointer]:
+              - /url: https://atobeach.com/turkey-travel-guide
+              - generic [ref=e242]:
+                - img [ref=e243]
+                - generic [ref=e245]:
+                  - heading [level=3] [ref=e246]:
+                    - img [ref=e248]
+                    - text: Turkey
+                  - paragraph [ref=e249]: Click to learn more
+            - link [ref=e251] [cursor=pointer]:
+              - /url: https://atobeach.com/barbados-travel-guide
+              - generic [ref=e252]:
+                - img [ref=e253]
+                - generic [ref=e255]:
+                  - heading [level=3] [ref=e256]:
+                    - img [ref=e258]
+                    - text: Barbados
+                  - paragraph [ref=e259]: Click to learn more
+            - link [ref=e261] [cursor=pointer]:
+              - /url: https://atobeach.com/greece-travel-guide
+              - generic [ref=e262]:
+                - img [ref=e263]
+                - generic [ref=e265]:
+                  - heading [level=3] [ref=e266]:
+                    - img [ref=e268]
+                    - text: Greece
+                  - paragraph [ref=e269]: Click to learn more
+            - link [ref=e271] [cursor=pointer]:
+              - /url: https://atobeach.com/portugal-travel-guide
+              - generic [ref=e272]:
+                - img [ref=e273]
+                - generic [ref=e275]:
+                  - heading [level=3] [ref=e276]:
+                    - img [ref=e278]
+                    - text: Portugal
+                  - paragraph [ref=e279]: Click to learn more
+            - link [ref=e281] [cursor=pointer]:
+              - /url: https://atobeach.com/thailand-travel-guide
+              - generic [ref=e282]:
+                - img [ref=e283]
+                - generic [ref=e285]:
+                  - heading [level=3] [ref=e286]:
+                    - img [ref=e288]
+                    - text: Thailand
+                  - paragraph [ref=e289]: Click to learn more
+            - link [ref=e291] [cursor=pointer]:
+              - /url: https://atobeach.com/mauritius-travel-guide
+              - generic [ref=e292]:
+                - img [ref=e293]
+                - generic [ref=e295]:
+                  - heading [level=3] [ref=e296]:
+                    - img [ref=e298]
+                    - text: Mauritius
+                  - paragraph [ref=e299]: Click to learn more
+            - link [ref=e301] [cursor=pointer]:
+              - /url: https://atobeach.com/cyprus-travel-guide
+              - generic [ref=e302]:
+                - img [ref=e303]
+                - generic [ref=e305]:
+                  - heading [level=3] [ref=e306]:
+                    - img [ref=e308]
+                    - text: Cyprus
+                  - paragraph [ref=e309]: Click to learn more
+            - link [ref=e311] [cursor=pointer]:
+              - /url: https://atobeach.com/italy-travel-guide
+              - generic [ref=e312]:
+                - img [ref=e313]
+                - generic [ref=e315]:
+                  - heading [level=3] [ref=e316]:
+                    - img [ref=e318]
+                    - text: Italy
+                  - paragraph [ref=e319]: Click to learn more
+            - link [ref=e321] [cursor=pointer]:
+              - /url: https://atobeach.com/croatia-travel-guide
+              - generic [ref=e322]:
+                - img [ref=e323]
+                - generic [ref=e325]:
+                  - heading [level=3] [ref=e326]:
+                    - img [ref=e328]
+                    - text: Croatia
+                  - paragraph [ref=e329]: Click to learn more
+            - link [ref=e331] [cursor=pointer]:
+              - /url: https://atobeach.com/spain-travel-guide
+              - generic [ref=e332]:
+                - img [ref=e333]
+                - generic [ref=e335]:
+                  - heading [level=3] [ref=e336]:
+                    - img [ref=e338]
+                    - text: Spain
+                  - paragraph [ref=e339]: Click to learn more
+            - link [ref=e341] [cursor=pointer]:
+              - /url: https://atobeach.com/maldives-travel-guide
+              - generic [ref=e342]:
+                - img [ref=e343]
+                - generic [ref=e345]:
+                  - heading [level=3] [ref=e346]:
+                    - img [ref=e348]
+                    - text: Maldives
+                  - paragraph [ref=e349]: Click to learn more
+            - link [ref=e351] [cursor=pointer]:
+              - /url: https://atobeach.com/malta-travel-guide
+              - generic [ref=e352]:
+                - img [ref=e353]
+                - generic [ref=e355]:
+                  - heading [level=3] [ref=e356]:
+                    - img [ref=e358]
+                    - text: Malta
+                  - paragraph [ref=e359]: Click to learn more
+            - link [ref=e361] [cursor=pointer]:
+              - /url: https://atobeach.com/indonesia-travel-guide
+              - generic [ref=e362]:
+                - img [ref=e363]
+                - generic [ref=e365]:
+                  - heading [level=3] [ref=e366]:
+                    - img [ref=e368]
+                    - text: Indonesia
+                  - paragraph [ref=e369]: Click to learn more
+            - link [ref=e371] [cursor=pointer]:
+              - /url: https://atobeach.com/turkey-travel-guide
+              - generic [ref=e372]:
+                - img [ref=e373]
+                - generic [ref=e375]:
+                  - heading [level=3] [ref=e376]:
+                    - img [ref=e378]
+                    - text: Turkey
+                  - paragraph [ref=e379]: Click to learn more
+            - link [ref=e381] [cursor=pointer]:
+              - /url: https://atobeach.com/barbados-travel-guide
+              - generic [ref=e382]:
+                - img [ref=e383]
+                - generic [ref=e385]:
+                  - heading [level=3] [ref=e386]:
+                    - img [ref=e388]
+                    - text: Barbados
+                  - paragraph [ref=e389]: Click to learn more
+            - link "Greece Greece Greece Click to learn more" [ref=e391] [cursor=pointer]:
+              - /url: https://atobeach.com/greece-travel-guide
+              - generic [ref=e392]:
+                - img "Greece" [ref=e393]
+                - generic [ref=e395]:
+                  - heading "Greece Greece" [level=3] [ref=e396]:
+                    - img "Greece" [ref=e398]
+                    - text: Greece
+                  - paragraph [ref=e399]: Click to learn more
+            - link [ref=e401] [cursor=pointer]:
+              - /url: https://atobeach.com/portugal-travel-guide
+              - generic [ref=e402]:
+                - img [ref=e403]
+                - generic [ref=e405]:
+                  - heading [level=3] [ref=e406]:
+                    - img [ref=e408]
+                    - text: Portugal
+                  - paragraph [ref=e409]: Click to learn more
+            - link [ref=e411] [cursor=pointer]:
+              - /url: https://atobeach.com/thailand-travel-guide
+              - generic [ref=e412]:
+                - img [ref=e413]
+                - generic [ref=e415]:
+                  - heading [level=3] [ref=e416]:
+                    - img [ref=e418]
+                    - text: Thailand
+                  - paragraph [ref=e419]: Click to learn more
+            - link [ref=e421] [cursor=pointer]:
+              - /url: https://atobeach.com/mauritius-travel-guide
+              - generic [ref=e422]:
+                - img [ref=e423]
+                - generic [ref=e425]:
+                  - heading [level=3] [ref=e426]:
+                    - img [ref=e428]
+                    - text: Mauritius
+                  - paragraph [ref=e429]: Click to learn more
+            - link [ref=e431] [cursor=pointer]:
+              - /url: https://atobeach.com/cyprus-travel-guide
+              - generic [ref=e432]:
+                - img [ref=e433]
+                - generic [ref=e435]:
+                  - heading [level=3] [ref=e436]:
+                    - img [ref=e438]
+                    - text: Cyprus
+                  - paragraph [ref=e439]: Click to learn more
+            - link [ref=e441] [cursor=pointer]:
+              - /url: https://atobeach.com/italy-travel-guide
+              - generic [ref=e442]:
+                - img [ref=e443]
+                - generic [ref=e445]:
+                  - heading [level=3] [ref=e446]:
+                    - img [ref=e448]
+                    - text: Italy
+                  - paragraph [ref=e449]: Click to learn more
+            - link [ref=e451] [cursor=pointer]:
+              - /url: https://atobeach.com/croatia-travel-guide
+              - generic [ref=e452]:
+                - img [ref=e453]
+                - generic [ref=e455]:
+                  - heading [level=3] [ref=e456]:
+                    - img [ref=e458]
+                    - text: Croatia
+                  - paragraph [ref=e459]: Click to learn more
+            - link [ref=e461] [cursor=pointer]:
+              - /url: https://atobeach.com/spain-travel-guide
+              - generic [ref=e462]:
+                - img [ref=e463]
+                - generic [ref=e465]:
+                  - heading [level=3] [ref=e466]:
+                    - img [ref=e468]
+                    - text: Spain
+                  - paragraph [ref=e469]: Click to learn more
+            - link [ref=e471] [cursor=pointer]:
+              - /url: https://atobeach.com/maldives-travel-guide
+              - generic [ref=e472]:
+                - img [ref=e473]
+                - generic [ref=e475]:
+                  - heading [level=3] [ref=e476]:
+                    - img [ref=e478]
+                    - text: Maldives
+                  - paragraph [ref=e479]: Click to learn more
+            - link [ref=e481] [cursor=pointer]:
+              - /url: https://atobeach.com/malta-travel-guide
+              - generic [ref=e482]:
+                - img [ref=e483]
+                - generic [ref=e485]:
+                  - heading [level=3] [ref=e486]:
+                    - img [ref=e488]
+                    - text: Malta
+                  - paragraph [ref=e489]: Click to learn more
+            - link [ref=e491] [cursor=pointer]:
+              - /url: https://atobeach.com/indonesia-travel-guide
+              - generic [ref=e492]:
+                - img [ref=e493]
+                - generic [ref=e495]:
+                  - heading [level=3] [ref=e496]:
+                    - img [ref=e498]
+                    - text: Indonesia
+                  - paragraph [ref=e499]: Click to learn more
+            - link [ref=e501] [cursor=pointer]:
+              - /url: https://atobeach.com/turkey-travel-guide
+              - generic [ref=e502]:
+                - img [ref=e503]
+                - generic [ref=e505]:
+                  - heading [level=3] [ref=e506]:
+                    - img [ref=e508]
+                    - text: Turkey
+                  - paragraph [ref=e509]: Click to learn more
+            - link [ref=e511] [cursor=pointer]:
+              - /url: https://atobeach.com/barbados-travel-guide
+              - generic [ref=e512]:
+                - img [ref=e513]
+                - generic [ref=e515]:
+                  - heading [level=3] [ref=e516]:
+                    - img [ref=e518]
+                    - text: Barbados
+                  - paragraph [ref=e519]: Click to learn more
+            - link [ref=e521] [cursor=pointer]:
+              - /url: https://atobeach.com/greece-travel-guide
+              - generic [ref=e522]:
+                - img [ref=e523]
+                - generic [ref=e525]:
+                  - heading [level=3] [ref=e526]:
+                    - img [ref=e528]
+                    - text: Greece
+                  - paragraph [ref=e529]: Click to learn more
+            - link [ref=e531] [cursor=pointer]:
+              - /url: https://atobeach.com/portugal-travel-guide
+              - generic [ref=e532]:
+                - img [ref=e533]
+                - generic [ref=e535]:
+                  - heading [level=3] [ref=e536]:
+                    - img [ref=e538]
+                    - text: Portugal
+                  - paragraph [ref=e539]: Click to learn more
+            - link [ref=e541] [cursor=pointer]:
+              - /url: https://atobeach.com/thailand-travel-guide
+              - generic [ref=e542]:
+                - img [ref=e543]
+                - generic [ref=e545]:
+                  - heading [level=3] [ref=e546]:
+                    - img [ref=e548]
+                    - text: Thailand
+                  - paragraph [ref=e549]: Click to learn more
+            - link [ref=e551] [cursor=pointer]:
+              - /url: https://atobeach.com/mauritius-travel-guide
+              - generic [ref=e552]:
+                - img [ref=e553]
+                - generic [ref=e555]:
+                  - heading [level=3] [ref=e556]:
+                    - img [ref=e558]
+                    - text: Mauritius
+                  - paragraph [ref=e559]: Click to learn more
+            - link [ref=e561] [cursor=pointer]:
+              - /url: https://atobeach.com/cyprus-travel-guide
+              - generic [ref=e562]:
+                - img [ref=e563]
+                - generic [ref=e565]:
+                  - heading [level=3] [ref=e566]:
+                    - img [ref=e568]
+                    - text: Cyprus
+                  - paragraph [ref=e569]: Click to learn more
+            - link [ref=e571] [cursor=pointer]:
+              - /url: https://atobeach.com/italy-travel-guide
+              - generic [ref=e572]:
+                - img [ref=e573]
+                - generic [ref=e575]:
+                  - heading [level=3] [ref=e576]:
+                    - img [ref=e578]
+                    - text: Italy
+                  - paragraph [ref=e579]: Click to learn more
+            - link [ref=e581] [cursor=pointer]:
+              - /url: https://atobeach.com/croatia-travel-guide
+              - generic [ref=e582]:
+                - img [ref=e583]
+                - generic [ref=e585]:
+                  - heading [level=3] [ref=e586]:
+                    - img [ref=e588]
+                    - text: Croatia
+                  - paragraph [ref=e589]: Click to learn more
+          - paragraph [ref=e591]: Whitewashed villages and turquoise coves around every corner. Plan your Greece beach holiday with flights, hotels, and island-hopping tips.
+        - generic [ref=e610]:
+          - generic [ref=e611]:
+            - generic [ref=e612]:
+              - img [ref=e613]
+              - text: Our Promise
+            - heading "Price-Drop Guarantee" [level=2] [ref=e624]
+            - paragraph [ref=e625]: Book with confidence. If the price of your holiday package drops after you book, we automatically refund you the difference. No forms, no chasing. It just happens.
+            - generic [ref=e626]:
+              - generic [ref=e627]:
+                - img [ref=e629]
+                - generic [ref=e635]:
+                  - heading "Book your holiday" [level=3] [ref=e636]
+                  - paragraph [ref=e637]: Lock in your flights and hotel at today's price.
+              - generic [ref=e638]:
+                - img [ref=e640]
+                - generic [ref=e644]:
+                  - heading "We monitor the price" [level=3] [ref=e645]
+                  - paragraph [ref=e646]: We check for price drops daily until your departure date.
+              - generic [ref=e647]:
+                - img [ref=e649]
+                - generic [ref=e660]:
+                  - heading "Get refunded automatically" [level=3] [ref=e661]
+                  - paragraph [ref=e662]: If the price drops, we refund the difference automatically.
+            - paragraph [ref=e663]: "* Subject to hotel availability."
+          - generic [ref=e666]:
+            - generic [ref=e667]:
+              - heading "Mallorca Beach Resort" [level=4] [ref=e668]
+              - paragraph [ref=e669]: 15 Jun — 22 Jun · 7 nights
+              - generic [ref=e670]:
+                - generic [ref=e671]:
+                  - img [ref=e672]
+                  - paragraph [ref=e679]: 2 Adults
+                - generic [ref=e680]:
+                  - img [ref=e681]
+                  - paragraph [ref=e688]: Deluxe Sea View
+                - generic [ref=e689]:
+                  - img [ref=e690]
+                  - paragraph [ref=e697]: All-Inclusive
+                - generic [ref=e698]:
+                  - img [ref=e699]
+                  - generic [ref=e711]: Refundable
+              - generic [ref=e712]:
+                - generic [ref=e713]: Direct flight
+                - generic [ref=e714]: Beachfront
+                - generic [ref=e715]: Pool
+                - generic [ref=e716]: Free Wi-Fi
+                - generic [ref=e717]: Spa
+              - generic [ref=e718]:
+                - paragraph [ref=e719]: £1,249
+                - paragraph [ref=e720]: per person · flights + hotel
+            - generic [ref=e722]:
+              - img [ref=e724]
+              - generic [ref=e742]:
+                - heading "Price Drop Refund" [level=3] [ref=e743]
+                - paragraph [ref=e744]: Great news! The price of your Mallorca Beach Resort package has dropped. We've automatically refunded the difference.
+                - generic [ref=e746]:
+                  - generic [ref=e747]:
+                    - generic [ref=e748]: Original price
+                    - generic [ref=e749]: £1,249
+                  - generic [ref=e750]:
+                    - generic [ref=e751]: New price
+                    - generic [ref=e752]: £1,099
+                  - generic [ref=e754]:
+                    - generic [ref=e755]: Refunded to you
+                    - generic [ref=e756]: £150
+                - paragraph [ref=e757]: The refund has been sent to your original payment method.
+                - paragraph [ref=e758]:
+                  - text: Best regards,
+                  - text: AtoBeach Team
+        - generic [ref=e759]:
+          - generic [ref=e760]:
+            - heading "A Beach Holiday for Everyone" [level=2] [ref=e761]
+            - paragraph [ref=e762]: Whether you're travelling as a family, escaping as a couple, watching your budget, or want everything included
+          - generic [ref=e763]:
+            - generic [ref=e764]:
+              - img [ref=e765]
+              - heading "Family" [level=3] [ref=e776]
+              - paragraph [ref=e777]: Kid-friendly resorts with shallow beaches and short flights from Chile.
+            - generic [ref=e778]:
+              - img [ref=e779]
+              - heading "Couples" [level=3] [ref=e785]
+              - paragraph [ref=e786]: Adults-only resorts and boutique coastal hotels for a quieter escape.
+            - generic [ref=e787]:
+              - img [ref=e788]
+              - heading "Budget" [level=3] [ref=e793]
+              - paragraph [ref=e794]: Self-catering stays and shoulder season dates that keep costs down.
+            - generic [ref=e795]:
+              - img [ref=e796]
+              - heading "All-Inclusive" [level=3] [ref=e801]
+              - paragraph [ref=e802]: Meals, drinks, and resort activities all covered by a single upfront price.
+        - generic [ref=e803]:
+          - generic [ref=e804]:
+            - heading "Beach Holiday FAQs" [level=2] [ref=e805]
+            - paragraph [ref=e806]: Common questions about planning your beach holiday
+          - region [ref=e808]:
+            - generic [ref=e809]:
+              - heading "What's included in a beach holiday package?" [level=3] [ref=e810]:
+                - button "What's included in a beach holiday package?" [ref=e811] [cursor=pointer]:
+                  - text: What's included in a beach holiday package?
+                  - img [ref=e813]
+              - region "What's included in a beach holiday package?"
+            - generic [ref=e815]:
+              - heading "When is the cheapest time to book a beach holiday?" [level=3] [ref=e816]:
+                - button "When is the cheapest time to book a beach holiday?" [ref=e817] [cursor=pointer]:
+                  - text: When is the cheapest time to book a beach holiday?
+                  - img [ref=e819]
+              - region "When is the cheapest time to book a beach holiday?"
+            - generic [ref=e821]:
+              - heading "Do I need a visa for popular beach destinations?" [level=3] [ref=e822]:
+                - button "Do I need a visa for popular beach destinations?" [ref=e823] [cursor=pointer]:
+                  - text: Do I need a visa for popular beach destinations?
+                  - img [ref=e825]
+              - region "Do I need a visa for popular beach destinations?"
+            - generic [ref=e827]:
+              - heading "Can I compare all-inclusive and other board options?" [level=3] [ref=e828]:
+                - button "Can I compare all-inclusive and other board options?" [ref=e829] [cursor=pointer]:
+                  - text: Can I compare all-inclusive and other board options?
+                  - img [ref=e831]
+              - region "Can I compare all-inclusive and other board options?"
+            - generic [ref=e833]:
+              - heading "How far in advance should I book a beach holiday?" [level=3] [ref=e834]:
+                - button "How far in advance should I book a beach holiday?" [ref=e835] [cursor=pointer]:
+                  - text: How far in advance should I book a beach holiday?
+                  - img [ref=e837]
+              - region "How far in advance should I book a beach holiday?"
+    - contentinfo [ref=e839]:
+      - generic [ref=e840]:
+        - generic [ref=e841]:
+          - generic [ref=e842]:
+            - img [ref=e843]
+            - paragraph [ref=e861]: Your gateway to the world's most beautiful beaches and destinations. Plan, book, and experience unforgettable travel moments.
+            - generic [ref=e862]:
+              - link "X (Twitter)" [ref=e863] [cursor=pointer]:
+                - /url: https://x.com/atobeach
+                - img [ref=e864]
+              - link "Instagram" [ref=e867] [cursor=pointer]:
+                - /url: https://instagram.com/atobeach
+                - img [ref=e868]
+              - link "TikTok" [ref=e871] [cursor=pointer]:
+                - /url: https://tiktok.com/@atobeach.com
+                - img [ref=e872]
+          - generic [ref=e875]:
+            - heading "Popular Destinations" [level=3] [ref=e876]
+            - list [ref=e877]:
+              - listitem [ref=e878]:
+                - link "Spain Travel Guide" [ref=e879] [cursor=pointer]:
+                  - /url: https://atobeach.com/spain-travel-guide
+              - listitem [ref=e880]:
+                - link "Greece Travel Guide" [ref=e881] [cursor=pointer]:
+                  - /url: https://atobeach.com/greece-travel-guide
+              - listitem [ref=e882]:
+                - link "Turkey Travel Guide" [ref=e883] [cursor=pointer]:
+                  - /url: https://atobeach.com/turkey-travel-guide
+              - listitem [ref=e884]:
+                - link "Thailand Travel Guide" [ref=e885] [cursor=pointer]:
+                  - /url: https://atobeach.com/thailand-travel-guide
+              - listitem [ref=e886]:
+                - link "Mexico Travel Guide" [ref=e887] [cursor=pointer]:
+                  - /url: https://atobeach.com/mexico-travel-guide
+              - listitem [ref=e888]:
+                - link "View all destinations" [ref=e889] [cursor=pointer]:
+                  - /url: https://atobeach.com/destinations
+          - generic [ref=e890]:
+            - heading "Account" [level=3] [ref=e891]
+            - list [ref=e892]:
+              - listitem [ref=e893]:
+                - link "My Trips" [ref=e894] [cursor=pointer]:
+                  - /url: https://atobeach.com/settings/trips
+              - listitem [ref=e895]:
+                - link "Favourites" [ref=e896] [cursor=pointer]:
+                  - /url: https://atobeach.com/settings/favourites
+              - listitem [ref=e897]:
+                - link "Settings" [ref=e898] [cursor=pointer]:
+                  - /url: https://atobeach.com/settings/account
+              - listitem [ref=e899]:
+                - link "Saved Profiles" [ref=e900] [cursor=pointer]:
+                  - /url: https://atobeach.com/settings/profiles
+          - generic [ref=e901]:
+            - heading "Company" [level=3] [ref=e902]
+            - list [ref=e903]:
+              - listitem [ref=e904]:
+                - link "About" [ref=e905] [cursor=pointer]:
+                  - /url: https://atobeach.com/about
+              - listitem [ref=e906]:
+                - link "Blog" [ref=e907] [cursor=pointer]:
+                  - /url: https://atobeach.com/blog
+              - listitem [ref=e908]:
+                - link "Terms of Service" [ref=e909] [cursor=pointer]:
+                  - /url: https://atobeach.com/terms
+              - listitem [ref=e910]:
+                - link "Privacy Policy" [ref=e911] [cursor=pointer]:
+                  - /url: https://atobeach.com/privacy
+        - generic [ref=e912]:
+          - paragraph [ref=e913]: © 2026 A2B Travel Tech Ltd (No. 17080120). All rights reserved.
+          - generic [ref=e914]:
+            - img "Visa" [ref=e915]
+            - img "Mastercard" [ref=e916]
+            - img "American Express" [ref=e917]
+            - img "Maestro" [ref=e918]
+            - img "Apple Pay" [ref=e919]
+            - img "Google Pay" [ref=e920]
+  - region "Notifications"

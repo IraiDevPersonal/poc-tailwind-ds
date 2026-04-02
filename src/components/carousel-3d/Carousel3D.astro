@@ -1,0 +1,30 @@
+---
+import { cn } from "@lib/utils";
+
+/**
+ * Contenedor raíz del Carousel3D.
+ *
+ * Estructura interna:
+ * - `.carousel-3d-clip` → `overflow-hidden` para recortar los slides adyacentes.
+ * - `#[id]` → Viewport de Embla con `overflow-visible` para que los slides
+ *   adyacentes sean visibles antes de ser recortados por el padre.
+ * - Primer hijo del viewport → container de Embla (flex).
+ *
+ * Los slides deben ser hijos directos del slot de este componente.
+ */
+
+type Props = {
+  id: string;
+  className?: string;
+};
+
+const { id, className } = Astro.props;
+---
+
+<div class={cn("carousel-3d-clip relative overflow-hidden w-full", className)}>
+  <div id={id} class="overflow-visible w-full">
+    <div class="flex">
+      <slot />
+    </div>
+  </div>
+</div>

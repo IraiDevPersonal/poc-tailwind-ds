@@ -2,6 +2,9 @@
 import DeviceThumbnail from "@components/DeviceThumbnail.astro";
 import GalleryFallback from "@components/GalleryFallback.astro";
 import GallerySlide from "@components/GallerySlide.astro";
+import Carousel3D from "@components/carousel-3d/Carousel3D.astro";
+import Carousel3DDots from "@components/carousel-3d/Carousel3DDots.astro";
+import Carousel3DSlide from "@components/carousel-3d/Carousel3DSlide.astro";
 import Slider from "@components/slider/Slider.astro";
 import SliderDots from "@components/slider/SliderDots.astro";
 import SliderNavButtons from "@components/slider/SliderNavButtons.astro";
@@ -9,15 +12,63 @@ import SliderThumbnailsWrapper from "@components/slider/SliderThumbnailsWrapper.
 import SliderWrapper from "@components/slider/SliderWrapper.astro";
 import Slides from "@components/slider/Slides.astro";
 import RootLayout from "@layouts/RootLayout.astro";
-import { GALLERY_SLIDER_ID } from "@lib/constants";
+import { CAROUSEL_3D_ID, GALLERY_SLIDER_ID } from "@lib/constants";
 
 const products = Array.from({ length: 7 }).map((_, index) => ({
   id: index + 1,
   name: `producto ${index + 1}`,
 }));
+
+const destinations = [
+  { name: "Grecia", label: "Click to learn more", from: "#0ea5e9", to: "#0369a1" },
+  { name: "Maldivas", label: "Click to learn more", from: "#14b8a6", to: "#0f766e" },
+  { name: "España", label: "Click to learn more", from: "#f97316", to: "#c2410c" },
+  { name: "Indonesia", label: "Click to learn more", from: "#a855f7", to: "#7e22ce" },
+  { name: "Portugal", label: "Click to learn more", from: "#ec4899", to: "#be185d" },
+  { name: "Turquía", label: "Click to learn more", from: "#22c55e", to: "#15803d" },
+  { name: "Barbados", label: "Click to learn more", from: "#eab308", to: "#a16207" },
+];
 ---
 
 <RootLayout>
+  <!-- Carousel 3D (coverflow effect) -->
+
+    <Carousel3D id={CAROUSEL_3D_ID} className="py-4 w-[1024px]">
+      {
+        destinations.map((dest) => (
+          <Carousel3DSlide className="w-56">
+            <div
+              class="relative w-full h-72 flex flex-col justify-end p-5 select-none"
+              style={`background: linear-gradient(135deg, ${dest.from}, ${dest.to})`}
+            >
+              <!-- Fondo decorativo -->
+              <div class="absolute inset-0 opacity-10">
+                <div class="absolute top-4 right-4 w-32 h-32 rounded-full bg-white/30 blur-2xl" />
+                <div class="absolute bottom-8 left-4 w-24 h-24 rounded-full bg-white/20 blur-xl" />
+              </div>
+
+              <!-- Overlay gradiente inferior -->
+              <div class="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-black/60 to-transparent rounded-b-2xl" />
+
+              <!-- Contenido -->
+              <div class="relative z-10">
+                <h3 class="text-white text-xl font-bold">{dest.name}</h3>
+                <span class="text-white/80 text-xs mt-1 block">{dest.label}</span>
+              </div>
+
+              <!-- Badge activo (visible solo cuando data-active=true en el slide padre) -->
+              <div class="absolute top-4 left-4 z-10 opacity-0 transition-opacity duration-300 group-active-badge">
+                <span class="bg-white/90 text-slate-900 text-xs font-semibold px-2 py-1 rounded-full">
+                  ✦ Featured
+                </span>
+              </div>
+            </div>
+          </Carousel3DSlide>
+        ))
+      }
+    </Carousel3D>
+
+    <Carousel3DDots id={CAROUSEL_3D_ID} className="mt-2" />
   <!-- Ejemplo para Slider Gallery -->
   <Slider
     className="mx-auto w-max"
@@ -48,8 +99,16 @@ const products = Array.from({ length: 7 }).map((_, index) => ({
 </RootLayout>
 
 <script>
+  import { Carousel3DProvider } from "@components/carousel-3d/carousel-3d-provider";
   import { SliderProvider } from "@components/slider/slider-provider";
-  import { GALLERY_SLIDER_ID } from "@lib/constants";
+  import { CAROUSEL_3D_ID, GALLERY_SLIDER_ID } from "@lib/constants";
+
+  new Carousel3DProvider(CAROUSEL_3D_ID, {
+    emblaOptions: {
+      showDots: true,
+      loop: true,
+    },
+  });
 
   new SliderProvider(GALLERY_SLIDER_ID, {
     sliderOptions: {
@@ -62,3 +121,10 @@ const products = Array.from({ length: 7 }).map((_, index) => ({
     },
   });
 </script>
+
+<style>
+  /* Cuando el slide padre tiene data-active="true", muestra el badge */
+  [data-active="true"] .group-active-badge {
+    opacity: 1;
+  }
+</style>
