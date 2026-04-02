@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @variant dark (&:where(.dark, .dark *));
 
+/* Carousel3D: hide scrollbar on webkit for the virtual scroll layer */
+[data-c3d-scroll]::-webkit-scrollbar {
+  display: none;
+}
+
 :root {
   --color-claro-50: #fef3f2;
   --color-claro-100: #ffe3e1;

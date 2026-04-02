@@ -1,11 +1,24 @@
 ---
+import { cn } from "@lib/utils";
+
 type Props = {
   position?: "center" | "left" | "right";
 };
 
 const { position = "center" } = Astro.props;
+
+const transforms = {
+  center: "z-30",
+  left: "[transform:translateX(-154px)_scale(0.8)_rotateY(21deg)] sm:[transform:translateX(-187px)_scale(0.8)_rotateY(21deg)] lg:[transform:translateX(-220px)_scale(0.8)_rotateY(21deg)] z-20",
+  right: "[transform:translateX(154px)_scale(0.8)_rotateY(-21deg)] sm:[transform:translateX(187px)_scale(0.8)_rotateY(-21deg)] lg:[transform:translateX(220px)_scale(0.8)_rotateY(-21deg)] z-20",
+};
 ---
 
-<div class={`c3d-placeholder-card c3d-placeholder-${position}`}>
+<div
+  class={cn(
+    "absolute w-[200px] h-[260px] sm:w-[220px] sm:h-[290px] lg:w-[260px] lg:h-[340px] rounded-[25px] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.15),0_5px_15px_rgba(0,0,0,0.08)]",
+    transforms[position],
+  )}
+>
   <slot />
 </div>

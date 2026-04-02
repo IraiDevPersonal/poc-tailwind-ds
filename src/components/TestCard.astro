@@ -1,0 +1,28 @@
+---
+import { Image } from "astro:assets";
+
+type Props = {
+  image: string;
+  name: string;
+  flag: string;
+};
+
+const { image, name, flag } = Astro.props;
+---
+
+<Image
+  height={340}
+  width={260}
+  src={image}
+  alt={name}
+  loading="lazy"
+  class="w-full h-full object-cover block"
+/>
+<div class="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent pointer-events-none"></div>
+<div class="absolute bottom-0 left-0 right-0 p-4">
+  <h3 class="text-lg font-semibold text-white">
+    {flag}
+    {name}
+  </h3>
+  <p class="text-xs text-white/70 mt-0.5">Click to learn more</p>
+</div>

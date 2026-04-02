@@ -60,6 +60,15 @@ function interpolateKeyframes(
   };
 }
 
+const NAV_CLASS = [
+  'shrink-0', 'flex', 'items-center', 'justify-center',
+  'w-12', 'h-12', 'max-sm:w-9', 'max-sm:h-9',
+  'rounded-full', 'border-[1.5px]', 'border-black/15',
+  'bg-white/90', 'text-[#333]', 'cursor-pointer', 'z-40',
+  'transition-[background-color,box-shadow]', 'duration-200', 'backdrop-blur-[4px]',
+  'hover:bg-white', 'hover:shadow-[0_2px_8px_rgba(0,0,0,0.12)]', 'active:scale-95',
+].join(' ');
+
 export class Carousel3D {
   private container: HTMLElement;
   private visibleCards: 3 | 5;
@@ -125,7 +134,8 @@ export class Carousel3D {
     // Swap after 500ms: placeholder stays visible while real carousel
     // settles, then swap is imperceptible since both show the same layout.
     this.swapTimer = setTimeout(() => {
-      this.container.classList.remove('c3d-real-hidden');
+      this.container.classList.remove('absolute', 'inset-0', 'opacity-0', 'pointer-events-none');
+      this.container.classList.add('relative', 'w-full', 'select-none', 'overflow-hidden');
       this.perspectiveContainer.style.visibility = 'visible';
       if (this.placeholder) {
         this.placeholder.style.display = 'none';
@@ -150,27 +160,26 @@ export class Carousel3D {
   }
 
   private buildDOM(): void {
-    this.container.classList.add('c3d');
     const rc = this.currentResponsive;
 
     this.perspectiveContainer = document.createElement('div');
-    this.perspectiveContainer.className = 'c3d-perspective';
+    this.perspectiveContainer.className = 'relative flex-1 flex items-center justify-center overflow-visible';
     this.perspectiveContainer.style.perspective = `${rc.perspective}px`;
     this.perspectiveContainer.style.height = `${rc.containerHeight}px`;
     this.perspectiveContainer.style.visibility = 'hidden';
 
     const visualLayer = document.createElement('div');
-    visualLayer.className = 'c3d-visual-layer';
+    visualLayer.className = 'absolute inset-0 flex items-center justify-center pointer-events-none [transform-style:preserve-3d]';
 
     for (let i = 0; i < this.cardCount; i++) {
       const card = document.createElement('div');
-      card.className = 'c3d-card';
+      card.className = 'absolute [transform-style:preserve-3d] [will-change:transform,opacity] transition-[transform,opacity] duration-[50ms] ease-linear cursor-pointer rounded-[25px] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.15),0_5px_15px_rgba(0,0,0,0.08)]';
       card.style.width = `${rc.cardWidth}px`;
       card.style.height = `${rc.cardHeight}px`;
       card.dataset.realIndex = String(i);
+      card.dataset.c3dCard = '';
 
       const inner = this.originalCards[i].cloneNode(true) as HTMLElement;
-      inner.classList.add('c3d-card-inner');
       card.appendChild(inner);
       visualLayer.appendChild(card);
       this.visualCards.push(card);
@@ -178,20 +187,23 @@ export class Carousel3D {
 
     // Scroll layer: spacer + canvas + spacer (3 DOM elements).
     this.scrollLayer = document.createElement('div');
-    this.scrollLayer.className = 'c3d-scroll';
+    this.scrollLayer.className = 'absolute inset-0 z-[35] flex overflow-x-auto overscroll-x-contain [scrollbar-width:none] [-ms-overflow-style:none]';
+    this.scrollLayer.dataset.c3dScroll = '';
 
     const spacerLeft = document.createElement('div');
-    spacerLeft.className = 'c3d-spacer';
+    spacerLeft.className = 'shrink-0';
+    spacerLeft.dataset.c3dSpacer = '';
     spacerLeft.style.minWidth = `calc(50% - ${rc.cardWidth / 2}px)`;
 
     const totalVirtualWidth = this.virtualCount * rc.cardWidth;
     this.canvas = document.createElement('div');
-    this.canvas.className = 'c3d-canvas';
+    this.canvas.className = 'shrink-0 h-px';
     this.canvas.style.width = `${totalVirtualWidth}px`;
     this.canvas.style.minWidth = `${totalVirtualWidth}px`;
 
     const spacerRight = document.createElement('div');
-    spacerRight.className = 'c3d-spacer';
+    spacerRight.className = 'shrink-0';
+    spacerRight.dataset.c3dSpacer = '';
     spacerRight.style.minWidth = `calc(50% - ${rc.cardWidth / 2}px)`;
 
     this.scrollLayer.appendChild(spacerLeft);
@@ -203,21 +215,21 @@ export class Carousel3D {
 
     // Nav buttons
     this.prevBtn = document.createElement('button');
-    this.prevBtn.className = 'c3d-nav c3d-nav-prev';
+    this.prevBtn.className = NAV_CLASS;
     this.prevBtn.setAttribute('aria-label', 'Previous');
-    this.prevBtn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`;
+    this.prevBtn.innerHTML = `<svg width="24" height="24" class="max-sm:w-[18px] max-sm:h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`;
 
     this.nextBtn = document.createElement('button');
-    this.nextBtn.className = 'c3d-nav c3d-nav-next';
+    this.nextBtn.className = NAV_CLASS;
     this.nextBtn.setAttribute('aria-label', 'Next');
-    this.nextBtn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`;
+    this.nextBtn.innerHTML = `<svg width="24" height="24" class="max-sm:w-[18px] max-sm:h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`;
 
     if (!this.showArrows) {
       this.prevBtn.style.display = 'none';
       this.nextBtn.style.display = 'none';
     } else if (!this.showArrowsOnMobile) {
-      this.prevBtn.classList.add('c3d-nav-hide-mobile');
-      this.nextBtn.classList.add('c3d-nav-hide-mobile');
+      this.prevBtn.classList.add('max-sm:hidden');
+      this.nextBtn.classList.add('max-sm:hidden');
     }
 
     while (this.container.firstChild) {
@@ -225,7 +237,7 @@ export class Carousel3D {
     }
 
     const wrapper = document.createElement('div');
-    wrapper.className = 'c3d-wrapper';
+    wrapper.className = 'relative flex items-center';
     wrapper.appendChild(this.prevBtn);
     wrapper.appendChild(this.perspectiveContainer);
     wrapper.appendChild(this.nextBtn);
@@ -310,7 +322,7 @@ export class Carousel3D {
     const el = document.elementFromPoint(e.clientX, e.clientY);
     this.scrollLayer.style.pointerEvents = '';
 
-    const target = (el as HTMLElement | null)?.closest('.c3d-card') as HTMLElement | null;
+    const target = (el as HTMLElement | null)?.closest('[data-c3d-card]') as HTMLElement | null;
     if (!target) return;
 
     const cardIdx = this.visualCards.indexOf(target);
@@ -396,7 +408,7 @@ export class Carousel3D {
     const totalVirtualWidth = this.virtualCount * newConfig.cardWidth;
     this.canvas.style.width = `${totalVirtualWidth}px`;
     this.canvas.style.minWidth = `${totalVirtualWidth}px`;
-    const spacers = this.scrollLayer.querySelectorAll<HTMLElement>('.c3d-spacer');
+    const spacers = this.scrollLayer.querySelectorAll<HTMLElement>('[data-c3d-spacer]');
     for (const spacer of spacers) {
       spacer.style.minWidth = `calc(50% - ${newConfig.cardWidth / 2}px)`;
     }
@@ -438,7 +450,8 @@ export class Carousel3D {
     if (this.scrollEndTimer) clearTimeout(this.scrollEndTimer);
     if (this.swapTimer) clearTimeout(this.swapTimer);
 
-    this.container.classList.remove('c3d');
+    this.container.classList.remove('relative', 'w-full', 'select-none', 'overflow-hidden');
+    this.container.classList.add('absolute', 'inset-0', 'opacity-0', 'pointer-events-none');
     this.container.innerHTML = '';
     for (const child of this.savedChildren) {
       this.container.appendChild(child.cloneNode(true));

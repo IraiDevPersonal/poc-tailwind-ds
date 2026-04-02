@@ -12,10 +12,10 @@ import SliderWrapper from "@components/slider/SliderWrapper.astro";
 import Slides from "@components/slider/Slides.astro";
 import RootLayout from "@layouts/RootLayout.astro";
 import { GALLERY_SLIDER_ID } from "@lib/constants";
-import "../components/carousel-3d/carousel-3d.css";
 import Carousel3DSlides from "@components/carousel-3d/Carousel3dSlides.astro";
 import Carousel3dPlaceholder from "@components/carousel-3d/Carousel3dPlaceholder.astro";
 import Carousel3DPlaceholderItem from "@components/carousel-3d/Carousel3dPlaceholderItem.astro";
+import TestCard from "@components/TestCard.astro";
 
 const products = Array.from({ length: 7 }).map((_, index) => ({
   id: index + 1,
@@ -110,35 +110,37 @@ const destinations = [
       "Adriatic jewel with medieval walled cities and island-hopping adventures.",
   },
 ];
+
+function getPlaceholder() {
+  return {
+    left: destinations.at(-1),
+    center: destinations.at(0),
+    right: destinations.at(1),
+  };
+}
+
+const placeholders = getPlaceholder();
 ---
 
 <RootLayout>
   <Carousel3D>
     <Carousel3dPlaceholder id="placeholder">
       <Carousel3DPlaceholderItem position="left">
-        <!-- ultima card -->
+        <TestCard {...placeholders.left!} />
       </Carousel3DPlaceholderItem>
       <Carousel3DPlaceholderItem position="center">
-        <!-- primera card -->
+        <TestCard {...placeholders.center!} />
       </Carousel3DPlaceholderItem>
       <Carousel3DPlaceholderItem position="right">
-        <!-- segunda card -->
+        <TestCard {...placeholders.right!} />
       </Carousel3DPlaceholderItem>
     </Carousel3dPlaceholder>
 
-    <!-- Carousel real (oculto) -->
     <Carousel3DSlides id="mi-carousel">
       {
         destinations.map((dest) => (
           <Carousel3DItem data-carousel-card>
-            <img src={dest.image} alt={dest.name} loading="lazy" />
-            <div class="card-gradient" />
-            <div class="card-info">
-              <h3>
-                {dest.flag} {dest.name}
-              </h3>
-              <p>Click to learn more</p>
-            </div>
+            <TestCard {...dest} />
           </Carousel3DItem>
         ))
       }
@@ -179,9 +181,10 @@ const destinations = [
   import { GALLERY_SLIDER_ID } from "@lib/constants";
 
   new Carousel3D(document.getElementById("mi-carousel")!, {
+    placeholderSelector: "#placeholder",
     visibleCards: 3,
     infinite: true,
-    placeholderSelector: "#placeholder",
+    showArrows: false,
   });
 
   new SliderProvider(GALLERY_SLIDER_ID, {
