@@ -1,0 +1,321 @@
+.c3d-card-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 25px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.c3d-card-content > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.c3d-card-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0.1) 50%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+.c3d-card-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+}
+
+.c3d-card-info h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.c3d-card-info p {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 2px;
+}
+
+/* ============================
+     Placeholder: cards fake estaticas
+     Posicionadas con CSS para simular el carousel antes de que JS cargue.
+     Valores de transform identicos a los que usa el JS.
+     ============================ */
+.c3d-placeholder {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  perspective: 1050px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.c3d-placeholder-card {
+  position: absolute;
+  width: 260px;
+  height: 340px;
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.15),
+    0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.c3d-placeholder-center {
+  transform: translateX(0px) scale(1) rotateY(0deg);
+  z-index: 30;
+}
+
+.c3d-placeholder-left {
+  transform: translateX(-220px) scale(0.8) rotateY(21deg);
+  z-index: 20;
+}
+
+.c3d-placeholder-right {
+  transform: translateX(220px) scale(0.8) rotateY(-21deg);
+  z-index: 20;
+}
+
+/* Descripcion */
+.c3d-description-area {
+  text-align: center;
+  margin-top: 24px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.c3d-description-area p {
+  color: #4b5563;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+/* ============================
+     Responsive placeholder
+     ============================ */
+@media (max-width: 1023px) and (min-width: 640px) {
+  .c3d-placeholder {
+    height: 360px;
+    perspective: 800px;
+  }
+  .c3d-placeholder-card {
+    width: 220px;
+    height: 290px;
+  }
+  .c3d-placeholder-left {
+    transform: translateX(-187px) scale(0.8) rotateY(21deg);
+  }
+  .c3d-placeholder-right {
+    transform: translateX(187px) scale(0.8) rotateY(-21deg);
+  }
+}
+
+@media (max-width: 639px) {
+  .c3d-placeholder {
+    height: 320px;
+    perspective: 600px;
+  }
+  .c3d-placeholder-card {
+    width: 200px;
+    height: 260px;
+  }
+  .c3d-placeholder-left {
+    transform: translateX(-154px) scale(0.8) rotateY(21deg);
+  }
+  .c3d-placeholder-right {
+    transform: translateX(154px) scale(0.8) rotateY(-21deg);
+  }
+}
+
+/* Placeholder swap container */
+.c3d-swap-container {
+  position: relative;
+}
+
+.c3d {
+  position: relative;
+  width: 100%;
+  user-select: none;
+  overflow: hidden;
+}
+
+/* Must come AFTER .c3d to override position: relative.
+   Higher specificity (2 classes) ensures absolute wins. */
+.c3d.c3d-real-hidden {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.c3d-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Perspective container */
+.c3d-perspective {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+/* Visual card layer */
+.c3d-visual-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+/* Individual card */
+.c3d-card {
+  position: absolute;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  transition:
+    transform 0.05s linear,
+    opacity 0.05s linear;
+  pointer-events: auto;
+  cursor: pointer;
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.15),
+    0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.c3d-card-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+.c3d-card-inner > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Invisible scroll layer — virtual scroll pattern:
+   A single canvas div sets the scrollable width.
+   No snap items in DOM — snapping is JS-based on scroll end. */
+.c3d-scroll {
+  position: absolute;
+  inset: 0;
+  z-index: 35;
+  display: flex;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.c3d-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.c3d-spacer {
+  flex-shrink: 0;
+}
+
+.c3d-canvas {
+  flex-shrink: 0;
+  height: 1px;
+}
+
+/* Nav buttons */
+.c3d-nav {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  cursor: pointer;
+  z-index: 40;
+  transition:
+    background-color 200ms,
+    box-shadow 200ms;
+  backdrop-filter: blur(4px);
+}
+
+.c3d-nav:hover {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.c3d-nav:active {
+  transform: scale(0.95);
+}
+
+/* Dot indicators (consumer-styled, these are just defaults) */
+.c3d-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 24px;
+}
+
+.c3d-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: #d1d5db;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition:
+    width 300ms ease,
+    background-color 300ms ease;
+}
+
+.c3d-dot[data-active="true"] {
+  width: 16px;
+  background: #5b8def;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .c3d-nav {
+    width: 36px;
+    height: 36px;
+  }
+
+  .c3d-nav svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .c3d-nav-hide-mobile {
+    display: none;
+  }
+}

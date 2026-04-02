@@ -1,0 +1,11 @@
+---
+type Props = {
+  position?: "center" | "left" | "right";
+};
+
+const { position = "center" } = Astro.props;
+---
+
+<div class={`c3d-placeholder-card c3d-placeholder-${position}`}>
+  <slot />
+</div>

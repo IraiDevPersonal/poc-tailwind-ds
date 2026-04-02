@@ -1,4 +1,6 @@
 ---
+import Carousel3D from "@components/carousel-3d/Carousel3d.astro";
+import Carousel3DItem from "@components/carousel-3d/Carousel3dItem.astro";
 import DeviceThumbnail from "@components/DeviceThumbnail.astro";
 import GalleryFallback from "@components/GalleryFallback.astro";
 import GallerySlide from "@components/GallerySlide.astro";
@@ -10,14 +12,138 @@ import SliderWrapper from "@components/slider/SliderWrapper.astro";
 import Slides from "@components/slider/Slides.astro";
 import RootLayout from "@layouts/RootLayout.astro";
 import { GALLERY_SLIDER_ID } from "@lib/constants";
+import "../components/carousel-3d/carousel-3d.css";
+import Carousel3DSlides from "@components/carousel-3d/Carousel3dSlides.astro";
+import Carousel3dPlaceholder from "@components/carousel-3d/Carousel3dPlaceholder.astro";
+import Carousel3DPlaceholderItem from "@components/carousel-3d/Carousel3dPlaceholderItem.astro";
 
 const products = Array.from({ length: 7 }).map((_, index) => ({
   id: index + 1,
   name: `producto ${index + 1}`,
 }));
+
+const destinations = [
+  {
+    name: "Spain",
+    flag: "\u{1F1EA}\u{1F1F8}",
+    image: "/images/spain.jpg",
+    description:
+      "Sun-drenched beaches and vibrant culture along the Mediterranean coast.",
+  },
+  {
+    name: "Maldives",
+    flag: "\u{1F1F2}\u{1F1FB}",
+    image: "/images/maldives.jpg",
+    description: "Crystal-clear waters and overwater bungalows in paradise.",
+  },
+  {
+    name: "Malta",
+    flag: "\u{1F1F2}\u{1F1F9}",
+    image: "/images/malta.jpg",
+    description:
+      "Historic temples and stunning blue lagoons in the Mediterranean.",
+  },
+  {
+    name: "Indonesia",
+    flag: "\u{1F1EE}\u{1F1E9}",
+    image: "/images/indonesia.jpg",
+    description:
+      "Tropical islands with world-class surfing and ancient temples.",
+  },
+  {
+    name: "Turkey",
+    flag: "\u{1F1F9}\u{1F1F7}",
+    image: "/images/turkey.jpg",
+    description:
+      "Where East meets West with stunning coastlines and rich history.",
+  },
+  {
+    name: "Barbados",
+    flag: "\u{1F1E7}\u{1F1E7}",
+    image: "/images/barbados.jpg",
+    description: "Caribbean charm with pink sand beaches and rum distilleries.",
+  },
+  {
+    name: "Greece",
+    flag: "\u{1F1EC}\u{1F1F7}",
+    image: "/images/greece.jpg",
+    description:
+      "Whitewashed villages and turquoise coves around every corner.",
+  },
+  {
+    name: "Portugal",
+    flag: "\u{1F1F5}\u{1F1F9}",
+    image: "/images/portugal.jpg",
+    description: "Golden Algarve cliffs and charming coastal towns.",
+  },
+  {
+    name: "Thailand",
+    flag: "\u{1F1F9}\u{1F1ED}",
+    image: "/images/thailand.jpg",
+    description:
+      "Emerald waters, jungle-covered limestone karsts, and golden temples.",
+  },
+  {
+    name: "Mauritius",
+    flag: "\u{1F1F2}\u{1F1FA}",
+    image: "/images/mauritius.jpg",
+    description: "Volcanic island paradise with coral reefs and lush forests.",
+  },
+  {
+    name: "Cyprus",
+    flag: "\u{1F1E8}\u{1F1FE}",
+    image: "/images/cyprus.jpg",
+    description: "Mythical birthplace of Aphrodite with golden sandy beaches.",
+  },
+  {
+    name: "Italy",
+    flag: "\u{1F1EE}\u{1F1F9}",
+    image: "/images/italy.jpg",
+    description:
+      "Amalfi Coast dreams, Sardinian coves, and world-renowned cuisine.",
+  },
+  {
+    name: "Croatia",
+    flag: "\u{1F1ED}\u{1F1F7}",
+    image: "/images/croatia.jpg",
+    description:
+      "Adriatic jewel with medieval walled cities and island-hopping adventures.",
+  },
+];
 ---
 
 <RootLayout>
+  <Carousel3D>
+    <Carousel3dPlaceholder id="placeholder">
+      <Carousel3DPlaceholderItem position="left">
+        <!-- ultima card -->
+      </Carousel3DPlaceholderItem>
+      <Carousel3DPlaceholderItem position="center">
+        <!-- primera card -->
+      </Carousel3DPlaceholderItem>
+      <Carousel3DPlaceholderItem position="right">
+        <!-- segunda card -->
+      </Carousel3DPlaceholderItem>
+    </Carousel3dPlaceholder>
+
+    <!-- Carousel real (oculto) -->
+    <Carousel3DSlides id="mi-carousel">
+      {
+        destinations.map((dest) => (
+          <Carousel3DItem data-carousel-card>
+            <img src={dest.image} alt={dest.name} loading="lazy" />
+            <div class="card-gradient" />
+            <div class="card-info">
+              <h3>
+                {dest.flag} {dest.name}
+              </h3>
+              <p>Click to learn more</p>
+            </div>
+          </Carousel3DItem>
+        ))
+      }
+    </Carousel3DSlides>
+  </Carousel3D>
   <!-- Ejemplo para Slider Gallery -->
   <Slider
     className="mx-auto w-max"
@@ -48,8 +174,15 @@ const products = Array.from({ length: 7 }).map((_, index) => ({
 </RootLayout>
 
 <script>
+  import { Carousel3D } from "@components/carousel-3d";
   import { SliderProvider } from "@components/slider/slider-provider";
   import { GALLERY_SLIDER_ID } from "@lib/constants";
+
+  new Carousel3D(document.getElementById("mi-carousel")!, {
+    visibleCards: 3,
+    infinite: true,
+    placeholderSelector: "#placeholder",
+  });
 
   new SliderProvider(GALLERY_SLIDER_ID, {
     sliderOptions: {
