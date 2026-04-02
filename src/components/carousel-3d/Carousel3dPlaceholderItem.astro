@@ -7,13 +7,10 @@ type Props = {
 
 const { position = "center" } = Astro.props;
 
-// Default transforms match the JS defaults (translateX 220, sideScale 0.8, rotateY 21).
-// These are SSR fallbacks only — Carousel3D.updatePlaceholder() overrides them
-// via inline styles right after initialization, keeping both in sync automatically.
 const defaultTransforms = {
   center: "",
-  left: "[transform:translateX(-235px)_scale(0.8)_rotateY(55deg)]",
-  right: "[transform:translateX(235px)_scale(0.8)_rotateY(-55deg)]",
+  left: "[transform:translateX(-234px)_scale(0.7627)_rotateY(55.6deg)]",
+  right: "[transform:translateX(234px)_scale(0.7627)_rotateY(-55.6deg)]",
 };
 ---
 

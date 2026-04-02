@@ -8,7 +8,6 @@ import type {
 // User would need to scroll ~650 cards in one direction to reach the edge.
 const VIRTUAL_CYCLES = 100;
 
-
 function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * t;
 }
@@ -160,9 +159,6 @@ export class Carousel3D {
     this.initialPosition();
     this.updateTransforms();
 
-    // Sync placeholder transforms with the active config immediately.
-    this.updatePlaceholder();
-
     // Swap after 500ms: placeholder stays visible while real carousel
     // settles, then swap is imperceptible since both show the same layout.
     this.swapTimer = setTimeout(() => {
@@ -259,48 +255,23 @@ export class Carousel3D {
 
     // Sin breakpoints: un único BP (minWidth: 0) que aplica a cualquier ancho.
     const defaults: ResponsiveConfig = {
-      cardWidth:       275,
-      cardHeight:      271,
+      cardWidth: 275,
+      cardHeight: 271,
       containerHeight: 420,
-      perspective:     this.lgPerspective,
-      transformScale:  1.0,
+      perspective: this.lgPerspective,
+      transformScale: 1.0,
     };
 
-    return [{
-      minWidth: 0,
-      config: {
-        ...defaults,
-        ...(this.options.layout ?? {}),
-        perspective: this.lgPerspective, // siempre respeta la opción top-level
+    return [
+      {
+        minWidth: 0,
+        config: {
+          ...defaults,
+          ...(this.options.layout ?? {}),
+          perspective: this.lgPerspective, // siempre respeta la opción top-level
+        },
       },
-    }];
-  }
-
-  /**
-   * Sync the placeholder element's transforms with the current responsive
-   * config and layout options. Called right after init and on every resize.
-   */
-  private updatePlaceholder(): void {
-    if (!this.placeholder) return;
-    const rc = this.currentResponsive;
-    const adjustedTX = Math.round(this.translateX * rc.transformScale);
-
-    // Sincronizar altura y perspectiva del contenedor
-    this.placeholder.style.height = `${rc.containerHeight}px`;
-    this.placeholder.style.perspective = `${rc.perspective}px`;
-
-    // Sincronizar tamaño de todas las cards placeholder
-    const items = this.placeholder.querySelectorAll<HTMLElement>('[data-c3d-position]');
-    for (const item of items) {
-      item.style.width  = `${rc.cardWidth}px`;
-      item.style.height = `${rc.cardHeight}px`;
-    }
-
-    // Sincronizar transforms de las cards laterales
-    const leftEl  = this.placeholder.querySelector<HTMLElement>('[data-c3d-position="left"]');
-    const rightEl = this.placeholder.querySelector<HTMLElement>('[data-c3d-position="right"]');
-    if (leftEl)  leftEl.style.transform  = `translateX(-${adjustedTX}px) scale(${this.sideScale}) rotateY(${this.rotateY}deg)`;
-    if (rightEl) rightEl.style.transform = `translateX(${adjustedTX}px) scale(${this.sideScale}) rotateY(-${this.rotateY}deg)`;
+    ];
   }
 
   // ---------------------------------------------------------------------------
@@ -612,7 +583,6 @@ export class Carousel3D {
     this.scrollToVirtual(Math.round(virtualIndex));
 
     this.updateTransforms();
-    this.updatePlaceholder();
   }
 
   getActiveIndex(): number {
