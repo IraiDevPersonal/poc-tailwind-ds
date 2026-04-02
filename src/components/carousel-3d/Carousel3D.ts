@@ -1,32 +1,16 @@
-import type { TransformKeyframe, ResponsiveConfig, Carousel3DOptions } from './types';
-
-const KEYFRAMES_5: TransformKeyframe[] = [
-  { translateX: 480, scale: 0.6, rotateY: -25, opacity: 0, zIndex: 5 },
-  { translateX: 380, scale: 0.7, rotateY: -25, opacity: 0.6, zIndex: 10 },
-  { translateX: 220, scale: 0.8, rotateY: -21, opacity: 1, zIndex: 20 },
-  { translateX: 0, scale: 1.0, rotateY: 0, opacity: 1, zIndex: 30 },
-  { translateX: -220, scale: 0.8, rotateY: 21, opacity: 1, zIndex: 20 },
-  { translateX: -380, scale: 0.7, rotateY: 25, opacity: 0.6, zIndex: 10 },
-  { translateX: -480, scale: 0.6, rotateY: 25, opacity: 0, zIndex: 5 },
-];
-
-const KEYFRAMES_3: TransformKeyframe[] = [
-  { translateX: 320, scale: 0.7, rotateY: -25, opacity: 0, zIndex: 5 },
-  { translateX: 220, scale: 0.8, rotateY: -21, opacity: 1, zIndex: 20 },
-  { translateX: 0, scale: 1.0, rotateY: 0, opacity: 1, zIndex: 30 },
-  { translateX: -220, scale: 0.8, rotateY: 21, opacity: 1, zIndex: 20 },
-  { translateX: -320, scale: 0.7, rotateY: 25, opacity: 0, zIndex: 5 },
-];
-
-const BREAKPOINTS: { minWidth: number; config: ResponsiveConfig }[] = [
-  { minWidth: 1024, config: { cardWidth: 260, cardHeight: 340, containerHeight: 420, perspective: 1050, transformScale: 1.0 } },
-  { minWidth: 640, config: { cardWidth: 220, cardHeight: 290, containerHeight: 360, perspective: 800, transformScale: 0.85 } },
-  { minWidth: 0, config: { cardWidth: 200, cardHeight: 260, containerHeight: 320, perspective: 600, transformScale: 0.7 } },
-];
+import type {
+  TransformKeyframe,
+  ResponsiveConfig,
+  Carousel3DOptions,
+} from "./types";
 
 // Virtual cycles: the canvas is sized to this many repetitions of all cards.
 // User would need to scroll ~650 cards in one direction to reach the edge.
 const VIRTUAL_CYCLES = 100;
+
+// Scale ratios for sm and base breakpoints relative to lg (fixed layout proportions).
+const SCALE_SM = 800 / 1050;
+const SCALE_BASE = 600 / 1050;
 
 function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * t;
@@ -36,11 +20,21 @@ function interpolateKeyframes(
   keyframes: TransformKeyframe[],
   position: number,
   transformScale: number,
-): { translateX: number; scale: number; rotateY: number; opacity: number; zIndex: number } {
+): {
+  translateX: number;
+  scale: number;
+  rotateY: number;
+  opacity: number;
+  zIndex: number;
+} {
   const half = (keyframes.length - 1) / 2;
   const normalized = position + half;
 
-  if (normalized <= 0) return { ...keyframes[0], translateX: keyframes[0].translateX * transformScale };
+  if (normalized <= 0)
+    return {
+      ...keyframes[0],
+      translateX: keyframes[0].translateX * transformScale,
+    };
   if (normalized >= keyframes.length - 1) {
     const last = keyframes[keyframes.length - 1];
     return { ...last, translateX: last.translateX * transformScale };
@@ -61,22 +55,44 @@ function interpolateKeyframes(
 }
 
 const NAV_CLASS = [
-  'shrink-0', 'flex', 'items-center', 'justify-center',
-  'w-12', 'h-12', 'max-sm:w-9', 'max-sm:h-9',
-  'rounded-full', 'border-[1.5px]', 'border-black/15',
-  'bg-white/90', 'text-[#333]', 'cursor-pointer', 'z-40',
-  'transition-[background-color,box-shadow]', 'duration-200', 'backdrop-blur-[4px]',
-  'hover:bg-white', 'hover:shadow-[0_2px_8px_rgba(0,0,0,0.12)]', 'active:scale-95',
-].join(' ');
+  "shrink-0",
+  "flex",
+  "items-center",
+  "justify-center",
+  "w-12",
+  "h-12",
+  "max-sm:w-9",
+  "max-sm:h-9",
+  "rounded-full",
+  "border-[1.5px]",
+  "border-black/15",
+  "bg-white/90",
+  "text-[#333]",
+  "cursor-pointer",
+  "z-40",
+  "transition-[background-color,box-shadow]",
+  "duration-200",
+  "backdrop-blur-[4px]",
+  "hover:bg-white",
+  "hover:shadow-[0_2px_8px_rgba(0,0,0,0.12)]",
+  "active:scale-95",
+].join(" ");
 
 export class Carousel3D {
   private container: HTMLElement;
   private visibleCards: 3 | 5;
   private infinite: boolean;
   private keyframes: TransformKeyframe[];
+  private breakpoints: { minWidth: number; config: ResponsiveConfig }[];
   private onActiveChange?: (index: number) => void;
   private showArrows: boolean;
   private showArrowsOnMobile: boolean;
+
+  // Layout options — single source of truth shared with the placeholder.
+  private translateX: number;
+  private rotateY: number;
+  private sideScale: number;
+  private lgPerspective: number;
 
   private originalCards: HTMLElement[] = [];
   private cardCount = 0;
@@ -101,20 +117,31 @@ export class Carousel3D {
 
   constructor(container: HTMLElement, options: Carousel3DOptions = {}) {
     this.container = container;
-    this.visibleCards = options.visibleCards
-      ?? (parseInt(container.dataset.visibleCards || '3', 10) as 3 | 5);
+    this.visibleCards =
+      options.visibleCards ??
+      (parseInt(container.dataset.visibleCards || "3", 10) as 3 | 5);
     this.infinite = options.infinite ?? true;
-    this.keyframes = this.visibleCards === 5 ? KEYFRAMES_5 : KEYFRAMES_3;
     this.onActiveChange = options.onActiveChange;
     this.showArrows = options.showArrows ?? true;
     this.showArrowsOnMobile = options.showArrowsOnMobile ?? true;
+
+    // Layout config
+    this.translateX = options.translateX ?? 220;
+    this.rotateY = options.rotateY ?? 21;
+    this.sideScale = options.sideScale ?? 0.8;
+    this.lgPerspective = options.perspective ?? 1050;
+
+    this.keyframes = this.buildKeyframes();
+    this.breakpoints = this.buildBreakpoints();
 
     if (options.placeholderSelector) {
       this.placeholder = document.querySelector(options.placeholderSelector);
     }
 
-    const selector = options.cardSelector || '[data-carousel-card]';
-    this.originalCards = Array.from(container.querySelectorAll<HTMLElement>(selector));
+    const selector = options.cardSelector || "[data-carousel-card]";
+    this.originalCards = Array.from(
+      container.querySelectorAll<HTMLElement>(selector),
+    );
     this.cardCount = this.originalCards.length;
 
     if (this.cardCount < 2) return;
@@ -124,27 +151,168 @@ export class Carousel3D {
       : this.cardCount;
 
     this.currentResponsive = this.getResponsiveConfig();
-    this.savedChildren = Array.from(this.container.childNodes).map(n => n.cloneNode(true));
+    this.savedChildren = Array.from(this.container.childNodes).map((n) =>
+      n.cloneNode(true),
+    );
 
     this.buildDOM();
-    this.spacerWidth = (this.scrollLayer.clientWidth - this.currentResponsive.cardWidth) / 2;
+    this.spacerWidth =
+      (this.scrollLayer.clientWidth - this.currentResponsive.cardWidth) / 2;
     this.initialPosition();
     this.updateTransforms();
+
+    // Sync placeholder transforms with the active config immediately.
+    this.updatePlaceholder();
 
     // Swap after 500ms: placeholder stays visible while real carousel
     // settles, then swap is imperceptible since both show the same layout.
     this.swapTimer = setTimeout(() => {
-      this.container.classList.remove('absolute', 'inset-0', 'opacity-0', 'pointer-events-none');
-      this.container.classList.add('relative', 'w-full', 'select-none', 'overflow-hidden');
-      this.perspectiveContainer.style.visibility = 'visible';
+      this.container.classList.remove(
+        "absolute",
+        "inset-0",
+        "opacity-0",
+        "pointer-events-none",
+      );
+      this.container.classList.add(
+        "relative",
+        "w-full",
+        "select-none",
+        "overflow-hidden",
+      );
+      this.perspectiveContainer.style.visibility = "visible";
       if (this.placeholder) {
-        this.placeholder.style.display = 'none';
+        this.placeholder.style.display = "none";
       }
     }, 500);
     this.bindEvents();
     this.initialized = true;
     this.onActiveChange?.(this.activeIndex);
   }
+
+  // ---------------------------------------------------------------------------
+  // Layout builders — derive keyframes and breakpoints from the config options.
+  // Edit the options (perspective, rotateY, translateX, sideScale) to change
+  // the look; these methods ensure the placeholder is always kept in sync.
+  // ---------------------------------------------------------------------------
+
+  /** Build keyframes for the currently selected visibleCards mode. */
+  private buildKeyframes(): TransformKeyframe[] {
+    const tx = this.translateX;
+    const ry = this.rotateY;
+    const sc = this.sideScale;
+
+    if (this.visibleCards === 5) {
+      // ±2 ghost cards derived proportionally from the ±1 visible position.
+      const ghost1TX = Math.round(tx * 1.73);
+      const ghost2TX = Math.round(tx * 2.18);
+      return [
+        {
+          translateX: ghost2TX,
+          scale: 0.6,
+          rotateY: -25,
+          opacity: 0,
+          zIndex: 5,
+        },
+        {
+          translateX: ghost1TX,
+          scale: 0.7,
+          rotateY: -25,
+          opacity: 0.6,
+          zIndex: 10,
+        },
+        { translateX: tx, scale: sc, rotateY: -ry, opacity: 1, zIndex: 20 },
+        { translateX: 0, scale: 1.0, rotateY: 0, opacity: 1, zIndex: 30 },
+        { translateX: -tx, scale: sc, rotateY: ry, opacity: 1, zIndex: 20 },
+        {
+          translateX: -ghost1TX,
+          scale: 0.7,
+          rotateY: 25,
+          opacity: 0.6,
+          zIndex: 10,
+        },
+        {
+          translateX: -ghost2TX,
+          scale: 0.6,
+          rotateY: 25,
+          opacity: 0,
+          zIndex: 5,
+        },
+      ];
+    }
+
+    // visibleCards === 3
+    const ghostTX = Math.round(tx * 1.45);
+    return [
+      { translateX: ghostTX, scale: 0.7, rotateY: -25, opacity: 0, zIndex: 5 },
+      { translateX: tx, scale: sc, rotateY: -ry, opacity: 1, zIndex: 20 },
+      { translateX: 0, scale: 1.0, rotateY: 0, opacity: 1, zIndex: 30 },
+      { translateX: -tx, scale: sc, rotateY: ry, opacity: 1, zIndex: 20 },
+      { translateX: -ghostTX, scale: 0.7, rotateY: 25, opacity: 0, zIndex: 5 },
+    ];
+  }
+
+  /** Build breakpoints scaling perspective proportionally from the lg value. */
+  private buildBreakpoints(): { minWidth: number; config: ResponsiveConfig }[] {
+    const p = this.lgPerspective;
+    return [
+      {
+        minWidth: 1024,
+        config: {
+          cardWidth: 275,
+          cardHeight: 271,
+          containerHeight: 420,
+          perspective: p,
+          transformScale: 1.0,
+        },
+      },
+      // {
+      //   minWidth: 640,
+      //   config: {
+      //     cardWidth: 220,
+      //     cardHeight: 290,
+      //     containerHeight: 360,
+      //     perspective: Math.round(p * SCALE_SM),
+      //     transformScale: 0.85,
+      //   },
+      // },
+      // {
+      //   minWidth: 0,
+      //   config: {
+      //     cardWidth: 200,
+      //     cardHeight: 260,
+      //     containerHeight: 320,
+      //     perspective: Math.round(p * SCALE_BASE),
+      //     transformScale: 0.7,
+      //   },
+      // },
+    ];
+  }
+
+  /**
+   * Sync the placeholder element's transforms with the current responsive
+   * config and layout options. Called right after init and on every resize.
+   */
+  private updatePlaceholder(): void {
+    if (!this.placeholder) return;
+    const rc = this.currentResponsive;
+    const adjustedTX = Math.round(this.translateX * rc.transformScale);
+
+    const leftEl = this.placeholder.querySelector<HTMLElement>(
+      '[data-c3d-position="left"]',
+    );
+    const rightEl = this.placeholder.querySelector<HTMLElement>(
+      '[data-c3d-position="right"]',
+    );
+
+    if (leftEl)
+      leftEl.style.transform = `translateX(-${adjustedTX}px) scale(${this.sideScale}) rotateY(${this.rotateY}deg)`;
+    if (rightEl)
+      rightEl.style.transform = `translateX(${adjustedTX}px) scale(${this.sideScale}) rotateY(-${this.rotateY}deg)`;
+
+    this.placeholder.style.perspective = `${rc.perspective}px`;
+  }
+
+  // ---------------------------------------------------------------------------
 
   /** Scroll position adjusted for the left spacer — 0 = first virtual card centered */
   private get scrollOffset(): number {
@@ -153,31 +321,34 @@ export class Carousel3D {
 
   private getResponsiveConfig(): ResponsiveConfig {
     const width = this.container.offsetWidth;
-    for (const bp of BREAKPOINTS) {
+    for (const bp of this.breakpoints) {
       if (width >= bp.minWidth) return bp.config;
     }
-    return BREAKPOINTS[BREAKPOINTS.length - 1].config;
+    return this.breakpoints[this.breakpoints.length - 1].config;
   }
 
   private buildDOM(): void {
     const rc = this.currentResponsive;
 
-    this.perspectiveContainer = document.createElement('div');
-    this.perspectiveContainer.className = 'relative flex-1 flex items-center justify-center overflow-visible';
+    this.perspectiveContainer = document.createElement("div");
+    this.perspectiveContainer.className =
+      "relative flex-1 flex items-center justify-center overflow-visible";
     this.perspectiveContainer.style.perspective = `${rc.perspective}px`;
     this.perspectiveContainer.style.height = `${rc.containerHeight}px`;
-    this.perspectiveContainer.style.visibility = 'hidden';
+    this.perspectiveContainer.style.visibility = "hidden";
 
-    const visualLayer = document.createElement('div');
-    visualLayer.className = 'absolute inset-0 flex items-center justify-center pointer-events-none [transform-style:preserve-3d]';
+    const visualLayer = document.createElement("div");
+    visualLayer.className =
+      "absolute inset-0 flex items-center justify-center pointer-events-none [transform-style:preserve-3d]";
 
     for (let i = 0; i < this.cardCount; i++) {
-      const card = document.createElement('div');
-      card.className = 'absolute [transform-style:preserve-3d] [will-change:transform,opacity] transition-[transform,opacity] duration-[50ms] ease-linear cursor-pointer rounded-[25px] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.15),0_5px_15px_rgba(0,0,0,0.08)]';
+      const card = document.createElement("div");
+      card.className =
+        "absolute [transform-style:preserve-3d] [will-change:transform,opacity] transition-[transform,opacity] duration-[50ms] ease-linear cursor-pointer rounded-[25px] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.15),0_5px_15px_rgba(0,0,0,0.08)]";
       card.style.width = `${rc.cardWidth}px`;
       card.style.height = `${rc.cardHeight}px`;
       card.dataset.realIndex = String(i);
-      card.dataset.c3dCard = '';
+      card.dataset.c3dCard = "";
 
       const inner = this.originalCards[i].cloneNode(true) as HTMLElement;
       card.appendChild(inner);
@@ -186,24 +357,25 @@ export class Carousel3D {
     }
 
     // Scroll layer: spacer + canvas + spacer (3 DOM elements).
-    this.scrollLayer = document.createElement('div');
-    this.scrollLayer.className = 'absolute inset-0 z-[35] flex overflow-x-auto overscroll-x-contain [scrollbar-width:none] [-ms-overflow-style:none]';
-    this.scrollLayer.dataset.c3dScroll = '';
+    this.scrollLayer = document.createElement("div");
+    this.scrollLayer.className =
+      "absolute inset-0 z-[35] flex overflow-x-auto overscroll-x-contain [scrollbar-width:none] [-ms-overflow-style:none]";
+    this.scrollLayer.dataset.c3dScroll = "";
 
-    const spacerLeft = document.createElement('div');
-    spacerLeft.className = 'shrink-0';
-    spacerLeft.dataset.c3dSpacer = '';
+    const spacerLeft = document.createElement("div");
+    spacerLeft.className = "shrink-0";
+    spacerLeft.dataset.c3dSpacer = "";
     spacerLeft.style.minWidth = `calc(50% - ${rc.cardWidth / 2}px)`;
 
     const totalVirtualWidth = this.virtualCount * rc.cardWidth;
-    this.canvas = document.createElement('div');
-    this.canvas.className = 'shrink-0 h-px';
+    this.canvas = document.createElement("div");
+    this.canvas.className = "shrink-0 h-px";
     this.canvas.style.width = `${totalVirtualWidth}px`;
     this.canvas.style.minWidth = `${totalVirtualWidth}px`;
 
-    const spacerRight = document.createElement('div');
-    spacerRight.className = 'shrink-0';
-    spacerRight.dataset.c3dSpacer = '';
+    const spacerRight = document.createElement("div");
+    spacerRight.className = "shrink-0";
+    spacerRight.dataset.c3dSpacer = "";
     spacerRight.style.minWidth = `calc(50% - ${rc.cardWidth / 2}px)`;
 
     this.scrollLayer.appendChild(spacerLeft);
@@ -214,30 +386,30 @@ export class Carousel3D {
     this.perspectiveContainer.appendChild(this.scrollLayer);
 
     // Nav buttons
-    this.prevBtn = document.createElement('button');
+    this.prevBtn = document.createElement("button");
     this.prevBtn.className = NAV_CLASS;
-    this.prevBtn.setAttribute('aria-label', 'Previous');
+    this.prevBtn.setAttribute("aria-label", "Previous");
     this.prevBtn.innerHTML = `<svg width="24" height="24" class="max-sm:w-[18px] max-sm:h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`;
 
-    this.nextBtn = document.createElement('button');
+    this.nextBtn = document.createElement("button");
     this.nextBtn.className = NAV_CLASS;
-    this.nextBtn.setAttribute('aria-label', 'Next');
+    this.nextBtn.setAttribute("aria-label", "Next");
     this.nextBtn.innerHTML = `<svg width="24" height="24" class="max-sm:w-[18px] max-sm:h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`;
 
     if (!this.showArrows) {
-      this.prevBtn.style.display = 'none';
-      this.nextBtn.style.display = 'none';
+      this.prevBtn.style.display = "none";
+      this.nextBtn.style.display = "none";
     } else if (!this.showArrowsOnMobile) {
-      this.prevBtn.classList.add('max-sm:hidden');
-      this.nextBtn.classList.add('max-sm:hidden');
+      this.prevBtn.classList.add("max-sm:hidden");
+      this.nextBtn.classList.add("max-sm:hidden");
     }
 
     while (this.container.firstChild) {
       this.container.removeChild(this.container.firstChild);
     }
 
-    const wrapper = document.createElement('div');
-    wrapper.className = 'relative flex items-center';
+    const wrapper = document.createElement("div");
+    wrapper.className = "relative flex items-center";
     wrapper.appendChild(this.prevBtn);
     wrapper.appendChild(this.perspectiveContainer);
     wrapper.appendChild(this.nextBtn);
@@ -245,7 +417,10 @@ export class Carousel3D {
     this.container.appendChild(wrapper);
   }
 
-  private scrollToVirtual(index: number, behavior: ScrollBehavior = 'auto'): void {
+  private scrollToVirtual(
+    index: number,
+    behavior: ScrollBehavior = "auto",
+  ): void {
     this.scrollLayer.scrollTo({
       left: this.spacerWidth + index * this.currentResponsive.cardWidth,
       behavior,
@@ -266,17 +441,25 @@ export class Carousel3D {
   }
 
   private bindEvents(): void {
-    this.scrollLayer.addEventListener('scroll', this.handleScroll, { passive: true });
-
-    this.prevBtn.addEventListener('click', () => {
-      this.scrollLayer.scrollBy({ left: -this.currentResponsive.cardWidth, behavior: 'smooth' });
+    this.scrollLayer.addEventListener("scroll", this.handleScroll, {
+      passive: true,
     });
 
-    this.nextBtn.addEventListener('click', () => {
-      this.scrollLayer.scrollBy({ left: this.currentResponsive.cardWidth, behavior: 'smooth' });
+    this.prevBtn.addEventListener("click", () => {
+      this.scrollLayer.scrollBy({
+        left: -this.currentResponsive.cardWidth,
+        behavior: "smooth",
+      });
     });
 
-    this.scrollLayer.addEventListener('click', this.handleCardClick);
+    this.nextBtn.addEventListener("click", () => {
+      this.scrollLayer.scrollBy({
+        left: this.currentResponsive.cardWidth,
+        behavior: "smooth",
+      });
+    });
+
+    this.scrollLayer.addEventListener("click", this.handleCardClick);
 
     this.resizeObserver = new ResizeObserver(() => {
       this.handleResize();
@@ -299,11 +482,12 @@ export class Carousel3D {
     const rawIndex = Math.round(offset / rc.cardWidth);
 
     // JS-based snap: scroll to the nearest card-aligned position
-    this.scrollToVirtual(rawIndex, 'smooth');
+    this.scrollToVirtual(rawIndex, "smooth");
 
     let newActive: number;
     if (this.infinite) {
-      newActive = ((rawIndex % this.cardCount) + this.cardCount) % this.cardCount;
+      newActive =
+        ((rawIndex % this.cardCount) + this.cardCount) % this.cardCount;
     } else {
       newActive = Math.max(0, Math.min(rawIndex, this.cardCount - 1));
     }
@@ -318,27 +502,36 @@ export class Carousel3D {
     const rc = this.currentResponsive;
     const centerVirtual = Math.round(this.scrollOffset / rc.cardWidth);
 
-    this.scrollLayer.style.pointerEvents = 'none';
+    this.scrollLayer.style.pointerEvents = "none";
     const el = document.elementFromPoint(e.clientX, e.clientY);
-    this.scrollLayer.style.pointerEvents = '';
+    this.scrollLayer.style.pointerEvents = "";
 
-    const target = (el as HTMLElement | null)?.closest('[data-c3d-card]') as HTMLElement | null;
+    const target = (el as HTMLElement | null)?.closest(
+      "[data-c3d-card]",
+    ) as HTMLElement | null;
     if (!target) return;
 
     const cardIdx = this.visualCards.indexOf(target);
     if (cardIdx === -1) return;
 
     if (this.infinite) {
-      const centerReal = ((centerVirtual % this.cardCount) + this.cardCount) % this.cardCount;
+      const centerReal =
+        ((centerVirtual % this.cardCount) + this.cardCount) % this.cardCount;
       let diff = cardIdx - centerReal;
       if (diff > this.cardCount / 2) diff -= this.cardCount;
       if (diff < -this.cardCount / 2) diff += this.cardCount;
       if (diff === 0) return;
-      this.scrollLayer.scrollBy({ left: diff * rc.cardWidth, behavior: 'smooth' });
+      this.scrollLayer.scrollBy({
+        left: diff * rc.cardWidth,
+        behavior: "smooth",
+      });
     } else {
       if (cardIdx === centerVirtual) return;
       const diff = cardIdx - centerVirtual;
-      this.scrollLayer.scrollBy({ left: diff * rc.cardWidth, behavior: 'smooth' });
+      this.scrollLayer.scrollBy({
+        left: diff * rc.cardWidth,
+        behavior: "smooth",
+      });
     }
   };
 
@@ -358,17 +551,21 @@ export class Carousel3D {
         if (dist < -this.cardCount / 2) dist += this.cardCount;
 
         if (Math.abs(dist) > maxRange) {
-          card.style.opacity = '0';
-          card.style.zIndex = '0';
-          card.style.pointerEvents = 'none';
+          card.style.opacity = "0";
+          card.style.zIndex = "0";
+          card.style.pointerEvents = "none";
           continue;
         }
 
-        const vals = interpolateKeyframes(this.keyframes, dist, rc.transformScale);
+        const vals = interpolateKeyframes(
+          this.keyframes,
+          dist,
+          rc.transformScale,
+        );
         card.style.transform = `translateX(${vals.translateX}px) scale(${vals.scale}) rotateY(${vals.rotateY}deg)`;
         card.style.opacity = String(Math.max(0, Math.min(1, vals.opacity)));
         card.style.zIndex = String(vals.zIndex);
-        card.style.pointerEvents = vals.opacity > 0.1 ? 'auto' : 'none';
+        card.style.pointerEvents = vals.opacity > 0.1 ? "auto" : "none";
       }
     } else {
       for (let i = 0; i < this.visualCards.length; i++) {
@@ -376,17 +573,21 @@ export class Carousel3D {
         const position = centerFloat - i;
 
         if (Math.abs(position) > maxRange) {
-          card.style.opacity = '0';
-          card.style.zIndex = '0';
-          card.style.pointerEvents = 'none';
+          card.style.opacity = "0";
+          card.style.zIndex = "0";
+          card.style.pointerEvents = "none";
           continue;
         }
 
-        const vals = interpolateKeyframes(this.keyframes, position, rc.transformScale);
+        const vals = interpolateKeyframes(
+          this.keyframes,
+          position,
+          rc.transformScale,
+        );
         card.style.transform = `translateX(${vals.translateX}px) scale(${vals.scale}) rotateY(${vals.rotateY}deg)`;
         card.style.opacity = String(Math.max(0, Math.min(1, vals.opacity)));
         card.style.zIndex = String(vals.zIndex);
-        card.style.pointerEvents = vals.opacity > 0.1 ? 'auto' : 'none';
+        card.style.pointerEvents = vals.opacity > 0.1 ? "auto" : "none";
       }
     }
   }
@@ -408,7 +609,8 @@ export class Carousel3D {
     const totalVirtualWidth = this.virtualCount * newConfig.cardWidth;
     this.canvas.style.width = `${totalVirtualWidth}px`;
     this.canvas.style.minWidth = `${totalVirtualWidth}px`;
-    const spacers = this.scrollLayer.querySelectorAll<HTMLElement>('[data-c3d-spacer]');
+    const spacers =
+      this.scrollLayer.querySelectorAll<HTMLElement>("[data-c3d-spacer]");
     for (const spacer of spacers) {
       spacer.style.minWidth = `calc(50% - ${newConfig.cardWidth / 2}px)`;
     }
@@ -419,6 +621,7 @@ export class Carousel3D {
     this.scrollToVirtual(Math.round(virtualIndex));
 
     this.updateTransforms();
+    this.updatePlaceholder();
   }
 
   getActiveIndex(): number {
@@ -431,13 +634,14 @@ export class Carousel3D {
 
     if (this.infinite) {
       const currentVirtual = Math.round(this.scrollOffset / rc.cardWidth);
-      const currentReal = ((currentVirtual % this.cardCount) + this.cardCount) % this.cardCount;
+      const currentReal =
+        ((currentVirtual % this.cardCount) + this.cardCount) % this.cardCount;
       let diff = clamped - currentReal;
       if (diff > this.cardCount / 2) diff -= this.cardCount;
       if (diff < -this.cardCount / 2) diff += this.cardCount;
-      this.scrollToVirtual(currentVirtual + diff, 'smooth');
+      this.scrollToVirtual(currentVirtual + diff, "smooth");
     } else {
-      this.scrollToVirtual(clamped, 'smooth');
+      this.scrollToVirtual(clamped, "smooth");
     }
   }
 
@@ -445,14 +649,24 @@ export class Carousel3D {
     if (!this.initialized) return;
 
     this.resizeObserver.disconnect();
-    this.scrollLayer.removeEventListener('scroll', this.handleScroll);
-    this.scrollLayer.removeEventListener('click', this.handleCardClick);
+    this.scrollLayer.removeEventListener("scroll", this.handleScroll);
+    this.scrollLayer.removeEventListener("click", this.handleCardClick);
     if (this.scrollEndTimer) clearTimeout(this.scrollEndTimer);
     if (this.swapTimer) clearTimeout(this.swapTimer);
 
-    this.container.classList.remove('relative', 'w-full', 'select-none', 'overflow-hidden');
-    this.container.classList.add('absolute', 'inset-0', 'opacity-0', 'pointer-events-none');
-    this.container.innerHTML = '';
+    this.container.classList.remove(
+      "relative",
+      "w-full",
+      "select-none",
+      "overflow-hidden",
+    );
+    this.container.classList.add(
+      "absolute",
+      "inset-0",
+      "opacity-0",
+      "pointer-events-none",
+    );
+    this.container.innerHTML = "";
     for (const child of this.savedChildren) {
       this.container.appendChild(child.cloneNode(true));
     }
