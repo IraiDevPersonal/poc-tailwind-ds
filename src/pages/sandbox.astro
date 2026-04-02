@@ -1,6 +1,6 @@
 ---
-import Carousel3D from "@components/carousel-3d/Carousel3d.astro";
-import Carousel3DItem from "@components/carousel-3d/Carousel3dItem.astro";
+import Carousel3D from "@components/carousel-3d/Carousel3D.astro";
+import Carousel3DItem from "@components/carousel-3d/Carousel3DItem.astro";
 import DeviceThumbnail from "@components/DeviceThumbnail.astro";
 import GalleryFallback from "@components/GalleryFallback.astro";
 import GallerySlide from "@components/GallerySlide.astro";
@@ -12,10 +12,11 @@ import SliderWrapper from "@components/slider/SliderWrapper.astro";
 import Slides from "@components/slider/Slides.astro";
 import RootLayout from "@layouts/RootLayout.astro";
 import { GALLERY_SLIDER_ID } from "@lib/constants";
-import Carousel3DSlides from "@components/carousel-3d/Carousel3dSlides.astro";
-import Carousel3dPlaceholder from "@components/carousel-3d/Carousel3dPlaceholder.astro";
-import Carousel3DPlaceholderItem from "@components/carousel-3d/Carousel3dPlaceholderItem.astro";
+import Carousel3DSlides from "@components/carousel-3d/Carousel3DSlides.astro";
+import Carousel3DPlaceholder from "@components/carousel-3d/Carousel3DPlaceholder.astro";
+import Carousel3DPlaceholderItem from "@components/carousel-3d/Carousel3DPlaceholderItem.astro";
 import TestCard from "@components/TestCard.astro";
+import { getCarousel3DPlaceholders } from "@components/carousel-3d/utils";
 
 const products = Array.from({ length: 7 }).map((_, index) => ({
   id: index + 1,
@@ -111,30 +112,22 @@ const destinations = [
   },
 ].slice(0, 3);
 
-function getPlaceholder() {
-  return {
-    left: destinations.at(-1),
-    center: destinations.at(0),
-    right: destinations.at(1),
-  };
-}
-
-const placeholders = getPlaceholder();
+const placeholders = getCarousel3DPlaceholders(destinations);
 ---
 
 <RootLayout>
   <Carousel3D>
-    <Carousel3dPlaceholder id="placeholder">
+    <Carousel3DPlaceholder id="placeholder">
       <Carousel3DPlaceholderItem position="left">
-        <TestCard {...placeholders.left!} />
+        <TestCard {...placeholders.left} />
       </Carousel3DPlaceholderItem>
       <Carousel3DPlaceholderItem position="center">
-        <TestCard {...placeholders.center!} />
+        <TestCard {...placeholders.center} />
       </Carousel3DPlaceholderItem>
       <Carousel3DPlaceholderItem position="right">
-        <TestCard {...placeholders.right!} />
+        <TestCard {...placeholders.right} />
       </Carousel3DPlaceholderItem>
-    </Carousel3dPlaceholder>
+    </Carousel3DPlaceholder>
 
     <Carousel3DSlides id="mi-carousel">
       {

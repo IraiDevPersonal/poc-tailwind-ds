@@ -52,7 +52,7 @@ export class Carousel3DProvider {
   private showArrows: boolean;
   private showArrowsOnMobile: boolean;
 
-  // Layout options — single source of truth shared with the placeholder.
+  // Opciones de layout — fuente única de verdad compartida con el placeholder.
   private options!: Carousel3DOptions;
   private translateX: number;
   private rotateY: number;
@@ -76,6 +76,7 @@ export class Carousel3DProvider {
   private resizeObserver!: ResizeObserver;
   private scrollEndTimer: ReturnType<typeof setTimeout> | null = null;
   private swapTimer: ReturnType<typeof setTimeout> | null = null;
+  private finalizeTimer: ReturnType<typeof setTimeout> | null = null;
   private savedChildren: Node[] = [];
   private initialized = false;
   private placeholder: HTMLElement | null = null;
@@ -127,35 +128,41 @@ export class Carousel3DProvider {
     this.initialPosition();
     this.updateTransforms();
 
-    // Swap after 500ms: placeholder stays visible while real carousel
-    // settles, then swap is imperceptible since both show the same layout.
+    // Crossfade: el carrusel aparece mientras el placeholder desaparece simultáneamente.
+    // El cambio de layout (absolute→relative) ocurre tras el fade, enmascarado por la opacidad.
     this.swapTimer = setTimeout(() => {
-      this.container.classList.remove(
-        "absolute",
-        "inset-0",
-        "opacity-0",
-        "pointer-events-none",
-      );
-      this.container.classList.add(
-        "relative",
-        "w-full",
-        "select-none",
-        "overflow-hidden",
-      );
       this.perspectiveContainer.style.visibility = "visible";
+      this.container.style.transition = "opacity 300ms ease-in-out";
+      this.container.classList.remove("opacity-0", "pointer-events-none");
+
       if (this.placeholder) {
-        this.placeholder.style.display = "none";
+        this.placeholder.style.transition = "opacity 300ms ease-in-out";
+        this.placeholder.style.opacity = "0";
       }
-    }, 500);
+
+      // El cambio de posicionamiento ocurre cuando el carrusel ya es opaco
+      // y el placeholder ya es transparente: el layout shift es imperceptible.
+      this.finalizeTimer = setTimeout(() => {
+        this.finalizeTimer = null;
+        this.container.style.transition = "";
+        this.container.classList.remove("absolute", "inset-0");
+        this.container.classList.add("relative", "w-full", "select-none", "overflow-hidden");
+        if (this.placeholder) {
+          this.placeholder.style.display = "none";
+          this.placeholder.style.transition = "";
+          this.placeholder.style.opacity = "";
+        }
+      }, 320);
+    }, 300);
     this.bindEvents();
     this.initialized = true;
     this.onActiveChange?.(this.activeIndex);
   }
 
   // ---------------------------------------------------------------------------
-  // Layout builders — derive keyframes and breakpoints from the config options.
-  // Edit the options (perspective, rotateY, translateX, sideScale) to change
-  // the look; these methods ensure the placeholder is always kept in sync.
+  // Constructores de layout — derivan keyframes y breakpoints de las opciones.
+  // Modifica las opciones (perspective, rotateY, translateX, sideScale) para
+  // cambiar el aspecto; estos métodos mantienen el placeholder siempre sincronizado.
   // ---------------------------------------------------------------------------
 
   /**
@@ -658,19 +665,16 @@ export class Carousel3DProvider {
     this.scrollLayer.removeEventListener("click", this.handleCardClick);
     if (this.scrollEndTimer) clearTimeout(this.scrollEndTimer);
     if (this.swapTimer) clearTimeout(this.swapTimer);
+    if (this.finalizeTimer) clearTimeout(this.finalizeTimer);
 
-    this.container.classList.remove(
-      "relative",
-      "w-full",
-      "select-none",
-      "overflow-hidden",
-    );
-    this.container.classList.add(
-      "absolute",
-      "inset-0",
-      "opacity-0",
-      "pointer-events-none",
-    );
+    this.container.style.transition = "";
+    if (this.placeholder) {
+      this.placeholder.style.transition = "";
+      this.placeholder.style.opacity = "";
+      this.placeholder.style.display = "";
+    }
+    this.container.classList.remove("relative", "w-full", "select-none", "overflow-hidden");
+    this.container.classList.add("absolute", "inset-0", "opacity-0", "pointer-events-none");
     this.container.innerHTML = "";
     for (const child of this.savedChildren) {
       this.container.appendChild(child.cloneNode(true));

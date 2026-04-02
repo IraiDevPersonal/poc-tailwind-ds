@@ -41,3 +41,15 @@ export function interpolateKeyframes(
     zIndex: Math.round(lerp(a.zIndex, b.zIndex, t)),
   };
 }
+
+export function getCarousel3DPlaceholders<T>(items: Array<T>) {
+  if (items.length < 3) {
+    throw new Error("Carousel 3D must have at least 3 items");
+  }
+
+  return {
+    left: items.at(-1)!,
+    center: items.at(0)!,
+    right: items.at(1)!,
+  };
+}
